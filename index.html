@@ -2,22 +2,28 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WSHome formulario de carga</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
   <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f6f8;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
 
     .container {
       background-color: #fff;
-      padding: 30px 40px;
+      padding: 30px 25px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       width: 100%;
@@ -27,7 +33,7 @@
     h2 {
       text-align: center;
       color: #004080;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
 
     label {
@@ -65,19 +71,31 @@
 
     .logo {
       text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .logo img {
+      height: 60px;
+      display: block;
+      margin: 0 auto 5px;
+    }
+
+    .logo div {
       font-size: 24px;
       font-weight: bold;
       color: #004080;
-      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <div class="logo">WSHome</div>
-    <h2>Formulario de contacto</h2>
-    <form id="formulario">
+    <div class="logo">
+      <img src="logo.svg" alt="WSHome logo">
+      <div>WSHome</div>
+    </div>
+    <h2>Formulario de carga</h2>
+    <form id="formulario" novalidate>
       <label>Contrato:
         <input type="text" name="contrato" required>
       </label>
@@ -96,13 +114,17 @@
     document.getElementById("formulario").addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const contrato = e.target.contrato.value;
-      const apartamento = e.target.apartamento.value;
-      const carga = e.target.carga.value;
+      const contrato = e.target.contrato.value.trim();
+      const apartamento = e.target.apartamento.value.trim();
+      const carga = e.target.carga.value.trim();
 
-      const texto = `*Nuevo formulario enviado desde WSHome*:%0A📄 Contrato: ${contrato}%0A🏢 Apartamento: ${apartamento}%0A⚡ Carga: ${carga}`;
+      if (!contrato || !apartamento || !carga) {
+        alert("Por favor completa todos los campos antes de enviar.");
+        return;
+      }
 
-      const numero = "573126747790"; 
+      const texto = `formulario de carga WSHome*:%0A Contrato: ${contrato}%0A Apartamento: ${apartamento}%0A Carga: ${carga}`;
+      const numero = "573126747790";
       const url = `https://wa.me/${numero}?text=${texto}`;
       window.open(url, '_blank');
     });
