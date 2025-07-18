@@ -200,8 +200,8 @@
       const nombre = e.target.nombre.value.trim();
       const telefono = e.target.telefono.value.trim();
       const contrato = e.target.contrato.value.trim();
-      if (!nombre || !telefono) {
-        alert("Por favor completa todos los campos antes de actualizar.");
+      if (!nombre && !telefono) {
+        alert("Por favor completa alguno nombre o telefono.");
         return;
       }
 
