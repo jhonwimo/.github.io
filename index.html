@@ -92,8 +92,7 @@
   <div class="container">
     <div class="logo">
       <img src="logo.svg" alt="WSHome logo">
-      <div>WSHome</div>
-    </div>
+     </div>
     <form id="formulario" novalidate>
       <label>Contrato:
         <input type="text" name="contrato" required>
@@ -105,7 +104,7 @@
         <input type="number" name="carga" required>
       </label>
 
-      <button type="submit">Enviar por WhatsApp</button>
+      <button type="submit">Enviar</button>
     </form>
   </div>
 
@@ -122,7 +121,7 @@
         return;
       }
 
-      const texto = `formulario de carga WSHome*:%0A Contrato: ${contrato}%0A Apartamento: ${apartamento}%0A Carga: ${carga}`;
+            const texto = `*Formulario Carga*:%0A Contrato: ${contrato}%0A Apartamento: ${apartamento}%0A Carga: ${carga}`;
       const numero = "573126747790";
       const url = `https://wa.me/${numero}?text=${texto}`;
       window.open(url, '_blank');
