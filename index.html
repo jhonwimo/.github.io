@@ -14,20 +14,49 @@
       font-family: Arial, sans-serif;
       background-color: #f4f6f8;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+    }
+
+    .navbar {
+      background-color: #004080;
+      color: #fff;
+      padding: 15px 20px;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      min-height: 100vh;
+    }
+
+    .navbar h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .menu {
+      display: flex;
+      gap: 10px;
+    }
+
+    .menu button {
+      background-color: #0066cc;
+      border: none;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .menu button:hover {
+      background-color: #0052a3;
     }
 
     .container {
+      max-width: 400px;
+      margin: 30px auto;
       background-color: #fff;
       padding: 30px 25px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      width: 100%;
-      max-width: 400px;
     }
 
     h2 {
@@ -52,7 +81,7 @@
       font-size: 14px;
     }
 
-    button {
+    button[type="submit"] {
       width: 100%;
       padding: 12px;
       margin-top: 20px;
@@ -65,7 +94,7 @@
       transition: background-color 0.3s ease;
     }
 
-    button:hover {
+    button[type="submit"]:hover {
       background-color: #002e5a;
     }
 
@@ -80,38 +109,76 @@
       margin: 0 auto 5px;
     }
 
-    .logo div {
-      font-size: 24px;
-      font-weight: bold;
-      color: #004080;
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active {
+      display: block;
     }
   </style>
 </head>
 <body>
 
+  <div class="navbar">
+    <h1>WSHome</h1>
+    <div class="menu">
+      <button onclick="mostrarSeccion('energia')">Carga Energía</button>
+      <button onclick="mostrarSeccion('inquilino')">Actualizar Inquilino</button>
+    </div>
+  </div>
+
   <div class="container">
     <div class="logo">
       <img src="logo.svg" alt="WSHome logo">
-     </div>
-    <form id="formulario" novalidate>
-      <label>Contrato:
-        <input type="text" name="contrato" required>
-      </label>
-      <label>Apartamento:
-        <input type="number" name="apartamento" required>
-      </label>
-      <label>Carga:
-        <input type="number" name="carga" required>
-      </label>
+    </div>
 
-      <button type="submit">Enviar</button>
-    </form>
+    <!-- Sección Carga Energía -->
+    <div id="form-energia" class="form-section active">
+      <h2>Carga Energía</h2>
+      <form id="formularioEnergia" novalidate>
+        <label>Contrato:
+          <input type="text" name="contrato" required>
+        </label>
+        <label>Apartamento:
+          <input type="number" name="apartamento" required>
+        </label>
+        <label>Carga:
+          <input type="number" name="carga" required>
+        </label>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <!-- Sección Actualizar Inquilino -->
+    <div id="form-inquilino" class="form-section">
+      <h2>Actualizar Inquilino</h2>
+      <form id="formularioInquilino" novalidate>
+	   <label>Contrato:
+          <input type="text" name="contrato" required>
+        </label>
+        <label>Nombre:
+          <input type="text" name="nombre" >
+        </label>
+        <label>Teléfono:
+          <input type="tel" name="telefono" >
+        </label>
+        <button type="submit">Actualizar</button>
+      </form>
+    </div>
   </div>
 
   <script>
-    document.getElementById("formulario").addEventListener("submit", function(e) {
-      e.preventDefault();
+    function mostrarSeccion(seccion) {
+      document.querySelectorAll('.form-section').forEach(sec => {
+        sec.classList.remove('active');
+      });
+      document.getElementById(`form-${seccion}`).classList.add('active');
+    }
 
+    // Formulario energía
+    document.getElementById("formularioEnergia").addEventListener("submit", function(e) {
+      e.preventDefault();
       const contrato = e.target.contrato.value.trim();
       const apartamento = e.target.apartamento.value.trim();
       const carga = e.target.carga.value.trim();
@@ -121,7 +188,24 @@
         return;
       }
 
-            const texto = `*Formulario Carga*:%0A Contrato: ${contrato}%0A Apartamento: ${apartamento}%0A Carga: ${carga}`;
+      const texto = `*Formulario Carga*:%0A Contrato: ${contrato}%0A Apartamento: ${apartamento}%0A Carga: ${carga}`;
+      const numero = "573126747790";
+      const url = `https://wa.me/${numero}?text=${texto}`;
+      window.open(url, '_blank');
+    });
+
+    // Formulario inquilino
+    document.getElementById("formularioInquilino").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const nombre = e.target.nombre.value.trim();
+      const telefono = e.target.telefono.value.trim();
+      const contrato = e.target.contrato.value.trim();
+      if (!nombre || !telefono) {
+        alert("Por favor completa todos los campos antes de actualizar.");
+        return;
+      }
+
+      const texto = `*Actualizar Inquilino*:%0A Contrato: ${contrato}%0A Nombre: ${nombre}%0A Teléfono: ${telefono}`;
       const numero = "573126747790";
       const url = `https://wa.me/${numero}?text=${texto}`;
       window.open(url, '_blank');
