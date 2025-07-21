@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cargar Imagen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    padding: 20px;
+    margin: 0;
+  }
+
+.container {
+  max-width: 480px;
+  margin: auto;
+  padding: 15px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  width: 100%; /* Esto ayuda que se ajuste bien en pantallas chicas */
+}
+input[type="text"],
+.file-btn,
+button {
+  box-sizing: border-box;
+}
+
+  h2 {
+    color: #004080;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+
+  /* Estilo personalizado para el input file */
+  .file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .file-input-wrapper input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+
+  .file-btn {
+    background-color: #004080;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
+  }
+
+  #preview {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  #preview img {
+    max-width: 100%;
+    border-radius: 10px;
+    display: none;
+  }
+
+  #resultadoOCR {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    white-space: pre-wrap;
+    font-family: monospace;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    background-color: #004080;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #002e5a;
+  }
+
+  #enviarWhatsapp {
+    background-color: #25D366;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+    }
+
+    .container {
+      padding: 10px;
+    }
+
+    input[type="text"],
+    .file-btn,
+    button {
+      font-size: 15px;
+      padding: 12px;
+    }
+  }
+  
+  #preview img {
+  max-width: 100%;
+  border-radius: 10px;
+  display: none;
+}
+
+#preview img {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+  display: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+</style>
+
+  <!-- Tesseract.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <h2>Cargar comprobante</h2>
+
+  <form id="formImagen">
+     <label for="imagen">Selecciona Comprobante:</label>
+    <div class="file-input-wrapper">
+      <button type="button" class="file-btn">Elegir imagen</button>
+      <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required />
+    </div>
+	 <div id="resultadoOCR" style="display:none;"></div>
+ <!--
+    <div id="preview">
+      <img id="previewImg" src="" alt="Previsualización" />
+    </div>
+-->
+    <!-- Nuevos inputs para mostrar datos extraídos -->
+	  <!--<input type="text" id="usuario" name="usuario" readonly style="position:absolute; left:-9999px;" />-->
+	  <input type="text" id="usuario" name="usuario" readonly />
+	<label for="valor">Contrato:</label>
+	<input type="text" id="contrato" name="contrato" readonly />
+	<div id="datosExtraidos" style="display:none;">
+    <label for="valor">Valor a cargar:</label>
+    <input type="text" id="valor" name="valor" readonly />
+
+    <label for="fecha">Fecha:</label>
+    <input type="text" id="fecha" name="fecha" readonly />
+
+    <label for="referencia">Referencia:</label>
+    <input type="text" id="referencia" name="referencia" readonly />
+
+  
+  <button type="button" id="enviarWhatsapp" disabled style="margin-top:10px; background-color: #25D366;" onclick="enviarDatosAWhatsApp()">
+  Enviar a WhatsApp
+</button>
+</div>
+
+  </form>
+</div>
+  <script>
+    function previsualizarImagen(event) {
+      const archivo = event.target.files[0];
+      const img = document.getElementById("previewImg");
+
+      if (archivo) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          img.src = e.target.result;
+          img.style.display = "block";
+        };
+        reader.readAsDataURL(archivo);
+		procesarImagenOCR();
+      } else {
+        img.src = "";
+        img.style.display = "none";
+      }
+    }
+
+  
+	
+	async function procesarImagenOCR() {
+  const archivo = document.getElementById("imagen").files[0];
+  const resultadoOCRDiv = document.getElementById("resultadoOCR");
+
+  if (!archivo) {
+    alert("Por favor selecciona una imagen antes de enviar.");
+    return;
+  }
+
+  resultadoOCRDiv.style.display = "block";
+  resultadoOCRDiv.textContent = "Procesando Comprobante, por favor espera...";
+
+  const reader = new FileReader();
+
+  reader.onload = async function (event) {
+    const imgSrc = event.target.result;
+
+    try {
+      const {
+        data: { text },
+      } = await Tesseract.recognize(imgSrc, "spa", {
+        logger: (m) => console.log(m),
+      });
+
+      resultadoOCRDiv.textContent = "";
+	  document.getElementById("resultadoOCR").style.display = "none";
+      document.getElementById("datosExtraidos").style.display = "block";
+      const datos = extraerDatos(text);
+      console.log("Datos extraídos:", datos);
+
+      // Llenar inputs con los datos extraídos (si hay)
+      document.getElementById("valor").value = datos.valor || "";
+      document.getElementById("fecha").value = datos.fecha ? datos.fecha.join("; ") : "";
+      document.getElementById("referencia").value = datos.referencia || "";
+	  validarCampos();
+    } catch (error) {
+      resultadoOCRDiv.textContent = "Error al procesar OCR: " + error.message;
+    }
+  };
+
+  reader.readAsDataURL(archivo);
+}
+
+// Y el event listener queda así:
+document.getElementById("formImagen").addEventListener("submit", function (e) {
+  e.preventDefault();
+  procesarImagenOCR();
+});
+
+
+    function extraerDatos(texto) {
+      const fechas = extraerFechas(texto);
+
+      const valores = extraerValores(texto);
+
+      const referencia = extraerReferenciaComprobante(texto);
+
+      return {
+        fecha: fechas.length > 0 ? fechas : null,
+        valor: valores.length > 0 ? valores[0] : null,
+        referencia: referencia,
+      };
+    }
+
+    function extraerFechas(texto) {
+      const regexFechaHora =
+        /\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+DE)?\s+(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+DE)?\s+\d{4}|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01]))(?:\s*[-–]?\s*(?:[01]?\d|2[0-3]):[0-5]\d(?:\:[0-5]\d)?(?:\s?(?:AM|PM|am|pm))?)?\b/gi;
+
+      const lineas = texto.split(/\r?\n/);
+      const lineasConFecha = [];
+
+      for (const linea of lineas) {
+        if (regexFechaHora.test(linea)) {
+          lineasConFecha.push(linea.trim());
+        }
+      }
+
+      return lineasConFecha;
+    }
+
+    function extraerValores(texto) {
+      const regex = /(?:\$|COP)?\s*\d{1,3}(?:([.,])\d{3})+(?:[.,]\d{2})?|\d+[.,]\d{2}/g;
+      const valores = [];
+      let match;
+      while ((match = regex.exec(texto)) !== null) {
+        valores.push(match[0].trim());
+      }
+      return valores;
+    }
+
+    function extraerReferenciaComprobante(texto) {
+      const regexReferencia =
+        /\b(?:comprobante|referencia|ref(?:\.|:)?|n[úu]mero|nro(?:\.|:)?)(?:\s*No\.?\s*|\s+No\.?\s*|\s*:\s*|\s+)?([A-Z0-9\-]{6,})\b/gi;
+      const match = regexReferencia.exec(texto);
+      return match ? match[1] : "";
+    }
+	
+	function enviarDatosAWhatsApp() {
+const usuario = document.getElementById("usuario").value;
+	const contrato = document.getElementById("contrato").value;
+  const valor = document.getElementById("valor").value;
+  const fecha = document.getElementById("fecha").value;
+  const referencia = document.getElementById("referencia").value;
+
+  if (!valor && !fecha && !referencia) {
+    alert("No hay datos para enviar a WhatsApp.");
+    return;
+  }
+
+  let mensaje = "Datos Carga WShome :\n";
+  if (usuario) mensaje += `Usuario: ${usuario}\n`;
+  if (contrato) mensaje += `Contrato: ${contrato}\n`;
+  if (valor) mensaje += `Carga: ${valor}\n`;
+  if (fecha) mensaje += `Fecha: ${fecha}\n`;
+  if (referencia) mensaje += `Referencia: ${referencia}\n`;
+
+  const telefono = "573126747790"; // Cambia por el número destino
+
+  const mensajeUrl = encodeURIComponent(textoAInvisible(mensaje)+""+"Datos Carga WShome :646464");
+  const urlWhatsapp = `https://wa.me/${telefono}?text=${mensajeUrl}`;
+  window.open(urlWhatsapp, "_blank");
+}
+function validarCampos() {
+  const valor = document.getElementById("valor").value.trim();
+  const fecha = document.getElementById("fecha").value.trim();
+  const referencia = document.getElementById("referencia").value.trim();
+
+  const boton = document.getElementById("enviarWhatsapp");
+  // El botón estará habilitado solo si al menos un campo tiene contenido
+  if (valor || fecha || referencia) {
+    boton.disabled = false;
+  } else {
+    boton.disabled = true;
+	
+  }
+}
+
+function cifrarMensaje(mensaje) {
+  // Codificar en Base64
+  const base64 = btoa(mensaje); 
+  // Agregar la palabra "fin"
+  return base64 + "fin";
+}
+
+
+
+
+ window.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const contrato = params.get("contrato");
+	const usuario = params.get("usuario");
+    if (contrato) {
+      document.getElementById("contrato").value = contrato;
+    }
+	 if (usuario) {
+      document.getElementById("usuario").value = usuario;
+    }
+  });
+  
+  
+function textoAInvisible(texto) {
+  return [...texto].map(char => {
+    const bin = char.charCodeAt(0).toString(4).padStart(4, '0');
+    return [...bin].map(dig => inverso[dig]).join('');
+  }).join('');
+}
+
+function invisibleATexto(invisible) {
+  const chunks = invisible.match(/.{4}/g) || [];
+  return chunks.map(grupo => {
+    const bin = [...grupo].map(c => mapa[c]).join('');
+    return String.fromCharCode(parseInt(bin, 4));
+  }).join('');
+}
+
+const mapa = {
+  '\u200B': '0',
+  '\u200C': '1',
+  '\u200D': '2',
+  '\u2060': '3'
+};
+
+// Generar inverso para codificación
+const inverso = {
+  '0': '\u200B',
+  '1': '\u200C',
+  '2': '\u200D',
+  '3': '\u2060'
+};
+  </script>
+</body>
+</html>
