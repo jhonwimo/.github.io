@@ -137,11 +137,10 @@
     <div id="form-energia" class="form-section active">
       <h2>Carga Energía</h2>
       <form id="formularioEnergia" novalidate>
+	  <input type="text" id="usuario" name="usuario" readonly />
+	
         <label>Contrato:
-          <input type="text" name="contrato" required>
-        </label>
-        <label>Apartamento:
-          <input type="number" name="apartamento" required>
+          <input type="text" id="contrato" name="contrato" required>
         </label>
         <label>Carga:
           <input type="number" name="carga" required>
@@ -210,6 +209,17 @@
       const url = `https://wa.me/${numero}?text=${texto}`;
       window.open(url, '_blank');
     });
+	
+	
+	 window.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const contrato = params.get("contrato");
+	const usuario = params.get("usuario");
+    
+	 if (usuario) {
+      document.getElementById("usuario").value = usuario;
+    }
+  });
   </script>
 
 </body>
