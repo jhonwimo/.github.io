@@ -197,6 +197,9 @@ button {
   </form>
 </div>
   <script>
+  
+  
+  
     function previsualizarImagen(event) {
       const archivo = event.target.files[0];
       const img = document.getElementById("previewImg");
@@ -354,26 +357,36 @@ function validarCampos() {
   }
 }
 
-function cifrarMensaje(mensaje) {
-  // Codificar en Base64
-  const base64 = btoa(mensaje); 
-  // Agregar la palabra "fin"
-  return base64 + "fin";
-}
+
 
 
 
 
  window.addEventListener("DOMContentLoaded", () => {
-    const params = new URLSearchParams(window.location.search);
-    const contrato = params.get("contrato");
-	const usuario = params.get("usuario");
-    if (contrato) {
-      document.getElementById("contrato").value = contrato;
+ 
+     const params = new URLSearchParams(window.location.search);
+	const dataBase64 = params.get("data");
+	
+	 if (dataBase64) {
+      try {
+        // Decodificar Base64
+        const decoded = atob(dataBase64);
+
+        // Parsear como parámetros tipo query string
+        const datos = new URLSearchParams(decoded);
+
+        // Extraer valores individuales
+        const contrato = datos.get("contrato");
+        const usuario = datos.get("usuario");
+        document.getElementById("contrato").value = contrato;
+		document.getElementById("usuario").value = usuario;
+       
+      } catch (e) {
+        document.getElementById("info").innerText = "Error al decodificar.";
+      }
     }
-	 if (usuario) {
-      document.getElementById("usuario").value = usuario;
-    }
+	
+	
   });
   
   
