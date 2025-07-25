@@ -370,9 +370,10 @@ function validarCampos() {
 	 if (dataBase64) {
       try {
         // Decodificar Base64
-        const decoded = atob(dataBase64);
+             const base64 = urlSafeBase64ToNormal(dataParam);
+        const decoded = atob(base64);
 
-        // Parsear como parámetros tipo query string
+        // Convertir texto en objeto tipo query string
         const datos = new URLSearchParams(decoded);
 
         // Extraer valores individuales
