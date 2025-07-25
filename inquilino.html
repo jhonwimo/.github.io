@@ -362,7 +362,7 @@ function validarCampos() {
 
 
 
- window.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("DOMContentLoaded", () => {
  
      const params = new URLSearchParams(window.location.search);
 	const dataBase64 = params.get("data");
@@ -370,8 +370,8 @@ function validarCampos() {
 	 if (dataBase64) {
       try {
         // Decodificar Base64
-             const base64 = urlSafeBase64ToNormal(dataParam);
-        const decoded = atob(base64);
+            // const base64 = urlSafeBase64ToNormal(dataParam);
+        const decoded = atob(dataBase64);
 
         // Convertir texto en objeto tipo query string
         const datos = new URLSearchParams(decoded);
@@ -389,6 +389,13 @@ function validarCampos() {
 	
 	
   });
+  
+  function urlSafeBase64ToNormal(str) {
+      return str
+        .replace(/-/g, '+')
+        .replace(/_/g, '/')
+        .padEnd(str.length + (4 - str.length % 4) % 4, '=');
+    }
   
   
 function textoAInvisible(texto) {
