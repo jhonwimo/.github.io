@@ -220,6 +220,35 @@
       document.getElementById("usuario").value = usuario;
     }
   });
+  
+  
+   window.addEventListener("DOMContentLoaded", () => {
+ 
+     const params = new URLSearchParams(window.location.search);
+	const dataBase64 = params.get("data");
+	
+	 if (dataBase64) {
+      try {
+        // Decodificar Base64
+             const base64 = urlSafeBase64ToNormal(dataParam);
+        const decoded = atob(base64);
+
+        // Convertir texto en objeto tipo query string
+        const datos = new URLSearchParams(decoded);
+
+        // Extraer valores individuales
+        const contrato = datos.get("contrato");
+        const usuario = datos.get("usuario");
+        document.getElementById("contrato").value = contrato;
+		document.getElementById("usuario").value = usuario;
+       
+      } catch (e) {
+        document.getElementById("info").innerText = "Error al decodificar.";
+      }
+    }
+	
+	
+  });
   </script>
 
 </body>
