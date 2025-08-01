@@ -152,6 +152,7 @@
     <!-- Sección Actualizar Inquilino -->
     <div id="form-inquilino" class="form-section">
       <h2>Actualizar Inquilino</h2>
+	   <input type="text" id="usuario" name="usuario" readonly style="display: none;"/>
       <form id="formularioInquilino" novalidate>
 	   <label>Contrato:
           <input type="text" name="contrato" required>
@@ -199,12 +200,13 @@
       const nombre = e.target.nombre.value.trim();
       const telefono = e.target.telefono.value.trim();
       const contrato = e.target.contrato.value.trim();
+	  const usuario = e.target.usuario.value.trim();
       if (!nombre && !telefono) {
         alert("Por favor completa alguno nombre o telefono.");
         return;
       }
 
-      const texto = `*Actualizar Inquilino*:%0A Contrato: ${contrato}%0A Nombre: ${nombre}%0A Teléfono: ${telefono}`;
+      const texto = `*Actualizar Inquilino*:%0A Usuario: ${usuario}%0A Contrato: ${contrato}%0A Nombre: ${nombre}%0A Teléfono: ${telefono}`;
       const numero = "573126747790";
       const url = `https://wa.me/${numero}?text=${texto}`;
       window.open(url, '_blank');
@@ -256,6 +258,36 @@
         .replace(/_/g, '/')
         .padEnd(str.length + (4 - str.length % 4) % 4, '=');
     }
+	
+	
+	
+	 window.addEventListener("DOMContentLoaded", () => {
+ 
+     const params = new URLSearchParams(window.location.search);
+	const dataBase64 = params.get("data");
+	
+	 if (dataBase64) {
+      try {
+        // Decodificar Base64
+            // const base64 = urlSafeBase64ToNormal(dataParam);
+        const decoded = atob(dataBase64);
+
+        // Convertir texto en objeto tipo query string
+        const datos = new URLSearchParams(decoded);
+
+        // Extraer valores individuales
+        //const contrato = datos.get("contrato");
+        const usuario = datos.get("usuario");
+       // document.getElementById("contrato").value = contrato;
+		document.getElementById("usuario").value = usuario;
+       
+      } catch (e) {
+        document.getElementById("info").innerText = "Error al decodificar.";
+      }
+    }
+	
+	
+  });
   </script>
 
 </body>
