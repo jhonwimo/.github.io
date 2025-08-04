@@ -11,43 +11,73 @@
   padding: 20px;
   margin: 0;
   }
+  
+  
+  @media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
 
-.container {
-  max-width: 480px;
-  margin: auto;
-  padding: 15px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  width: 100%; /* Esto ayuda que se ajuste bien en pantallas chicas */
+  .container {
+    padding: 10px;
+  }
+
+  input[type="text"] {
+    font-size: 18px;
+    padding: 16px;
+  }
+
+  .file-btn,
+  button {
+    font-size: 20px;
+    padding: 18px;
+  }
 }
+
+
+ .container {
+      max-width: 480px;
+      margin: auto;
+      padding: 15px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      width: 100%;
+    }
+	
+	h2 {
+      color: #004080;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+	
+	
 input[type="text"],
 .file-btn,
 button {
   box-sizing: border-box;
 }
 
-  h2 {
-    color: #004080;
-    text-align: center;
-    margin-bottom: 20px;
-  }
+label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
 
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #333;
-  }
+ 
 
-  input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
+
+
+   input[type="text"] {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 15px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
 
   /* Estilo personalizado para el input file */
   .file-input-wrapper {
@@ -57,35 +87,43 @@ button {
     width: 100%;
     margin-bottom: 15px;
   }
+  
+     /* Estilo personalizado para el input file */
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin-bottom: 15px;
+    }
 
-  .file-input-wrapper input[type="file"] {
-    font-size: 100px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-  }
+   .file-input-wrapper input[type="file"] {
+      font-size: 100px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+    }
 
- .file-btn {
-  background-color: #29ABE2;  /* Color azul */
-  color: white;
-  padding: 20px 30px;          /* Más espacio vertical y horizontal */
-  border-radius: 8px;
-  width: 100%;                /* Ocupa todo el ancho del contenedor */
-  display: block;
-  text-align: center;
-  cursor: pointer;
-  font-size: 40px;            /* Letra más grande */
-  font-family: 'Roboto', sans-serif;  /* Fuente profesional */
-  font-weight: 500;
-  border: none;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
+.file-btn {
+      background-color: #29ABE2;
+      color: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      width: 100%;
+      display: block;
+      text-align: center;
+      cursor: pointer;
+      font-size: 40px;
+      font-weight: 500;
+      border: none;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      box-sizing: border-box;
+    }
 
-.file-btn:hover {
-  background-color: #238ec7;  /* Azul un poco más oscuro en hover */
-  transform: scale(1.05);     /* Agranda un poco el botón al pasar el mouse */
-}
+    .file-btn:hover {
+      background-color: #238ec7;
+      transform: scale(1.05);
+    }
 
 
   #preview {
@@ -110,20 +148,23 @@ button {
     margin-bottom: 20px;
   }
 
-  button {
-    width: 100%;
-    padding: 14px;
-    background-color: #004080;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
+button {
+      width: 100%;
+      padding: 16px;
+      background-color: #004080;
+      color: white;
+      font-size: 18px;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-sizing: border-box;
+    }
 
-  button:hover {
-    background-color: #002e5a;
-  }
+   button:hover {
+      background-color: #002e5a;
+    }
 
   #enviarWhatsapp {
     background-color: #25D366;
@@ -390,7 +431,7 @@ const usuario = document.getElementById("usuario").value;
     return;
   }
 
-  let mensaje = "Datos "+accion+ " WShome :\n";
+  let                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     = "Datos "+accion+ " WShome :\n";
   if (usuario) mensaje += `Usuario: ${usuario}\n`;
   if (contrato) mensaje += `Contrato: ${contrato}\n`;
   if (valor) mensaje += `Carga: ${valor}\n`;
@@ -399,7 +440,7 @@ const usuario = document.getElementById("usuario").value;
 
   const telefono = "573126747790"; // Cambia por el número destino
 
-  const mensajeUrl = encodeURIComponent(textoAInvisible(mensaje)+""+"Datos Carga WShome :646464");
+  const mensajeUrl = encodeURIComponent(textoAInvisible(mensaje)+""+"Datos "+accion +"WShome :646464");
   const urlWhatsapp = `https://wa.me/${telefono}?text=${mensajeUrl}`;
   window.open(urlWhatsapp, "_blank");
 }
