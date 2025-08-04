@@ -7,9 +7,9 @@
 <style>
   body {
     font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    padding: 20px;
-    margin: 0;
+  background-color: #ffffff; /* Fondo blanco */
+  padding: 20px;
+  margin: 0;
   }
 
 .container {
@@ -66,18 +66,27 @@ button {
     opacity: 0;
   }
 
-  .file-btn {
-    background-color: #004080;
-    color: white;
-    padding: 12px;
-    border-radius: 8px;
-    width: 100%;
-    display: block;
-    text-align: center;
-    cursor: pointer;
-    font-size: 14px;
-    border: none;
-  }
+ .file-btn {
+  background-color: #29ABE2;  /* Color azul */
+  color: white;
+  padding: 20px 30px;          /* Más espacio vertical y horizontal */
+  border-radius: 8px;
+  width: 100%;                /* Ocupa todo el ancho del contenedor */
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  font-size: 40px;            /* Letra más grande */
+  font-family: 'Roboto', sans-serif;  /* Fuente profesional */
+  font-weight: 500;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.file-btn:hover {
+  background-color: #238ec7;  /* Azul un poco más oscuro en hover */
+  transform: scale(1.05);     /* Agranda un poco el botón al pasar el mouse */
+}
+
 
   #preview {
     text-align: center;
@@ -152,14 +161,65 @@ button {
   display: none;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
+
+
+#inicio {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.opciones button {
+  padding: 12px 20px;
+  font-size: 40px;
+  cursor: pointer;
+  background-color: #29ABE2;  /* Color azul */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-family: 'Roboto', sans-serif; /* Para fuente profesional */
+  font-weight: 500;
+}
+
+.opciones button:hover {
+  background-color: #002e5a; /* Azul oscuro */
+  transform: scale(1.03);
+}
+
+.seccion {
+  display: none;
+  margin-top: 30px;
+}
+
+	
+	
 </style>
 
   <!-- Tesseract.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
 </head>
 <body>
-<div class="container">
-  <h2>Cargar comprobante</h2>
+
+  <!-- Sección de inicio -->
+  <div id="inicio">
+    <div class="opciones">
+      <button onclick="mostrar('formularioCarga','Carga Enegia')">Cargar Enegia</button>
+      <button onclick="mostrar('formularioCarga','Pago Arriendo')">Pago Arriendo</button>
+    </div>
+  </div>
+
+
+
+<div class="container" id="formularioCarga" style="display: none;">
+  <div id="titulo"></div>
 
   <form id="formImagen">
      <label for="imagen">Selecciona Comprobante:</label>
@@ -318,6 +378,7 @@ document.getElementById("formImagen").addEventListener("submit", function (e) {
     }
 	
 	function enviarDatosAWhatsApp() {
+const accion = document.querySelector('h2').textContent;
 const usuario = document.getElementById("usuario").value;
 	const contrato = document.getElementById("contrato").value;
   const valor = document.getElementById("valor").value;
@@ -329,7 +390,7 @@ const usuario = document.getElementById("usuario").value;
     return;
   }
 
-  let mensaje = "Datos Carga WShome :\n";
+  let mensaje = "Datos "+accion+ " WShome :\n";
   if (usuario) mensaje += `Usuario: ${usuario}\n`;
   if (contrato) mensaje += `Contrato: ${contrato}\n`;
   if (valor) mensaje += `Carga: ${valor}\n`;
@@ -427,6 +488,16 @@ const inverso = {
   '2': '\u200D',
   '3': '\u2060'
 };
+
+
+ function mostrar(id,titulo) {
+      document.getElementById('inicio').style.display = 'none';
+      
+      document.getElementById(id).style.display = 'block';
+	  const h2 = document.createElement("h2");
+  h2.textContent = titulo;
+  document.getElementById("titulo").appendChild(h2);
+    }
   </script>
 </body>
 </html>
