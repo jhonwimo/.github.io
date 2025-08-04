@@ -431,7 +431,7 @@ const usuario = document.getElementById("usuario").value;
     return;
   }
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    = "Datos "+accion+ " WShome :\n";
+  let mensaje = "Datos WShome :\n";
   if (usuario) mensaje += `Usuario: ${usuario}\n`;
   if (contrato) mensaje += `Contrato: ${contrato}\n`;
   if (valor) mensaje += `Carga: ${valor}\n`;
@@ -440,7 +440,7 @@ const usuario = document.getElementById("usuario").value;
 
   const telefono = "573126747790"; // Cambia por el número destino
 
-  const mensajeUrl = encodeURIComponent(textoAInvisible(mensaje)+""+"Datos "+accion +"WShome :646464");
+  const mensajeUrl = encodeURIComponent(textoAInvisible(mensaje)+""+"Datos "+accion+ " WShome :646464");
   const urlWhatsapp = `https://wa.me/${telefono}?text=${mensajeUrl}`;
   window.open(urlWhatsapp, "_blank");
 }
