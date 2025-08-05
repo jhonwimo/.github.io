@@ -135,7 +135,10 @@
           <input type="text" name="nombre" />
         </label>
         <label>Teléfono:
-          <input type="tel" name="telefono" />
+          <input type="number" name="telefono" />
+        </label>
+		<label>Dias de pago:
+          <input type="number" name="diaPago" />
         </label>
         <button type="submit">Actualizar</button>
       </form>
@@ -199,14 +202,14 @@
       const nombre = e.target.nombre.value.trim();
       const telefono = e.target.telefono.value.trim();
       const contrato = e.target.contrato.value.trim();
-      const usuario = e.target.usuario.value.trim() || "jhonwimo";
-
+      const usuario = e.target.usuario.value.trim();
+const diaPago = e.target.diaPago.value.trim();
       if (!nombre && !telefono) {
         alert("Por favor completa alguno nombre o telefono.");
         return;
       }
 
-      const texto = `*Actualizar Inquilino*:%0A Usuario: ${usuario}%0A Contrato: ${contrato}%0A Nombre: ${nombre}%0A Teléfono: ${telefono}`;
+      const texto = `*Actualizar Inquilino*:%0A Usuario: ${usuario}%0A Contrato: ${contrato}%0A Nombre: ${nombre}%0A Teléfono: ${telefono}%0A diaPago: ${diaPago}`;
       const numero = "573126747790";
       const url = `https://wa.me/${numero}?text=${texto}`;
       window.open(url, '_blank');
