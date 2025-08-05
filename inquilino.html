@@ -153,7 +153,14 @@ input[type="text"] {
 }
 
 
-
+.logo img {
+  width: 250px;      /* ancho fijo para móvil, puedes ajustar */
+  max-width: 80vw;   /* no exceda 80% del ancho de la pantalla */
+  height: auto;      /* mantiene proporción */
+  display: block;
+  margin: 0 auto;
+   margin-bottom: 50px; /* espacio debajo del logo */
+}
 </style>
 
   <!-- Tesseract.js CDN -->
@@ -163,6 +170,10 @@ input[type="text"] {
 
   <!-- Sección de inicio -->
   <div id="inicio">
+  <div class="logo">
+    <!-- Cambia el src a la URL o ruta local de tu logo -->
+    <img src="logo.svg" alt="Logo Empresa" />
+  </div>
     <div class="opciones">
       <button onclick="mostrar('formularioCarga','Carga Enegia')">Cargar Enegia</button>
       <button onclick="mostrar('formularioCarga','Pago Arriendo')">Pago Arriendo</button>
