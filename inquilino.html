@@ -443,7 +443,11 @@ const usuario = document.getElementById("usuario").value;
   const mensajeUrl = encodeURIComponent(textoAInvisible(mensaje)+""+"Datos "+accion+ " WShome :646464");
   const urlWhatsapp = `https://wa.me/${telefono}?text=${mensajeUrl}`;
   window.open(urlWhatsapp, "_blank");
-  window.close();
+   // Recarga esta página después de un breve tiempo (ej: 1 segundo)
+  setTimeout(() => {
+    location.reload();
+  }, 1000);
+}
 }
 function validarCampos() {
   const valor = document.getElementById("valor").value.trim();
