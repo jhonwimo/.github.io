@@ -26,6 +26,8 @@
     .logo img { width: 250px; max-width: 80vw; height: auto; display: block; margin: 0 auto 50px; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
 
@@ -145,7 +147,16 @@ async function enviarDatosAWhatsApp() {
       alert("Datos enviados correctamente.");
       document.getElementById("formImagen").reset();
       document.getElementById("datosExtraidos").style.display = "none";
-    } else { alert("Error al enviar."); console.error(await response.text()); }
+    } else { 
+	alert("Error al enviar."); console.error(await response.text());
+	Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'Error al enviar: ' ,
+  confirmButtonText: 'Cerrar',
+  timer: 5000
+});
+	}
   } catch(error) { alert("No se pudo conectar."); console.error(error); }
 }
 
