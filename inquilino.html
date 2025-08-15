@@ -122,7 +122,8 @@ function extraerReferenciaComprobante(texto) { const regex = /\b(?:comprobante|r
 
 async function enviarDatosAWhatsApp() {
   // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
-  const NGROK_URL = "https://dbe1b8bfbbc7.ngrok-free.app";
+  const NGROK_URL = await obtenerNgrokURL();
+  if (!NGROK_URL) { alert("No se pudo obtener la URL de ngrok"); return; }
   const accion = document.querySelector('h2').textContent;
   const usuario = document.getElementById("usuario").value;
   const contrato = document.getElementById("contrato").value;
@@ -147,6 +148,25 @@ async function enviarDatosAWhatsApp() {
     } else { alert("Error al enviar."); console.error(await response.text()); }
   } catch(error) { alert("No se pudo conectar."); console.error(error); }
 }
+
+async function obtenerNgrokURL() {
+  try {
+    const resp = await fetch("./.dev"); // archivo .dev debe estar en la misma carpeta que el HTML
+    const url = await resp.text();
+    return url.trim();
+  } catch(e) {
+    console.error("No se pudo leer .dev", e);
+    return null;
+  }
+}
+
+async function enviarDatosAWhatsApp() {
+  const NGROK_URL = await obtenerNgrokURL();
+  if (!NGROK_URL) { alert("No se pudo obtener la URL de ngrok"); return; }
+
+  // resto de tu código igual...
+}
+
 
 
 function validarCampos() {
