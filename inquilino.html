@@ -121,6 +121,7 @@ function extraerValores(texto) { const regex = /(?:\$|COP)?\s*\d{1,3}(?:([.,])\d
 function extraerReferenciaComprobante(texto) { const regex = /\b(?:comprobante|referencia|ref|nro)[^A-Z0-9]*([A-Z0-9\-]{6,})/i; const m = regex.exec(texto); return m ? m[1] : ""; }
 
 async function enviarDatosAWhatsApp() {
+  // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
   const res = await fetch('/.dev');
   const urlNgrok = (await res.text()).trim();
 
@@ -136,7 +137,11 @@ async function enviarDatosAWhatsApp() {
   const payload = { accion, usuario, contrato, valor, fecha, referencia };
 
   try {
-    const response = await fetch(`${urlNgrok}/recibir`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
+    const response = await fetch(`${urlNgrok}/recibir`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
     if(response.ok){
       alert("Datos enviados correctamente.");
       document.getElementById("formImagen").reset();
@@ -144,6 +149,7 @@ async function enviarDatosAWhatsApp() {
     } else { alert("Error al enviar."); console.error(await response.text()); }
   } catch(error) { alert("No se pudo conectar."); console.error(error); }
 }
+
 
 function validarCampos() {
   const valor = document.getElementById("valor").value.trim();
