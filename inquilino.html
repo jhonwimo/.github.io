@@ -122,9 +122,7 @@ function extraerReferenciaComprobante(texto) { const regex = /\b(?:comprobante|r
 
 async function enviarDatosAWhatsApp() {
   // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
-  const res = await fetch('/.dev');
-  const urlNgrok = (await res.text()).trim();
-  console.warn("⚠️ No hay datos para enviar"+urlNgrok);
+  
   const accion = document.querySelector('h2').textContent;
   const usuario = document.getElementById("usuario").value;
   const contrato = document.getElementById("contrato").value;
@@ -137,7 +135,7 @@ async function enviarDatosAWhatsApp() {
   const payload = { accion, usuario, contrato, valor, fecha, referencia };
 
   try {
-    const response = await fetch(`${urlNgrok}/recibir`, {
+    const response = await fetch(`#swhome#/recibir`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
