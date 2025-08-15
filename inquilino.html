@@ -342,6 +342,9 @@ document.getElementById("formImagen").addEventListener("submit", function (e) {
     }
 	
 	function enviarDatosAWhatsApp() {
+	const res = await fetch('/.dev');
+    const urlNgrok = (await res.text()).trim();
+    
 const accion = document.querySelector('h2').textContent;
 const usuario = document.getElementById("usuario").value;
 	const contrato = document.getElementById("contrato").value;
@@ -361,15 +364,38 @@ const usuario = document.getElementById("usuario").value;
   if (fecha) mensaje += `Fecha: ${fecha}\n`;
   if (referencia) mensaje += `Referencia: ${referencia}\n`;
 
-  const telefono = "573126747790"; // Cambia por el número destino
+    // Crear el objeto con los datos a enviar
+    const payload = {
+        accion,
+        usuario,
+        contrato,
+        valor,
+        fecha,
+        referencia
+    };
 
-  const mensajeUrl = encodeURIComponent(textoAInvisible(mensaje)+""+"Datos "+accion+ " WShome :646464");
-  const urlWhatsapp = `https://wa.me/${telefono}?text=${mensajeUrl}`;
-  window.open(urlWhatsapp, "_blank");
-   // Recarga esta página después de un breve tiempo (ej: 1 segundo)
-  setTimeout(() => {
-    location.reload();
-  }, 1000);
+    try {
+        const response = await fetch(`${urlNgrok}/recibir`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            alert("Datos enviados correctamente al servidor REST.");
+            // Limpiar formulario o recargar si lo deseas
+            document.getElementById("formImagen").reset();
+            document.getElementById("datosExtraidos").style.display = "none";
+        } else {
+            alert("Error al enviar los datos al servidor.");
+            console.error(await response.text());
+        }
+    } catch (error) {
+        alert("No se pudo conectar al servidor REST.");
+        console.error(error);
+    }
 
 }
 function validarCampos() {
