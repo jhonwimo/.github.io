@@ -123,7 +123,7 @@ function extraerReferenciaComprobante(texto) { const regex = /\b(?:comprobante|r
 async function enviarDatosAWhatsApp() {
   // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
   const NGROK_URL = "https://ae9e58e0ebbe.ngrok-free.app";
-  if (!NGROK_URL) { alert("No se pudo obtener la URL de ngrok"); return; }
+ 
   const accion = document.querySelector('h2').textContent;
   const usuario = document.getElementById("usuario").value;
   const contrato = document.getElementById("contrato").value;
@@ -151,12 +151,7 @@ async function enviarDatosAWhatsApp() {
 
 
 
-async function enviarDatosAWhatsApp() {
-  const NGROK_URL = await obtenerNgrokURL();
-  if (!NGROK_URL) { alert("No se pudo obtener la URL de ngrok"); return; }
 
-  // resto de tu código igual...
-}
 
 
 
