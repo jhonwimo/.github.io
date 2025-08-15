@@ -135,7 +135,7 @@ async function enviarDatosAWhatsApp() {
   const payload = { accion, usuario, contrato, valor, fecha, referencia };
 
   try {
-    const response = await fetch(`${NGROK_URL}/recibir`, {
+    const response = await fetch(`${NGROK_URL}/comprobantes`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
