@@ -190,7 +190,7 @@ async function enviarDatosAWhatsApp() {
   const fecha = document.getElementById("fecha").value;
   const referencia = document.getElementById("referencia").value;
 
-  if (!valor && !fecha && !referencia) { alert("No hay datos."); return; }
+  if (!valor || !fecha || !referencia || !contrato || !usuario) { alert("Todos los datos deben estar presentes."); return; }
 
   const payload = { accion, usuario, contrato, valor, fecha, referencia };
 
