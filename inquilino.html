@@ -63,7 +63,7 @@
       <label for="referencia">Referencia:</label>
       <input type="text" id="referencia" name="referencia" readonly />
       <button type="button" id="enviarWhatsapp" disabled style="margin-top:10px; background-color: #25D366;" onclick="enviarDatosAWhatsApp()">
-        Enviar a WhatsApp
+        Enviar 
       </button>
     </div>
   </form>
@@ -178,6 +178,9 @@ function previsualizarImagen(event) {
     }
 async function enviarDatosAWhatsApp() {
   // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
+  const boton = document.getElementById("enviarWhatsapp");
+  boton.disabled = true;
+  boton.textContent = "Enviando...";
   const NGROK_URL = "https://ae9e58e0ebbe.ngrok-free.app";
  
   const accion = document.querySelector('h2').textContent;
@@ -198,7 +201,14 @@ async function enviarDatosAWhatsApp() {
       body: JSON.stringify(payload)
     });
     if(response.ok){
-      alert("Datos enviados correctamente.");
+      Swal.fire({
+  icon: 'success',
+  title: 'Operación exitosa',
+  text: 'Los datos fueron enviados correctamente',
+  confirmButtonText: 'Aceptar',
+  timer: 3000
+});
+
       document.getElementById("formImagen").reset();
       document.getElementById("datosExtraidos").style.display = "none";
     } else { 
@@ -210,7 +220,13 @@ async function enviarDatosAWhatsApp() {
   timer: 5000
 });
 	}
-  } catch(error) { alert("No se pudo conectar."); console.error(error); }
+	boton.disabled = false;
+    boton.textContent = "Enviar";
+  } catch(error) { 
+  boton.disabled = false;
+    boton.textContent = "Enviar";
+  alert("No se pudo conectar."); console.error(error); 
+  }
 }
 
 
