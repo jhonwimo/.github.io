@@ -124,7 +124,7 @@ async function enviarDatosAWhatsApp() {
   // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
   const res = await fetch('/.dev');
   const urlNgrok = (await res.text()).trim();
-
+  console.warn("⚠️ No hay datos para enviar"+urlNgrok);
   const accion = document.querySelector('h2').textContent;
   const usuario = document.getElementById("usuario").value;
   const contrato = document.getElementById("contrato").value;
