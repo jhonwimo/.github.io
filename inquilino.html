@@ -87,41 +87,95 @@ function previsualizarImagen(event) {
   }
 }
 
-async function procesarImagenOCR() {
+	async function procesarImagenOCR() {
   const archivo = document.getElementById("imagen").files[0];
   const resultadoOCRDiv = document.getElementById("resultadoOCR");
-  if (!archivo) { alert("Selecciona una imagen."); return; }
+
+  if (!archivo) {
+    alert("Por favor selecciona una imagen antes de enviar.");
+    return;
+  }
+
   resultadoOCRDiv.style.display = "block";
-  resultadoOCRDiv.textContent = "Procesando...";
+  resultadoOCRDiv.textContent = "Procesando Comprobante, por favor espera...";
+
   const reader = new FileReader();
-  reader.onload = async function(event) {
+
+  reader.onload = async function (event) {
+    const imgSrc = event.target.result;
+
     try {
-      const { data: { text } } = await Tesseract.recognize(event.target.result, "spa", { logger: m => console.log(m) });
-      resultadoOCRDiv.style.display = "none";
+      const {
+        data: { text },
+      } = await Tesseract.recognize(imgSrc, "spa", {
+        logger: (m) => console.log(m),
+      });
+
+      resultadoOCRDiv.textContent = "";
+	  document.getElementById("resultadoOCR").style.display = "none";
       document.getElementById("datosExtraidos").style.display = "block";
       const datos = extraerDatos(text);
+      console.log("Datos extraídos:", datos);
+
+      // Llenar inputs con los datos extraídos (si hay)
       document.getElementById("valor").value = datos.valor || "";
       document.getElementById("fecha").value = datos.fecha ? datos.fecha.join("; ") : "";
       document.getElementById("referencia").value = datos.referencia || "";
-      validarCampos();
-    } catch(e) {
-      resultadoOCRDiv.textContent = "Error OCR: " + e.message;
+	  validarCampos();
+    } catch (error) {
+      resultadoOCRDiv.textContent = "Error al procesar OCR: " + error.message;
     }
-  }
+  };
+
   reader.readAsDataURL(archivo);
 }
 
-function extraerDatos(texto) {
-  const fechas = extraerFechas(texto);
-  const valores = extraerValores(texto);
-  const referencia = extraerReferenciaComprobante(texto);
-  return { fecha: fechas.length ? fechas : null, valor: valores.length ? valores[0] : null, referencia };
-}
+ function extraerDatos(texto) {
+      const fechas = extraerFechas(texto);
 
-function extraerFechas(texto) { const regex = /\b(?:\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4}|\d{4}[\/\-.]\d{1,2}[\/\-.]\d{1,2})\b/g; return texto.match(regex) || []; }
-function extraerValores(texto) { const regex = /(?:\$|COP)?\s*\d{1,3}(?:([.,])\d{3})+(?:[.,]\d{2})?|\d+[.,]\d{2}/g; return texto.match(regex) || []; }
-function extraerReferenciaComprobante(texto) { const regex = /\b(?:comprobante|referencia|ref|nro)[^A-Z0-9]*([A-Z0-9\-]{6,})/i; const m = regex.exec(texto); return m ? m[1] : ""; }
+      const valores = extraerValores(texto);
 
+      const referencia = extraerReferenciaComprobante(texto);
+
+      return {
+        fecha: fechas.length > 0 ? fechas : null,
+        valor: valores.length > 0 ? valores[0] : null,
+        referencia: referencia,
+      };
+    }
+
+    function extraerFechas(texto) {
+      const regexFechaHora =
+        /\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+DE)?\s+(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+DE)?\s+\d{4}|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01]))(?:\s*[-–]?\s*(?:[01]?\d|2[0-3]):[0-5]\d(?:\:[0-5]\d)?(?:\s?(?:AM|PM|am|pm))?)?\b/gi;
+
+      const lineas = texto.split(/\r?\n/);
+      const lineasConFecha = [];
+
+      for (const linea of lineas) {
+        if (regexFechaHora.test(linea)) {
+          lineasConFecha.push(linea.trim());
+        }
+      }
+
+      return lineasConFecha;
+    }
+
+    function extraerValores(texto) {
+      const regex = /(?:\$|COP)?\s*\d{1,3}(?:([.,])\d{3})+(?:[.,]\d{2})?|\d+[.,]\d{2}/g;
+      const valores = [];
+      let match;
+      while ((match = regex.exec(texto)) !== null) {
+        valores.push(match[0].trim());
+      }
+      return valores;
+    }
+
+    function extraerReferenciaComprobante(texto) {
+      const regexReferencia =
+        /\b(?:comprobante|referencia|ref(?:\.|:)?|n[úu]mero|nro(?:\.|:)?)(?:\s*No\.?\s*|\s+No\.?\s*|\s*:\s*|\s+)?([A-Z0-9\-]{6,})\b/gi;
+      const match = regexReferencia.exec(texto);
+      return match ? match[1] : "";
+    }
 async function enviarDatosAWhatsApp() {
   // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
   const NGROK_URL = "https://ae9e58e0ebbe.ngrok-free.app";
