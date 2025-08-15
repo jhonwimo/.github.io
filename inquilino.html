@@ -148,10 +148,9 @@ async function enviarDatosAWhatsApp() {
       document.getElementById("formImagen").reset();
       document.getElementById("datosExtraidos").style.display = "none";
     } else { 
-	alert("Error al enviar."); console.error(await response.text());
 	Swal.fire({
   icon: 'error',
-  title: 'Oops...',
+  title: 'Servicio presenta problemas',
   text: 'Error al enviar: ' ,
   confirmButtonText: 'Cerrar',
   timer: 5000
