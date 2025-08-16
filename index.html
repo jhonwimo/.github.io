@@ -232,8 +232,8 @@
           const datos = new URLSearchParams(decoded);
 
           //const contrato = datos.get("contrato");
-          const usuario = datos.get("usuario");
-
+          const usu = datos.get("usuario");
+          document.getElementById("usuario").value = usuario
         } catch (e) {
           console.warn("Error al decodificar datos iniciales");
         }
@@ -245,6 +245,7 @@
       const accion ="Actualizar inquilino";
       const nombre = document.getElementById("nombre").value;
       const telefono = document.getElementById("telefono").value;
+	  const usuario = document.getElementById("usuario").value;
       const contrato = document.getElementById("contratoInquilino").value;
       const diaPago = document.getElementById("diaPago").value;
       if (!nombre && !telefono) {
