@@ -181,7 +181,7 @@ async function enviarDatosAWhatsApp() {
   const boton = document.getElementById("enviarWhatsapp");
   boton.disabled = true;
   boton.textContent = "Enviando...";
-  const NGROK_URL = "https://d224bdf0b7e4.ngrok-free.app";
+  const NGROK_URL = "https://ff1bd925e872.ngrok-free.app";
  
   const accion = document.querySelector('h2').textContent;
   const usuario = document.getElementById("usuario").value;
@@ -206,7 +206,7 @@ async function enviarDatosAWhatsApp() {
   title: 'Operación exitosa',
   text: 'Se envio la informacion pronto le llegara un mensaje',
   confirmButtonText: 'Aceptar',
-  timer: 3000
+  timer: 5000
 });
 
       document.getElementById("formImagen").reset();
