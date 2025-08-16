@@ -271,11 +271,11 @@
   boton.textContent = "Enviando...";
   const NGROK_URL = "https://87b2a3e19101.ngrok-free.app";
       const accion ="Actualizar inquilino";
-      const nombre = e.target.nombre.value.trim();
-      const telefono = e.target.telefono.value.trim();
-      const contrato = e.target.contrato.value.trim();
-      const usuario = e.target.usuario.value.trim();
-      const diaPago = e.target.diaPago.value.trim();
+      const nombre = document.getElementById("nombre").value;
+      const telefono = document.getElementById("telefono").value;
+      const contrato = document.getElementById("contrato").value;
+      const usuario = document.getElementById("usuario").value;
+      const diaPago = document.getElementById("diaPago").value;
       if (!nombre && !telefono) {
         alert("Por favor completa alguno nombre o telefono.");
         return;
