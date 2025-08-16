@@ -198,21 +198,7 @@
     });
 
     document.getElementById("formularioInquilino").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const nombre = e.target.nombre.value.trim();
-      const telefono = e.target.telefono.value.trim();
-      const contrato = e.target.contrato.value.trim();
-      const usuario = e.target.usuario.value.trim();
-const diaPago = e.target.diaPago.value.trim();
-      if (!nombre && !telefono) {
-        alert("Por favor completa alguno nombre o telefono.");
-        return;
-      }
-
-      const texto = `*Actualizar Inquilino*:%0A Usuario: ${usuario}%0A Contrato: ${contrato}%0A Nombre: ${nombre}%0A Teléfono: ${telefono}%0A diaPago: ${diaPago}`;
-      const numero = "573126747790";
-      const url = `https://wa.me/${numero}?text=${texto}`;
-      window.open(url, '_blank');
+    sendData();
     });
 
     window.addEventListener("DOMContentLoaded", () => {
@@ -270,6 +256,69 @@ const diaPago = e.target.diaPago.value.trim();
       '2': '\u200D',
       '3': '\u2060'
     };
+	
+	
+	async function sendData() {
+  // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
+  const boton = document.getElementById("enviarWhatsapp");
+  boton.disabled = true;
+  boton.textContent = "Enviando...";
+  const NGROK_URL = "https://87b2a3e19101.ngrok-free.app";
+      const accion ="Actualizar inquilino";
+      const nombre = e.target.nombre.value.trim();
+      const telefono = e.target.telefono.value.trim();
+      const contrato = e.target.contrato.value.trim();
+      const usuario = e.target.usuario.value.trim();
+      const diaPago = e.target.diaPago.value.trim();
+      if (!nombre && !telefono) {
+        alert("Por favor completa alguno nombre o telefono.");
+        return;
+      }
+
+
+
+  const payload = { accion,usuario,nombre,telefono,contrato, diaPago };
+
+  try {
+    const response = await fetch(`${NGROK_URL}/comprobantes`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if(response.ok){
+      Swal.fire({
+  icon: 'success',
+  title: 'Información enviada',
+  text: 'Espere confirmacion a su telefono',
+  confirmButtonText: 'Aceptar',
+  timer: 5000
+});
+
+      document.getElementById("formImagen").reset();
+      document.getElementById("datosExtraidos").style.display = "none";
+    } else { 
+	Swal.fire({
+  icon: 'error',
+  title: 'Servicio presenta problemas',
+  text: 'Error al enviar: ' ,
+  confirmButtonText: 'Cerrar',
+  timer: 5000
+});
+	}
+	boton.disabled = false;
+    boton.textContent = "Enviar";
+  } catch(error) { 
+    boton.disabled = false;
+    boton.textContent = "Enviar";
+  	Swal.fire({
+  icon: 'error',
+  title: 'Servicio presenta problemas',
+  text: 'Error al enviar: ' ,
+  confirmButtonText: 'Cerrar',
+  timer: 5000
+});
+  }
+}
   </script>
 </body>
 </html>
