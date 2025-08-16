@@ -132,7 +132,7 @@
       <form id="formularioInquilino" novalidate>
         <input type="text" id="usuario" name="usuario" readonly style="display: none;" />
         <label>Contrato:
-          <input type="text" id="contrato" name="contrato" />
+          <input type="text" id="contratoInquilino" name="contrato" />
         </label>
         <label>Nombre:
           <input type="text" id="nombre" name="nombre" />
@@ -174,7 +174,7 @@
           const decoded = atob(dataBase64);
           const datos = new URLSearchParams(decoded);
 
-          form.contrato.value = datos.get("contrato") || '';
+         // form.contrato.value = datos.get("contrato") || '';
           form.usuario.value = datos.get("usuario") || '';
           form.nombre.value = '';
           form.telefono.value = '';
@@ -215,10 +215,10 @@
           const decoded = atob(dataBase64);
           const datos = new URLSearchParams(decoded);
 
-          const contrato = datos.get("contrato");
+          //const contrato = datos.get("contrato");
           const usuario = datos.get("usuario");
 
-          document.getElementById("contrato").value = contrato || '';
+          //document.getElementById("contrato").value = contrato || '';
           document.getElementById("usuario").value = usuario || '';
         } catch (e) {
           console.warn("Error al decodificar datos iniciales");
@@ -272,14 +272,17 @@
       const accion ="Actualizar inquilino";
       const nombre = document.getElementById("nombre").value;
       const telefono = document.getElementById("telefono").value;
-      const contrato = document.getElementById("contrato").value;
+      const contrato = document.getElementById("contratoInquilino").value;
       const usuario = document.getElementById("usuario").value;
       const diaPago = document.getElementById("diaPago").value;
       if (!nombre && !telefono) {
         alert("Por favor completa alguno nombre o telefono.");
         return;
       }
-
+      if (!contrato) {
+        alert("Por favor completa contrato.");
+        return;
+      }
 
 
   const payload = { accion,usuario,nombre,telefono,contrato, diaPago };
