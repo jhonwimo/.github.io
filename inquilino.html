@@ -2,28 +2,63 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Cargar Imagen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body { font-family: Arial, sans-serif; background-color: #ffffff; padding: 20px; margin: 0; }
-    .file-input-wrapper { position: relative; overflow: hidden; width: 100%; margin-bottom: 15px; }
-    .file-input-wrapper input[type="file"] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; }
-    #formImagen { max-width: 500px; width: 90%; margin: 0 auto; padding: 15px; box-sizing: border-box; background: #fff; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-    .file-btn { width: 100%; padding: 12px; font-size: 16px; background-color: #1E90FF; color: white; border: none; border-radius: 5px; }
-    #formImagen input[type="text"] { width: 100%; padding: 10px; font-size: 16px; margin-top: 5px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
-    #enviarWhatsapp { width: 100%; padding: 14px; font-size: 18px; border: none; border-radius: 5px; color: white; background-color: #25D366; cursor: pointer; }
-    #enviarWhatsapp:disabled { background-color: #A5D6A7; cursor: not-allowed; }
-    @media (max-width: 480px) {
-      #formImagen { padding: 10px; }
-      #formImagen input[type="text"], .file-btn, #enviarWhatsapp { font-size: 18px; padding: 16px; }
-    }
-    #inicio { text-align: center; margin-top: 50px; }
-    .opciones { display: flex; flex-direction: column; gap: 100px; max-width: 300px; margin: 0 auto; }
-    .opciones button { padding: 12px 20px; font-size: 40px; cursor: pointer; background-color: #29ABE2; color: white; border: none; border-radius: 8px; transition: background-color 0.3s ease, transform 0.3s ease; font-family: 'Roboto', sans-serif; font-weight: 500; }
-    .opciones button:hover { background-color: #002e5a; transform: scale(1.03); }
-    .seccion { display: none; margin-top: 30px; }
-    input[type="text"] { height: 60px; }
-    .logo img {
+  <title>WSHome formulario de carga</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 450px; /* opcional, para que no sea exagerado en PC */
+    margin: auto;
+  }
+
+  .campo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .campo label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    font-size: 18px; /* más legible */
+  }
+
+  .campo input {
+    padding: 16px;             /* más grande para el dedo */
+    font-size: 18px;           /* texto más visible */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ✅ Botón estilo WhatsApp */
+  #enviarWhatsapp {
+    width: 100%;
+    padding: 16px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: #25D366;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+  }
+
+  #enviarWhatsapp:hover:not(:disabled) {
+    background-color: #1ebe5d;
+    transform: scale(1.03);
+  }
+
+  #enviarWhatsapp:disabled {
+    background-color: #A5D6A7;
+    cursor: not-allowed;
+  }
+   .logo img {
   width: 125px;          /* la mitad de 250px */
   max-width: 40vw;       /* la mitad de 80vw */
   height: auto;
@@ -31,175 +66,199 @@
   margin: 0 auto 25px;   /* la mitad de 50px */
 }
 
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+</style>
 </head>
 <body>
+  
 
-<div id="inicio">
-  <div class="logo"><img src="logo.svg" alt="Logo Empresa" /></div>
-  <div class="opciones">
-    <button onclick="mostrar('formularioCarga','Carga Enegia')">Cargar Enegia</button>
-    <button onclick="mostrar('formularioCarga','Pago Arriendo')">Pago Arriendo</button>
-  </div>
-</div>
-
-<div class="container" id="formularioCarga" style="display: none;">
-  <div id="titulo" style="text-align: center;"></div>
-
-  <form id="formImagen">
-    <label for="imagen">Selecciona Comprobante:</label>
-    <div class="file-input-wrapper">
-      <button type="button" class="file-btn">Elegir imagen</button>
-      <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required />
+  <div class="container">
+    <div class="logo">
+      <img src="logo.svg" alt="WSHome logo" />
     </div>
-    <div id="resultadoOCR" style="display:none;"></div>
 
   
 
-    <input type="text" id="usuario" name="usuario" readonly style="display: none;"/>
-    <label for="valor">Contrato:</label>
-    <input type="text" id="contrato" name="contrato" readonly />
-    <div id="datosExtraidos" style="display:none;">
-      <label for="valor">Valor a cargar:</label>
-      <input type="text" id="valor" name="valor" readonly />
-      <label for="fecha">Fecha:</label>
-      <input type="text" id="fecha" name="fecha" readonly />
-      <label for="referencia">Referencia:</label>
-      <input type="text" id="referencia" name="referencia" readonly />
-      <button type="button" id="enviarWhatsapp" disabled style="margin-top:10px; background-color: #25D366;" onclick="enviarDatosAWhatsApp()">
-        Enviar 
-      </button>
+    <div id="form-inquilino" class="form-section">
+	<div id="titulo" style="text-align: center;">  <h2>Actualizar Inquilino</h2></div>
+    
+    <form id="formularioInquilino" novalidate>
+  <input type="text" id="usuario" name="usuario" readonly style="display: none;" />
+
+  <div class="campo">
+    <label for="contratoInquilino">Contrato</label>
+    <input type="text" id="contratoInquilino" name="contrato" />
+  </div>
+
+  <div class="campo">
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" name="nombre" />
+  </div>
+
+  <div class="campo">
+    <label for="telefono">Teléfono</label>
+    <input type="tel" id="telefono" name="telefono" inputmode="numeric" pattern="[0-9]*" />
+  </div>
+
+  <div class="campo">
+    <label for="diaPago">Días de pago</label>
+    <input type="number" id="diaPago" name="diaPago" />
+  </div>
+
+  <button type="button" id="enviarWhatsapp" onclick="enviarDatosAWhatsApp()">Enviar</button>
+</form>
     </div>
-  </form>
-</div>
+  </div>
 
-<script>
-function previsualizarImagen(event) {
-  const archivo = event.target.files[0];
-  const img = document.getElementById("previewImg");
-  if (archivo) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      img.src = e.target.result;
-      img.style.display = "block";
-    };
-    reader.readAsDataURL(archivo);
-    procesarImagenOCR();
-  } else {
-    img.src = "";
-    img.style.display = "none";
-  }
-}
-
-	async function procesarImagenOCR() {
-  const archivo = document.getElementById("imagen").files[0];
-  const resultadoOCRDiv = document.getElementById("resultadoOCR");
-
-  if (!archivo) {
-    alert("Por favor selecciona una imagen antes de enviar.");
-    return;
-  }
-
-  resultadoOCRDiv.style.display = "block";
-  resultadoOCRDiv.textContent = "Procesando Comprobante, por favor espera...";
-
-  const reader = new FileReader();
-
-  reader.onload = async function (event) {
-    const imgSrc = event.target.result;
-
-    try {
-      const {
-        data: { text },
-      } = await Tesseract.recognize(imgSrc, "spa", {
-        logger: (m) => console.log(m),
+  <script>
+    function mostrarSeccion(seccion) {
+      document.querySelectorAll('.form-section').forEach(sec => {
+        sec.classList.remove('active');
       });
+      const seccionActiva = document.getElementById(`form-${seccion}`);
+      seccionActiva.classList.add('active');
 
-      resultadoOCRDiv.textContent = "";
-	  document.getElementById("resultadoOCR").style.display = "none";
-      document.getElementById("datosExtraidos").style.display = "block";
-      const datos = extraerDatos(text);
-      console.log("Datos extraídos:", datos);
-
-      // Llenar inputs con los datos extraídos (si hay)
-      document.getElementById("valor").value = datos.valor || "";
-      document.getElementById("fecha").value = datos.fecha ? datos.fecha.join("; ") : "";
-      document.getElementById("referencia").value = datos.referencia || "";
-	  validarCampos();
-    } catch (error) {
-      resultadoOCRDiv.textContent = "Error al procesar OCR: " + error.message;
-    }
-  };
-
-  reader.readAsDataURL(archivo);
-}
-
- function extraerDatos(texto) {
-      const fechas = extraerFechas(texto);
-
-      const valores = extraerValores(texto);
-
-      const referencia = extraerReferenciaComprobante(texto);
-
-      return {
-        fecha: fechas.length > 0 ? fechas : null,
-        valor: valores.length > 0 ? valores[0] : null,
-        referencia: referencia,
-      };
+      // Refrescar contenido si es la sección de inquilino
+      if (seccion === 'inquilino') {
+        refrescarInquilino();
+      }
     }
 
-    function extraerFechas(texto) {
-      const regexFechaHora =
-        /\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+DE)?\s+(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+DE)?\s+\d{4}|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01]))(?:\s*[-–]?\s*(?:[01]?\d|2[0-3]):[0-5]\d(?:\:[0-5]\d)?(?:\s?(?:AM|PM|am|pm))?)?\b/gi;
+    function refrescarInquilino() {
+      const params = new URLSearchParams(window.location.search);
+      const dataBase64 = params.get("data");
 
-      const lineas = texto.split(/\r?\n/);
-      const lineasConFecha = [];
+      const form = document.getElementById("formularioInquilino");
+      if (dataBase64) {
+        try {
+          const decoded = atob(dataBase64);
+          const datos = new URLSearchParams(decoded);
 
-      for (const linea of lineas) {
-        if (regexFechaHora.test(linea)) {
-          lineasConFecha.push(linea.trim());
+         // form.contrato.value = datos.get("contrato") || '';
+          form.usuario.value = datos.get("usuario") || '';
+          form.nombre.value = '';
+          form.telefono.value = '';
+        } catch (e) {
+          console.warn("Error al decodificar datos del inquilino");
+        }
+      } else {
+        form.reset();
+      }
+    }
+
+    document.getElementById("formularioEnergia").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const contrato = e.target.contrato.value.trim();
+      const carga = e.target.carga.value.trim();
+
+      if (!contrato || !carga) {
+        alert("Por favor completa todos los campos antes de enviar.");
+        return;
+      }
+
+      const texto = `*Carga Energia *:%0A Contrato: ${contrato}%0A Carga: ${carga}`;
+      const numero = "573126747790";
+      const url = `https://wa.me/${numero}?text=${texto}`;
+      window.open(url, '_blank');
+    });
+
+    document.getElementById("formularioInquilino").addEventListener("submit", function(e) {
+    sendData();
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const dataBase64 = params.get("data");
+
+      if (dataBase64) {
+        try {
+          const decoded = atob(dataBase64);
+          const datos = new URLSearchParams(decoded);
+
+          //const contrato = datos.get("contrato");
+          const usuario = datos.get("usuario");
+
+          //document.getElementById("contrato").value = contrato || '';
+          document.getElementById("usuario").value = usuario || '';
+        } catch (e) {
+          console.warn("Error al decodificar datos iniciales");
         }
       }
+    });
 
-      return lineasConFecha;
+    function urlSafeBase64ToNormal(str) {
+      return str
+        .replace(/-/g, '+')
+        .replace(/_/g, '/')
+        .padEnd(str.length + (4 - str.length % 4) % 4, '=');
     }
 
-    function extraerValores(texto) {
-      const regex = /(?:\$|COP)?\s*\d{1,3}(?:([.,])\d{3})+(?:[.,]\d{2})?|\d+[.,]\d{2}/g;
-      const valores = [];
-      let match;
-      while ((match = regex.exec(texto)) !== null) {
-        valores.push(match[0].trim());
-      }
-      return valores;
+    function textoAInvisible(texto) {
+      return [...texto].map(char => {
+        const bin = char.charCodeAt(0).toString(4).padStart(4, '0');
+        return [...bin].map(dig => inverso[dig]).join('');
+      }).join('');
     }
 
-    function extraerReferenciaComprobante(texto) {
-      const regexReferencia =
-        /\b(?:comprobante|referencia|ref(?:\.|:)?|n[úu]mero|nro(?:\.|:)?)(?:\s*No\.?\s*|\s+No\.?\s*|\s*:\s*|\s+)?([A-Z0-9\-]{6,})\b/gi;
-      const match = regexReferencia.exec(texto);
-      return match ? match[1] : "";
+    function invisibleATexto(invisible) {
+      const chunks = invisible.match(/.{4}/g) || [];
+      return chunks.map(grupo => {
+        const bin = [...grupo].map(c => mapa[c]).join('');
+        return String.fromCharCode(parseInt(bin, 4));
+      }).join('');
     }
-async function enviarDatosAWhatsApp() {
+
+    const mapa = {
+      '\u200B': '0',
+      '\u200C': '1',
+      '\u200D': '2',
+      '\u2060': '3'
+    };
+
+    const inverso = {
+      '0': '\u200B',
+      '1': '\u200C',
+      '2': '\u200D',
+      '3': '\u2060'
+    };
+	
+	
+	async function enviarDatosAWhatsApp() {
   // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
+  const params = new URLSearchParams(window.location.search);
+  const dataBase64 = params.get("data");
+   if (dataBase64) {
+        try {
+          const decoded = atob(dataBase64);
+          const datos = new URLSearchParams(decoded);
+
+          //const contrato = datos.get("contrato");
+          const usu = datos.get("usuario");
+          document.getElementById("usuario").value = usu
+        } catch (e) {
+          console.warn("Error al decodificar datos iniciales");
+        }
+   }
   const boton = document.getElementById("enviarWhatsapp");
   boton.disabled = true;
   boton.textContent = "Enviando...";
-  const NGROK_URL = "https://87b2a3e19101.ngrok-free.app";
- 
-  const accion = document.querySelector('h2').textContent;
-  const usuario = document.getElementById("usuario").value;
-  const contrato = document.getElementById("contrato").value;
-  const valor = document.getElementById("valor").value;
-  const fecha = document.getElementById("fecha").value;
-  const referencia = document.getElementById("referencia").value;
+  const NGROK_URL = "https://20b66c7e1e47.ngrok-free.app";
+      const accion ="Actualizar inquilino";
+      const nombre = document.getElementById("nombre").value;
+      const telefono = document.getElementById("telefono").value;
+	  const usuario = document.getElementById("usuario").value;
+      const contrato = document.getElementById("contratoInquilino").value;
+      const diaPago = document.getElementById("diaPago").value;
+      if (!nombre && !telefono) {
+        alert("Por favor completa alguno nombre o telefono.");
+        return;
+      }
+      if (!contrato || !usuario) {
+        alert("Por favor completa contrato.");
+        return;
+      }
 
-  if (!valor || !fecha || !referencia || !contrato || !usuario) { alert("Todos los datos deben estar presentes."); return; }
 
-  const payload = { accion, usuario, contrato, valor, fecha, referencia };
+  const payload = { accion,usuario,nombre,telefono,contrato, diaPago };
 
   try {
     const response = await fetch(`${NGROK_URL}/comprobantes`, {
@@ -210,14 +269,12 @@ async function enviarDatosAWhatsApp() {
     if(response.ok){
       Swal.fire({
   icon: 'success',
-  title: 'Operación exitosa',
-  text: 'Se envio la informacion pronto le llegara un mensaje',
+  title: 'Información enviada',
+  text: 'Espere confirmacion a su telefono',
   confirmButtonText: 'Aceptar',
   timer: 5000
 });
 
-      document.getElementById("formImagen").reset();
-      document.getElementById("datosExtraidos").style.display = "none";
     } else { 
 	Swal.fire({
   icon: 'error',
@@ -230,44 +287,17 @@ async function enviarDatosAWhatsApp() {
 	boton.disabled = false;
     boton.textContent = "Enviar";
   } catch(error) { 
-  boton.disabled = false;
+    boton.disabled = false;
     boton.textContent = "Enviar";
-  alert("No se pudo conectar."); console.error(error); 
-  }
-}
-
-
-
-
-
-
-
-function validarCampos() {
-  const valor = document.getElementById("valor").value.trim();
-  const fecha = document.getElementById("fecha").value.trim();
-  const referencia = document.getElementById("referencia").value.trim();
-  document.getElementById("enviarWhatsapp").disabled = !(valor || fecha || referencia);
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const dataBase64 = params.get("data");
-  if(dataBase64){
-    try{
-      const decoded = atob(dataBase64);
-      const datos = new URLSearchParams(decoded);
-      document.getElementById("contrato").value = datos.get("contrato");
-      document.getElementById("usuario").value = datos.get("usuario");
-    } catch(e){ console.error("Error al decodificar."); }
-  }
+  	Swal.fire({
+  icon: 'error',
+  title: 'Servicio presenta problemas',
+  text: 'Error al enviar: ' ,
+  confirmButtonText: 'Cerrar',
+  timer: 5000
 });
-
-function mostrar(id,titulo){
-  document.getElementById('inicio').style.display='none';
-  document.getElementById(id).style.display='block';
-  const h2 = document.createElement("h2"); h2.textContent = titulo;
-  document.getElementById("titulo").appendChild(h2);
+  }
 }
-</script>
+  </script>
 </body>
 </html>
