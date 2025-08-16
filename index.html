@@ -8,12 +8,7 @@
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f8;
-      margin: 0;
-      padding: 0;
-    }
+       body { font-family: Arial, sans-serif; background-color: #ffffff; padding: 20px; margin: 0; }
     .navbar {
       background-color: #004080;
       color: #fff;
@@ -96,7 +91,10 @@
     .form-section { display: none; }
     .form-section.active { display: block; }
 	
-	
+	 @media (max-width: 480px) {
+      #formImagen { padding: 10px; }
+      #formImagen input[type="text"], .file-btn, #enviarWhatsapp { font-size: 18px; padding: 16px; }
+    }
 	    #enviarWhatsapp { width: 100%; padding: 14px; font-size: 18px; border: none; border-radius: 5px; color: white; background-color: #25D366; cursor: pointer; }
     #enviarWhatsapp:disabled { background-color: #A5D6A7; cursor: not-allowed; }
   </style>
@@ -134,7 +132,7 @@
       <form id="formularioInquilino" novalidate>
         <input type="text" id="usuario" name="usuario" readonly style="display: none;" />
         <label>Contrato:
-          <input type="text" name="contrato" required />
+          <input type="text" id="contrato" name="contrato" required />
         </label>
         <label>Nombre:
           <input type="text" id="nombre" name="nombre" />
