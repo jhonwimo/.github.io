@@ -58,7 +58,14 @@
     background-color: #A5D6A7;
     cursor: not-allowed;
   }
-   .logo img { width: 200px; max-width: 80vw; height: auto; display: block; margin: 0 auto 30px; }
+   .logo img {
+  width: 125px;          /* la mitad de 250px */
+  max-width: 40vw;       /* la mitad de 80vw */
+  height: auto;
+  display: block;
+  margin: 0 auto 25px;   /* la mitad de 50px */
+}
+
 </style>
 </head>
 <body>
@@ -217,6 +224,20 @@
 	
 	async function enviarDatosAWhatsApp() {
   // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
+  const params = new URLSearchParams(window.location.search);
+  const dataBase64 = params.get("data");
+   if (dataBase64) {
+        try {
+          const decoded = atob(dataBase64);
+          const datos = new URLSearchParams(decoded);
+
+          //const contrato = datos.get("contrato");
+          const usuario = datos.get("usuario");
+
+        } catch (e) {
+          console.warn("Error al decodificar datos iniciales");
+        }
+   }
   const boton = document.getElementById("enviarWhatsapp");
   boton.disabled = true;
   boton.textContent = "Enviando...";
@@ -225,13 +246,12 @@
       const nombre = document.getElementById("nombre").value;
       const telefono = document.getElementById("telefono").value;
       const contrato = document.getElementById("contratoInquilino").value;
-      const usuario = document.getElementById("usuario").value;
       const diaPago = document.getElementById("diaPago").value;
       if (!nombre && !telefono) {
         alert("Por favor completa alguno nombre o telefono.");
         return;
       }
-      if (!contrato) {
+      if (!contrato || !usuario) {
         alert("Por favor completa contrato.");
         return;
       }
