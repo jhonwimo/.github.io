@@ -232,7 +232,15 @@ async function enviarDatosAWhatsApp() {
   } catch(error) { 
   boton.disabled = false;
     boton.textContent = "Enviar";
-  alert("No se pudo conectar."); console.error(error); 
+    boton.disabled = false;
+    boton.textContent = "Enviar";
+  	Swal.fire({
+  icon: 'error',
+  title: 'Servicio presenta problemas',
+  text: 'Error al enviar: ' ,
+  confirmButtonText: 'Cerrar',
+  timer: 5000
+});
   }
 }
 
