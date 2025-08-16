@@ -94,6 +94,10 @@
     }
     .form-section { display: none; }
     .form-section.active { display: block; }
+	
+	
+	    #enviarWhatsapp { width: 100%; padding: 14px; font-size: 18px; border: none; border-radius: 5px; color: white; background-color: #25D366; cursor: pointer; }
+    #enviarWhatsapp:disabled { background-color: #A5D6A7; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -140,7 +144,7 @@
 		<label>Dias de pago:
           <input type="number" name="diaPago" />
         </label>
-        <button type="button" id="enviarWhatsapp" disabled style="margin-top:10px; background-color: #25D366;" onclick="enviarDatosAWhatsApp()">
+        <button type="button" id="enviarWhatsapp"  style="margin-top:10px; background-color: #25D366;" onclick="enviarDatosAWhatsApp()">
         Enviar 
       </button>
       </form>
