@@ -29,35 +29,18 @@
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <h1>WSHome</h1>
-    <div class="menu">
-      <button onclick="mostrarSeccion('energia')">Cargar</button>
-      <button onclick="mostrarSeccion('inquilino')">Actualizar Inquilino</button>
-    </div>
-  </div>
+  
 
   <div class="container">
     <div class="logo">
       <img src="logo.svg" alt="WSHome logo" />
     </div>
 
-    <div id="form-energia" class="form-section active">
-      <h2>Carga Energía</h2>
-      <form id="formularioEnergia" novalidate>
-        <input type="text" id="usuario" name="usuario" readonly style="display: none;" />
-        <label>Contrato:
-          <input type="text" id="contrato" name="contrato" required />
-        </label>
-        <label>Carga:
-          <input type="number" name="carga" required />
-        </label>
-        <button type="submit">Enviar</button>
-      </form>
-    </div>
+  
 
     <div id="form-inquilino" class="form-section">
-      <h2>Actualizar Inquilino</h2>
+	<div id="titulo" style="text-align: center;">  <h2>Actualizar Inquilino</h2></div>
+    
       <form id="formularioInquilino" novalidate>
         <input type="text" id="usuario" name="usuario" readonly style="display: none;" />
         <label>Contrato:
