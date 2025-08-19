@@ -199,7 +199,15 @@ async function enviarDatosAWhatsApp() {
 
   if (!valor || !fecha || !referencia || !contrato || !usuario) { alert("Todos los datos deben estar presentes."); return; }
 
-  const payload = { accion, usuario, contrato, valor, fecha, referencia };
+ const payload = {
+  accion: accion?.toString().trim(),
+  usuario: usuario?.toString().trim(),
+  contrato: contrato?.toString().trim(),
+  valor: valor?.toString().trim(),
+  fecha: fecha?.toString().trim(),
+  referencia: referencia?.toString().trim()
+};
+
 
   try {
     const response = await fetch(`${NGROK_URL}/comprobantes`, {
