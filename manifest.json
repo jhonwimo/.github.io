@@ -1,0 +1,19 @@
+{
+  "name": "Carga Comprobante",
+  "short_name": "CargaWSHome",
+  "start_url": "/inquilino.html",
+  "display": "standalone",
+  "share_target": {
+    "action": "/inquilino.html",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "files": [
+        {
+          "name": "imagen",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  }
+}
