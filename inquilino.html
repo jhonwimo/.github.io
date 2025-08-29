@@ -31,12 +31,13 @@ body {
   width:160px; 
   max-width:40vw; 
   display:block; 
-  margin:0 auto 35px;
-  border-radius:20px;                       /* Bordes redondeados */
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);  /* Sombra suave */
+  margin:40px auto 35px;  /* ⬅️ antes era 0 auto 35px */
+  border-radius:20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);  
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: floatLogo 3s ease-in-out infinite; /* Flotación */
+  animation: floatLogo 3s ease-in-out infinite; 
 }
+
 
 .logo img:hover { 
   transform: scale(1.08) rotate(-2deg); 
