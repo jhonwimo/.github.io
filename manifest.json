@@ -6,28 +6,7 @@
   "background_color": "#ffffff",
   "theme_color": "#0288d1",
   "icons": [
-    {
-      "src": "logo-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "logo-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "share_target": {
-    "action": "/inquilino.html",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "files": [
-        {
-          "name": "imagen",
-          "accept": ["image/*"]
-        }
-      ]
-    }
-  }
+    { "src": "logo-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "logo-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
 }
