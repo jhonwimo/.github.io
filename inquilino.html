@@ -2,226 +2,34 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Cargar Imagen</title>
+  <title>Carga Comprobante</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="manifest.json">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-    body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #e0f7fa, #ffffff); margin:0; padding:0;}
-    .container, #formularioCarga { max-width:650px; width:95%; margin:50px auto; background:#fff; border-radius:16px; box-shadow:0 12px 30px rgba(0,0,0,0.12); padding:30px; box-sizing:border-box;}
-    .logo img { width:160px; max-width:40vw; display:block; margin:0 auto 35px;}
-    #titulo h2 { text-align:center; font-size:32px; font-weight:700; margin-bottom:35px; color:#0288d1;}
-    input[type="text"], .file-btn { width:100%; padding:16px; font-size:18px; margin-bottom:22px; border:1px solid #ccc; border-radius:10px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.05); transition: all 0.3s ease;}
-    input[type="text"]:focus { border-color:#0288d1; box-shadow:0 0 10px rgba(2,136,209,0.3); outline:none;}
-    .file-btn { background:linear-gradient(90deg,#29ABE2,#0277bd); color:#fff; border:none; cursor:pointer; font-weight:600; font-size:18px; border-radius:12px; transition: all 0.3s ease;}
-    .file-btn:hover { background:linear-gradient(90deg,#0277bd,#01579b); transform:scale(1.03);}
-    #enviarWhatsapp { width:100%; padding:20px; font-size:22px; border-radius:14px; color:white; background:linear-gradient(90deg,#25D366,#128C7E); border:none; cursor:pointer; font-weight:700; box-shadow:0 6px 12px rgba(0,0,0,0.15); transition: all 0.3s ease; display:flex; align-items:center; justify-content:center; gap:10px;}
-    #enviarWhatsapp:hover:not(:disabled) { background:linear-gradient(90deg,#128C7E,#075E54); transform:scale(1.05);}
-    #enviarWhatsapp:disabled { background-color:#A5D6A7; cursor:not-allowed; transform:none;}
-    .opciones { display:flex; flex-direction:column; gap:30px; max-width:450px; margin:0 auto;}
-    .opciones button { padding:25px; font-size:26px; cursor:pointer; background:linear-gradient(90deg,#29ABE2,#0277bd); color:white; border:none; border-radius:16px; font-weight:600; transition: all 0.3s ease; display:flex; align-items:center; justify-content:center; gap:15px;}
-    .opciones button:hover { background:linear-gradient(90deg,#0277bd,#01579b); transform:scale(1.05);}
-    .file-input-wrapper { position:relative; overflow:hidden;}
-    .file-input-wrapper input[type="file"] { font-size:100px; position:absolute; left:0; top:0; opacity:0; cursor:pointer;}
-    #resultadoOCR { margin-bottom:20px; font-style:italic; color:#666;}
-    .btn-icon { display:inline-flex; align-items:center; gap:10px;}
-    @media (max-width:480px) { #titulo h2 { font-size:28px;} input[type="text"], .file-btn, #enviarWhatsapp { font-size:16px; padding:16px;} .opciones button { font-size:22px; padding:22px;}}
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <div id="inicio">
-    <div class="logo"><img src="logo.svg" alt="Logo Empresa" /></div>
-    <div class="opciones">
-      <button onclick="mostrar('formularioCarga','Carga Energia')"><span class="btn-icon">💡 Cargar Energía</span></button>
-      <button onclick="mostrar('formularioCarga','Pago Arriendo')"><span class="btn-icon">🏠 Pago Arriendo</span></button>
-    </div>
-  </div>
+  <h2>Carga Comprobante</h2>
+  <form id="formImagen">
+    <input type="file" id="imagen" name="imagen" accept="image/*" required/>
+    <button type="button" onclick="previsualizarImagen()">Previsualizar</button>
+  </form>
+  <img id="previewImg" style="max-width:300px; display:block; margin-top:20px;" />
 
-  <div class="container" id="formularioCarga" style="display:none;">
-    <div id="titulo" style="text-align:center;"></div>
-    <form id="formImagen">
-      <label for="imagen">Selecciona Comprobante:</label>
-      <div class="file-input-wrapper">
-        <button type="button" class="file-btn">Elegir imagen</button>
-        <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required/>
-      </div>
-      
-
-      <div id="resultadoOCR" style="display:none;"></div>
-
-      <input type="text" id="usuario" name="usuario" readonly style="display:none;"/>
-      <label for="contrato">Contrato:</label>
-      <input type="text" id="contrato" name="contrato" readonly/>
-      <div id="datosExtraidos" style="display:none;">
-        <label for="valor">Valor a cargar:</label>
-        <input type="text" id="valor" name="valor" readonly/>
-        <label for="fecha">Fecha:</label>
-        <input type="text" id="fecha" name="fecha" readonly/>
-        <label for="referencia">Referencia:</label>
-        <input type="text" id="referencia" name="referencia" readonly/>
-        <button type="button" id="enviarWhatsapp" disabled onclick="enviarDatosAWhatsApp()">Enviar</button>
-      </div>
-    </form>
-  </div>
-
-<script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(()=>console.log('SW registrado'))
-    .catch(console.error);
-}
-
-function mostrar(id,titulo){
-  document.getElementById('inicio').style.display='none';
-  document.getElementById(id).style.display='block';
-  const h2 = document.createElement("h2"); h2.textContent = titulo;
-  document.getElementById("titulo").appendChild(h2);
-}
-
-function previsualizarImagen(event){
-  const archivo = event.target.files[0];
-  const img = document.getElementById("previewImg");
-  if(archivo){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      img.src = e.target.result;
-      img.style.display="block";
-    };
-    reader.readAsDataURL(archivo);
-    procesarImagenOCR();
-  } else {
-    img.src=""; img.style.display="none";
-  }
-}
-
-async function procesarImagenOCR(){
-  const archivo = document.getElementById("imagen").files[0];
-  const resultadoOCRDiv = document.getElementById("resultadoOCR");
-  if(!archivo){ alert("Selecciona una imagen."); return; }
-  resultadoOCRDiv.style.display="block"; resultadoOCRDiv.textContent="Procesando comprobante...";
-  const reader = new FileReader();
-  reader.onload = async function(event){
-    try{
-      const { data: { text } } = await Tesseract.recognize(event.target.result,"spa",{logger:m=>console.log(m)});
-      resultadoOCRDiv.style.display="none";
-      document.getElementById("datosExtraidos").style.display="block";
-      const datos = extraerDatos(text);
-      document.getElementById("valor").value = datos.valor || "";
-      document.getElementById("fecha").value = datos.fecha ? datos.fecha.join("; ") : "";
-      document.getElementById("referencia").value = datos.referencia || "";
-      validarCampos();
-    } catch(err){
-      resultadoOCRDiv.textContent="Error OCR: "+err.message;
+  <script>
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(()=>console.log('SW registrado'))
+        .catch(console.error);
     }
-  };
-  reader.readAsDataURL(archivo);
-}
 
-function extraerDatos(texto){
-  const fechas = extraerFechas(texto);
-  const valores = extraerValores(texto);
-  const referencia = extraerReferenciaComprobante(texto);
-  return { fecha: fechas.length>0?fechas:null, valor: valores.length>0?valores[0]:null, referencia };
-}
-
-function extraerFechas(texto){
-  const regexFechaHora = /\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+DE)?\s+(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+DE)?\s+\d{4}|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01]))(?:\s*[-–]?\s*(?:[01]?\d|2[0-3]):[0-5]\d(?:\:[0-5]\d)?(?:\s?(?:AM|PM|am|pm))?)?\b/gi;
-  return texto.split(/\r?\n/).filter(linea=>regexFechaHora.test(linea)).map(l=>l.trim());
-}
-
-function extraerValores(texto){
-  const regex = /(?:\$|COP)?\s*\d{1,3}(?:([.,])\d{3})+(?:[.,]\d{2})?|\d+[.,]\d{2}/g;
-  const valores = []; let match;
-  while((match=regex.exec(texto))!==null) valores.push(match[0].trim());
-  return valores;
-}
-
-function extraerReferenciaComprobante(texto){
-  const regex = /\b(?:comprobante|referencia|ref(?:\.|:)?|n[úu]mero|nro(?:\.|:)?)(?:\s*No\.?\s*|\s+No\.?\s*|\s*:\s*|\s+)?([A-Z0-9\-]{6,})\b/gi;
-  const match = regex.exec(texto); return match?match[1]:"";
-}
-
-async function enviarDatosAWhatsApp(){
-  const boton=document.getElementById("enviarWhatsapp");
-  boton.disabled=true; boton.textContent="Enviando...";
-  const NGROK_URL="https://api.wshome.shop";
-  const accion=document.querySelector('h2').textContent+' wshome';
-  const usuario=document.getElementById("usuario").value;
-  const contrato=document.getElementById("contrato").value;
-  const valor=document.getElementById("valor").value;
-  const fecha=document.getElementById("fecha").value;
-  const referencia=document.getElementById("referencia").value;
-  if(!valor||!fecha||!referencia||!contrato||!usuario){ alert("Todos los datos deben estar presentes."); return; }
-  const payload={accion,usuario,contrato,valor,fecha,referencia};
-  try{
-    const response=await fetch(`${NGROK_URL}/comprobantes`,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(payload)
-    });
-    if(response.ok){
-      Swal.fire({icon:'success', title:'Operación exitosa', text:'Se envio la informacion pronto le llegara un mensaje', confirmButtonText:'Aceptar', timer:5000});
-      document.getElementById("formImagen").reset();
-      document.getElementById("datosExtraidos").style.display="none";
-    } else {
-      Swal.fire({icon:'error', title:'Servicio presenta problemas', text:'Error al enviar', confirmButtonText:'Cerrar', timer:5000});
+    function previsualizarImagen(){
+      const archivo = document.getElementById('imagen').files[0];
+      if(!archivo) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('previewImg').src = e.target.result;
+      };
+      reader.readAsDataURL(archivo);
     }
-    boton.disabled=false; boton.textContent="Enviar";
-  } catch(err){
-    boton.disabled=false; boton.textContent="Enviar"; alert("No se pudo conectar."); console.error(err);
-  }
-}
-
-function validarCampos(){
-  const valor=document.getElementById("valor").value.trim();
-  const fecha=document.getElementById("fecha").value.trim();
-  const referencia=document.getElementById("referencia").value.trim();
-  document.getElementById("enviarWhatsapp").disabled=!(valor || fecha || referencia);
-}
-
-
-window.addEventListener('DOMContentLoaded', () => {
-  // Manejo de query params
-  const params = new URLSearchParams(window.location.search);
-  const dataBase64 = params.get("data");
-  if(dataBase64){
-    try{
-      const decoded = atob(dataBase64);
-      const datos = new URLSearchParams(decoded);
-      document.getElementById("contrato").value = datos.get("contrato");
-      document.getElementById("usuario").value = datos.get("usuario");
-    } catch(e){ console.error("Error al decodificar."); }
-  }
-
-  // Manejo de archivos compartidos PWA
-  if(navigator.canShare && navigator.canShare({ files: [new File([], '')] })){
-    navigator.getInstalledRelatedApps?.().then(apps => console.log(apps));
-  }
-
-  // Verificar si el form fue llamado desde Share Target
-  if(window.location.search.includes('file')){
-    const fileInput = document.getElementById("imagen");
-    const files = window.location.files || [];
-    if(files.length){
-      fileInput.files = files;
-      previsualizarImagen({ target: fileInput });
-      mostrar('formularioCarga','Carga desde Compartir');
-    }
-  }
-  
-  if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(() => console.log('Service Worker registrado'))
-    .catch(err => console.log('Error al registrar:', err));
-}
-});
-
-
-  
-  
-
-</script>
+  </script>
 </body>
 </html>
