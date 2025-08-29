@@ -255,7 +255,7 @@ async function procesarImagenOCR(){
   const archivo = document.getElementById("imagen").files[0];
   const resultadoOCRDiv = document.getElementById("resultadoOCR");
   if(!archivo){ alert("Selecciona una imagen."); return; }
-  resultadoOCRDiv.style.display="block"; resultadoOCRDiv.textContent="Procesando comprobante...";
+  resultadoOCRDiv.style.display="block"; resultadoOCRDiv.textContent="Verificar datos despues de carga Procesando ...";
   const reader = new FileReader();
   reader.onload = async function(event){
     try{
