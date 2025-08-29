@@ -1,7 +1,7 @@
 {
   "name": "Carga Comprobante",
   "short_name": "CargaWSHome",
-  "start_url": "/inquilino.html",
+  "start_url": "./inquilino.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0288d1",

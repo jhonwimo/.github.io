@@ -1,9 +1,8 @@
 const CACHE_NAME = 'minimal-cache-v1';
 const urlsToCache = [
-  '/', // index o tu landing page
-  '/inquilino.html',
-  '/icon-192x192.png',
-  '/icon-512x512.png'
+  './inquilino.html',
+  './icon-192x192.png',
+  './icon-512x512.png'
 ];
 
 self.addEventListener('install', event => {

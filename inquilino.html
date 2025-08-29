@@ -11,45 +11,42 @@
   <form id="formImagen">
     <input type="file" id="imagen" name="imagen" accept="image/*" required/>
     <button type="button" onclick="previsualizarImagen()">Previsualizar</button>
-	<button id="btnInstalar" style="display:none;">Instalar App</button>
+    <button id="btnInstalar" style="display:none;">Instalar App</button>
   </form>
   <img id="previewImg" style="max-width:300px; display:block; margin-top:20px;" />
 
   <script>
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(()=>console.log('SW registrado'))
+    // Registro del Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(() => console.log('SW registrado'))
         .catch(console.error);
     }
 
+    // Previsualización de imagen
     function previsualizarImagen(){
       const archivo = document.getElementById('imagen').files[0];
       if(!archivo) return;
       const reader = new FileReader();
-      reader.onload = e => {
-        document.getElementById('previewImg').src = e.target.result;
-      };
+      reader.onload = e => document.getElementById('previewImg').src = e.target.result;
       reader.readAsDataURL(archivo);
     }
-  </script>
-  
-  
-<script>
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const btn = document.getElementById('btnInstalar');
-  btn.style.display = 'block';
-  btn.addEventListener('click', () => {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => {
-      deferredPrompt = null;
-      btn.style.display = 'none';
-    });
-  });
-});
-</script>
 
+    // Instalación de la PWA (botón personalizado)
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('btnInstalar');
+      btn.style.display = 'block';
+      btn.addEventListener('click', () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+          btn.style.display = 'none';
+        });
+      });
+    });
+  </script>
 </body>
 </html>
