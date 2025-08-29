@@ -318,7 +318,7 @@ async function enviarDatosAWhatsApp(){
       body:JSON.stringify(payload)
     });
     if(response.ok){
-      Swal.fire({icon:'success', title:'Operación exitosa', text:'Se envio la informacion pronto le llegara un mensaje', confirmButtonText:'Aceptar', timer:5000});
+      Swal.fire({icon:'success', title:'Se envio tu Solicitud', text:'Pronto llegara la respuesta al celualar registrado en el contrato', confirmButtonText:'Aceptar', timer:10000});
       document.getElementById("formImagen").reset();
       document.getElementById("datosExtraidos").style.display="none";
     } else {
