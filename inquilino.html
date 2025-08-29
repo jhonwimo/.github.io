@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Cargar Imagen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="manifest" href="manifest.json">
+ 
  <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
@@ -351,11 +351,11 @@ window.addEventListener("DOMContentLoaded", () => {
   }
   
    // Registro del Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(() => console.log('SW registrado'))
-        .catch(console.error);
-    }
+   // if ('serviceWorker' in navigator) {
+    //  navigator.serviceWorker.register('./service-worker.js')
+      //  .then(() => console.log('SW registrado'))
+       // .catch(console.error);
+  //  }
   
 });
 
