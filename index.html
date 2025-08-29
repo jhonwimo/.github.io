@@ -66,6 +66,32 @@
   margin: 0 auto 25px;   /* la mitad de 50px */
 }
 
+
+/* Contenedor de botones */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;        /* separación entre botones */
+  max-width: 350px; /* ancho máximo de los botones */
+  margin: 0 auto;   /* centrado horizontal */
+}
+
+.button-container button {
+  width: 100%;        /* ocupa todo el ancho del contenedor */
+  padding: 18px 0;    /* altura del botón */
+  font-size: 20px;    /* tamaño de texto */
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-container button:hover:not(:disabled) {
+  transform: scale(1.03);
+}
+
+
 </style>
 </head>
 <body>
