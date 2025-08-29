@@ -320,7 +320,10 @@ async function enviarDatosAWhatsApp(){
     }
     boton.disabled=false; boton.textContent="Enviar";
   } catch(err){
-    boton.disabled=false; boton.textContent="Enviar"; alert("No se pudo conectar."); console.error(err);
+    boton.disabled=false;
+	boton.textContent="Enviar"; 
+	 Swal.fire({icon:'error', title:'Servicio presenta problemas', text:'Error al enviar', confirmButtonText:'Cerrar', timer:5000});
+	console.error(err);
   }
 }
 
