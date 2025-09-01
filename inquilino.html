@@ -317,12 +317,12 @@ async function enviarDatosAWhatsApp(){
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(payload)
     });
-    if(response.ok){
-      Swal.fire({icon:'success', title:'Se envio tu Solicitud', text:'Pronto llegara la respuesta al celualar registrado en el contrato', confirmButtonText:'Aceptar', timer:10000});
-      document.getElementById("formImagen").reset();
-      document.getElementById("datosExtraidos").style.display="none";
-    } else {
-      Swal.fire({icon:'error', title:'Servicio presenta problemas', text:'Error al enviar', confirmButtonText:'Cerrar', timer:5000});
+   const data = await response.json();
+    if (data.status=="ko" ) {
+    // ❌ Error desde el backend (validación fallida o fallo en RabbitMQ)
+     mesajeError("Error en la solicitud",data.mensaje || 'Ocurrió un error inesperado');
+}else {
+    mesajeExito("Se envió tu Solicitud",'Pronto llegara la respuesta de su solicitud al celular');
     }
     boton.disabled=false; boton.textContent="Enviar";
   } catch(err){
@@ -360,6 +360,25 @@ window.addEventListener("DOMContentLoaded", () => {
   
 });
 
+function mesajeError(titulo,mensaje){
+  Swal.fire({
+    icon: 'error',
+    title: titulo,
+    text: mensaje ,
+    confirmButtonText: 'Cerrar',
+    timer: 10000
+  });
+}
+
+function mesajeExito(titulo,mensaje){
+  Swal.fire({
+    icon: 'success',
+    title: titulo,
+    text: mensaje,
+    confirmButtonText: 'Aceptar',
+    timer: 10000
+  });
+}
 </script>
 </body>
 </html>
