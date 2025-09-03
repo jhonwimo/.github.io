@@ -282,26 +282,13 @@ function extraerDatos(texto){
   return { fecha: fechas.length>0?fechas:null, valor: valores.length>0?valores[0]:null, referencia };
 }
 
-function extraerFechas(texto) {
-  const regex = /\b(?:0?[1-9]|[12][0-9]|3[01])(?:\s+DE)?\s+(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+DE)?\s+\d{4}|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01])/gi;
+function extraerFechas(texto){
+  // Regex solo para fechas, sin validar hora/minutos/AM/PM
+  const regexFecha = /\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+DE)?\s+(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+DE)?\s+\d{4}|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01]))/gi;
 
-  // Dividimos en líneas
-  const lineas = texto.split(/\r?\n/);
-
-  // Si alguna línea contiene la fecha, devolvemos toda la línea
-  return lineas.filter(linea => regex.test(linea)).map(l => l.trim());
+  // Dividimos por líneas y tomamos las que contengan la fecha
+  return texto.split(/\r?\n/).filter(linea => regexFecha.test(linea)).map(l => l.trim());
 }
-
-// Ejemplo
-const texto = `¡Transferencia exitosa!
-Comprobante No. 0000001400
-02 Sept 2025 - 08:07 a. m.
-Datos de la transferencia sin hora
-15/09/2025 Este es otro ejemplo sin hora
-2025-09-02 08:07 PM`;
-
-console.log(extraerFechas(texto));
-
 
 function extraerValores(texto){
   const regex = /(?:\$|COP)?\s*\d{1,3}(?:([.,])\d{3})+(?:[.,]\d{2})?|\d+[.,]\d{2}/g;
