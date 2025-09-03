@@ -283,8 +283,7 @@ function extraerDatos(texto){
 }
 
 function extraerFechas(texto){
-  // Regex solo para fechas, sin validar hora/minutos/AM/PM
-  const regexFecha = /\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+DE)?\s+(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+DE)?\s+\d{4}|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01]))/gi;
+  const regexFecha = /\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+de\s+)?(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Sept|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+de\s+)?\s+\d{4}|\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4}|\d{4}[\/\-.]\d{1,2}[\/\-.]\d{1,2})/gi;
 
   // Dividimos por líneas y tomamos las que contengan la fecha
   return texto.split(/\r?\n/).filter(linea => regexFecha.test(linea)).map(l => l.trim());
