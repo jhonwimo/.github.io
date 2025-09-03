@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WSHome formulario de carga</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 450px; /* opcional, para que no sea exagerado en PC */
+    margin: auto;
+  }
+
+  .campo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .campo label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    font-size: 18px; /* más legible */
+  }
+
+  .campo input {
+    padding: 16px;             /* más grande para el dedo */
+    font-size: 18px;           /* texto más visible */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ✅ Botón estilo WhatsApp */
+  #enviarWhatsapp {
+    width: 100%;
+    padding: 16px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: #25D366;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+  }
+
+  #enviarWhatsapp:hover:not(:disabled) {
+    background-color: #1ebe5d;
+    transform: scale(1.03);
+  }
+
+  #enviarWhatsapp:disabled {
+    background-color: #A5D6A7;
+    cursor: not-allowed;
+  }
+   .logo img {
+  width: 125px;          /* la mitad de 250px */
+  max-width: 40vw;       /* la mitad de 80vw */
+  height: auto;
+  display: block;
+  margin: 0 auto 25px;   /* la mitad de 50px */
+}
+
+</style>
+</head>
+<body>
+  
+
+  <div class="container">
+    <div class="logo">
+      <img src="logo.svg" alt="WSHome logo" /> 
+    </div>
+
+  
+
+    <div id="form-inquilino" class="form-section">
+	<div id="titulo" style="text-align: center;">  <h2>Actualizar Inquilino</h2></div>
+    
+    <form id="formularioInquilino" novalidate>
+  <input type="text" id="usuario" name="usuario" readonly style="display: none;" />
+
+  <div class="campo">
+    <label for="contratoInquilino">Contrato</label>
+    <input type="text" id="contratoInquilino" name="contrato" />
+  </div>
+
+  <div class="campo">
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" name="nombre" />
+  </div>
+
+  <div class="campo">
+    <label for="telefono">Teléfono</label>
+    <input type="tel" id="telefono" name="telefono" inputmode="numeric" pattern="[0-9]*" />
+  </div>
+
+  <div class="campo">
+    <label for="diaPago">Días de pago</label>
+    <input type="number" id="diaPago" name="diaPago" />
+  </div>
+
+  <button type="button" id="enviarWhatsapp" onclick="enviarDatosAWhatsApp()">Enviar</button>
+</form>
+    </div>
+  </div>
+
+  <script>
+    function mostrarSeccion(seccion) {
+      document.querySelectorAll('.form-section').forEach(sec => {
+        sec.classList.remove('active');
+      });
+      const seccionActiva = document.getElementById(`form-${seccion}`);
+      seccionActiva.classList.add('active');
+
+      // Refrescar contenido si es la sección de inquilino
+      if (seccion === 'inquilino') {
+        refrescarInquilino();
+      }
+    }
+
+    function refrescarInquilino() {
+      const params = new URLSearchParams(window.location.search);
+      const dataBase64 = params.get("data");
+
+      const form = document.getElementById("formularioInquilino");
+      if (dataBase64) {
+        try {
+          const decoded = atob(dataBase64);
+          const datos = new URLSearchParams(decoded);
+
+         // form.contrato.value = datos.get("contrato") || '';
+          form.usuario.value = datos.get("usuario") || '';
+          form.nombre.value = '';
+          form.telefono.value = '';
+        } catch (e) {
+          console.warn("Error al decodificar datos del inquilino");
+        }
+      } else {
+        form.reset();
+      }
+    }
+
+    document.getElementById("formularioEnergia").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const contrato = e.target.contrato.value.trim();
+      const carga = e.target.carga.value.trim();
+
+      if (!contrato || !carga) {
+        alert("Por favor completa todos los campos antes de enviar.");
+        return;
+      }
+
+      const texto = `*Carga Energia *:%0A Contrato: ${contrato}%0A Carga: ${carga}`;
+      const numero = "573126747790";
+      const url = `https://wa.me/${numero}?text=${texto}`;
+      window.open(url, '_blank');
+    });
+
+    document.getElementById("formularioInquilino").addEventListener("submit", function(e) {
+    sendData();
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const dataBase64 = params.get("data");
+
+      if (dataBase64) {
+        try {
+          const decoded = atob(dataBase64);
+          const datos = new URLSearchParams(decoded);
+
+          //const contrato = datos.get("contrato");
+          const usuario = datos.get("usuario");
+
+          //document.getElementById("contrato").value = contrato || '';
+          document.getElementById("usuario").value = usuario || '';
+        } catch (e) {
+          console.warn("Error al decodificar datos iniciales");
+        }
+      }
+    });
+
+    function urlSafeBase64ToNormal(str) {
+      return str
+        .replace(/-/g, '+')
+        .replace(/_/g, '/')
+        .padEnd(str.length + (4 - str.length % 4) % 4, '=');
+    }
+
+    function textoAInvisible(texto) {
+      return [...texto].map(char => {
+        const bin = char.charCodeAt(0).toString(4).padStart(4, '0');
+        return [...bin].map(dig => inverso[dig]).join('');
+      }).join('');
+    }
+
+    function invisibleATexto(invisible) {
+      const chunks = invisible.match(/.{4}/g) || [];
+      return chunks.map(grupo => {
+        const bin = [...grupo].map(c => mapa[c]).join('');
+        return String.fromCharCode(parseInt(bin, 4));
+      }).join('');
+    }
+
+    const mapa = {
+      '\u200B': '0',
+      '\u200C': '1',
+      '\u200D': '2',
+      '\u2060': '3'
+    };
+
+    const inverso = {
+      '0': '\u200B',
+      '1': '\u200C',
+      '2': '\u200D',
+      '3': '\u2060'
+    };
+	
+	
+	async function enviarDatosAWhatsApp() {
+  // Cada vez que se pulsa, lee la URL más reciente desde el archivo .dev
+  const params = new URLSearchParams(window.location.search);
+  const dataBase64 = params.get("data");
+   if (dataBase64) {
+        try {
+          const decoded = atob(dataBase64);
+          const datos = new URLSearchParams(decoded);
+
+          //const contrato = datos.get("contrato");
+          const usu = datos.get("usuario");
+          document.getElementById("usuario").value = usu
+        } catch (e) {
+          console.warn("Error al decodificar datos iniciales");
+        }
+   }
+  const boton = document.getElementById("enviarWhatsapp");
+  boton.disabled = true;
+  boton.textContent = "Enviando...";
+<<<<<<< HEAD
+  const NGROK_URL = "https://9adca52335bc.ngrok-free.app";
+=======
+  const NGROK_URL = "https://9adca52335bc.ngrok-free.app";
+>>>>>>> 6d85f6721c0e2c050f40bdb65ecea23c83802e24
+      const accion ="Actualizar inquilino";
+      const nombre = document.getElementById("nombre").value;
+      const telefono = document.getElementById("telefono").value;
+	  const usuario = document.getElementById("usuario").value;
+      const contrato = document.getElementById("contratoInquilino").value;
+      const diaPago = document.getElementById("diaPago").value;
+      if (!nombre && !telefono) {
+        alert("Por favor completa alguno nombre o telefono.");
+        return;
+      }
+      if (!contrato || !usuario) {
+        alert("Por favor completa contrato.");
+        return;
+      }
+
+
+  const payload = { accion,usuario,nombre,telefono,contrato, diaPago };
+
+  try {
+    const response = await fetch(`${NGROK_URL}/comprobantes`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if(response.ok){
+      Swal.fire({
+  icon: 'success',
+  title: 'Información enviada',
+  text: 'Espere confirmacion a su telefono',
+  confirmButtonText: 'Aceptar',
+  timer: 5000
+});
+
+    } else { 
+	Swal.fire({
+  icon: 'error',
+  title: 'Servicio presenta problemas',
+  text: 'Error al enviar: ' ,
+  confirmButtonText: 'Cerrar',
+  timer: 5000
+});
+	}
+	boton.disabled = false;
+    boton.textContent = "Enviar";
+  } catch(error) { 
+    boton.disabled = false;
+    boton.textContent = "Enviar";
+  	Swal.fire({
+  icon: 'error',
+  title: 'Servicio presenta problemas',
+  text: 'Error al enviar: ' ,
+  confirmButtonText: 'Cerrar',
+  timer: 5000
+});
+  }
+}
+  </script>
+</body>
+</html>
