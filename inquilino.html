@@ -208,6 +208,9 @@ input[type="text"]:focus {
       <div id="resultadoOCR" style="display:none;"></div>
 
       <input type="text" id="usuario" name="usuario" readonly style="display:none;"/>
+	   <input type="text" id="cuenta" name="cuenta" readonly style="display:none;"/>
+	   
+	   
       <label for="contrato">Contrato:</label>
       <input type="text" id="contrato" name="contrato" readonly/>
       <div id="datosExtraidos" style="display:none;">
@@ -267,6 +270,12 @@ async function procesarImagenOCR(){
       document.getElementById("valor").value = datos.valor || "";
       document.getElementById("fecha").value = datos.fecha ? datos.fecha.join("; ") : "";
       document.getElementById("referencia").value = datos.referencia || "";
+	  let cuentaValida = document.getElementById("cuenta").value;
+      let cuenta =contienePalabra(text, cuentaValida);
+      if ((cuentaValida !== null && cuentaValida !== undefined && cuentaValida !== "null" && cuentaValida !== "") && !cuenta) {
+       mesajeError("Error en la solicitud",'Este desprendible no esta dirigido a la cuenta correcta');
+	  document.getElementById("enviarWhatsapp").disabled = true; 
+      }
       validarCampos();
     } catch(err){
       resultadoOCRDiv.textContent="Error OCR: "+err.message;
@@ -348,6 +357,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const datos = new URLSearchParams(decoded);
       document.getElementById("contrato").value = datos.get("contrato");
       document.getElementById("usuario").value = datos.get("usuario");
+	  document.getElementById("cuenta").value = datos.get("validatran");
     } catch(e){ console.error("Error al decodificar."); }
   }
   
@@ -379,6 +389,24 @@ function mesajeExito(titulo,mensaje){
     timer: 10000
   });
 }
+
+function contienePalabra(texto, palabra) {
+  if (palabra === null) {
+    return null;
+  }
+
+  if (!texto || !palabra) return null;
+
+  // Normalizamos texto y palabra: trim y minúsculas
+  const textoNorm = texto.trim().toLowerCase();
+  const palabraNorm = palabra.trim().toLowerCase();
+
+  // Regex para palabra exacta
+  const regex = new RegExp(`\\b${palabraNorm}\\b`, "i");
+  return regex.test(textoNorm) ? palabra : null;
+}
+
+
 
 </script>
 </body>
