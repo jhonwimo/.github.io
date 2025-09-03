@@ -346,10 +346,18 @@ window.addEventListener("DOMContentLoaded", () => {
     try{
       const decoded = atob(dataBase64);
       const datos = new URLSearchParams(decoded);
+	  const usuario = datos.get("usuario");
       document.getElementById("contrato").value = datos.get("contrato");
       document.getElementById("usuario").value = datos.get("usuario");
     } catch(e){ console.error("Error al decodificar."); }
   }
+  
+  
+   if (!usuario || usuario.trim() === "") {
+        // 🚨 Redirigir si usuario no existe o está vacío
+        window.location.href = "index.html"; // <-- aquí cambias por tu página
+        return;
+      }
   
    // Registro del Service Worker
    // if ('serviceWorker' in navigator) {
