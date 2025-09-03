@@ -353,7 +353,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
   
   
-   if (!usuario || usuario === "") {
+   if (!document.getElementById("usuario").value || document.getElementById("usuario").value === "") {
         // 🚨 Redirigir si usuario no existe o está vacío
         window.location.href = "index.html"; // <-- aquí cambias por tu página
         return;
