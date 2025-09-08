@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mapa dispositivos</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    #map { 
+      height: calc(100vh - 60px);
+      width: 100%; 
+    }
+    header {
+      text-align: center;
+      padding: 8px;
+      background: #2c3e50;
+      color: white;
+      font-size: 18px;
+    }
+    .btn {
+      display: block;
+      width: 90%;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #3498db;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:active {
+      background: #2980b9;
+    }
+
+    /* Estilos para el cluster con imagen personalizada */
+    .custom-cluster {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .custom-cluster img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .cluster-count {
+      position: absolute;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      text-shadow: 0 0 3px black;
+    }
+  </style>
+</head>
+<body>
+  <header>Mapa dispositivos</header>
+  <button class="btn" id="buscarBtn">🔍 Buscar Propiedades</button>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+  <script>
+    var map = L.map('map').setView([3.4752819, -76.489579], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Cluster con ícono personalizado
+    var markers = L.markerClusterGroup({
+      maxClusterRadius: 8,
+      iconCreateFunction: function (cluster) {
+        return L.divIcon({
+          html: `<div class="custom-cluster">
+                   <img src="cluster.png" alt="cluster"/>
+                   <span class="cluster-count">${cluster.getChildCount()}</span>
+                 </div>`,
+          className: "myClusterIcon",
+          iconSize: [30, 30]
+        });
+      }
+    });
+
+    map.addLayer(markers);
+
+    document.getElementById('buscarBtn').onclick = async function() {
+      markers.clearLayers();
+
+      const url = 'https://api.wshome.shop/api/WsHome/sensores/listaSensoresMap';
+
+      try {
+        const response = await fetch(url, { method: 'POST' });
+        const mapSensores = await response.json();
+	  const mapSensores2 = 	[
+  {
+    "contrato": "C101",
+    "apartamento": "Apto 101",
+    "kwcarga": "134",
+    "latitud": "3.4752819",
+    "logitud": "-76.489579",
+    "online": true
+  },
+  {
+    "contrato": "C102",
+    "apartamento": "Apto 102",
+    "kwcarga": "87",
+    "latitud": "3.4752819",
+    "logitud": "-76.489579",
+    "online": false
+  },
+  {
+    "contrato": "C201",
+    "apartamento": "Apto 201",
+    "kwcarga": "155",
+    "latitud": "3.4768000",
+    "logitud": "-76.490200",
+    "online": true
+  },
+  {
+    "contrato": "C202",
+    "apartamento": "Apto 202",
+    "kwcarga": "69",
+    "latitud": "3.4768000",
+    "logitud": "-76.490200",
+    "online": false
+  },
+  {
+    "contrato": "C301",
+    "apartamento": "Apto 301",
+    "kwcarga": "121",
+    "latitud": "3.4775000",
+    "logitud": "-76.488700",
+    "online": true
+  },
+  {
+    "contrato": "C302",
+    "apartamento": "Apto 302",
+    "kwcarga": "77",
+    "latitud": "3.4775000",
+    "logitud": "-76.488700",
+    "online": false
+  },
+  {
+    "contrato": "C401",
+    "apartamento": "Apto 401",
+    "kwcarga": "162",
+    "latitud": "3.4745000",
+    "logitud": "-76.490800",
+    "online": true
+  },
+  {
+    "contrato": "C402",
+    "apartamento": "Apto 402",
+    "kwcarga": "91",
+    "latitud": "3.4745000",
+    "logitud": "-76.490800",
+    "online": false
+  }
+]
+
+
+        mapSensores.forEach(function(item) {
+          if (item.latitud && item.latitud !== "N/A" && item.logitud !== "N/A") {
+            const latitud = parseFloat(item.latitud);
+            const longitud = parseFloat(item.logitud);
+            const geocode = [latitud, longitud];
+            const popUp = item.online
+              ? `<b>Contrato:</b> ${item.contrato}<br/><b>Apartamento:</b> ${item.apartamento}<br/><b>Saldo:</b> ${item.kwcarga}`
+              : `<b>Contrato:</b> ${item.contrato}<br/><b>Apartamento:</b> ${item.apartamento}<br/><span style="color:red">Fuera de línea</span>`;
+
+            var marker = L.marker(geocode);
+            marker.bindPopup(popUp);
+            markers.addLayer(marker);
+          }
+        });
+
+        if (markers.getLayers().length > 0) {
+          map.fitBounds(markers.getBounds());
+        }
+
+      } catch (error) {
+        alert('Error al cargar los datos: ' + error);
+      }
+    };
+  </script>
+</body>
+</html>
