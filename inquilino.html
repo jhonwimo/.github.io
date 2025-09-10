@@ -1,311 +1,397 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>App con Tabs - Móvil</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<style>
+  <meta charset="UTF-8">
+  <title>App con Tabs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="tabs/css/menu.css" rel="stylesheet">
+  <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
+body { 
+  font-family: 'Roboto', sans-serif; 
+  background-color: #ffffff; /* Fondo blanco */
+  margin: 0; 
+  padding: 0;
+}
+
+
+.container, #formularioCarga { 
+  max-width:650px; 
+  width:95%; 
+  margin:50px auto; 
+  background:#fff; 
+  border-radius:16px; 
+  box-shadow:0 12px 30px rgba(0,0,0,0.12); 
+  padding:30px; 
+  box-sizing:border-box;
+}
+
+.logo img { 
+  width:160px; 
+  max-width:40vw; 
+  display:block; 
+  margin:100px auto 35px;  /* ⬅️ antes era 0 auto 35px */
+  border-radius:20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);  
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: floatLogo 3s ease-in-out infinite; 
+}
+
+
+.logo img:hover { 
+  transform: scale(1.08) rotate(-2deg); 
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35); 
+}
+
+@keyframes floatLogo {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+#titulo h2 { 
+  text-align:center; 
+  font-size:32px; 
+  font-weight:700; 
+  margin-bottom:35px; 
+  color:#0288d1;
+}
+
+input[type="text"], .file-btn { 
+  width:100%; 
+  padding:16px; 
+  font-size:18px; 
+  margin-bottom:22px; 
+  border:1px solid #ccc; 
+  border-radius:10px; 
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.05); 
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus { 
+  border-color:#0288d1; 
+  box-shadow:0 0 10px rgba(2,136,209,0.3); 
+  outline:none;
+}
+
+.file-btn { 
+  background:linear-gradient(90deg,#29ABE2,#0277bd); 
+  color:#fff; 
+  border:none; 
+  cursor:pointer; 
+  font-weight:600; 
+  font-size:18px; 
+  border-radius:12px; 
+  transition: all 0.3s ease;
+}
+
+.file-input-wrapper:hover .file-btn {
+  background: linear-gradient(90deg,#0277bd,#01579b); 
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+#enviarWhatsapp { 
+  width:100%; 
+  padding:20px; 
+  font-size:22px; 
+  border-radius:14px; 
+  color:white; 
+  background:linear-gradient(90deg,#25D366,#128C7E); 
+  border:none; 
+  cursor:pointer; 
+  font-weight:700; 
+  box-shadow:0 6px 12px rgba(0,0,0,0.15); 
+  transition: all 0.3s ease; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  gap:10px;
+}
+
+#enviarWhatsapp:hover:not(:disabled) { 
+  background:linear-gradient(90deg,#128C7E,#075E54); 
+  transform:scale(1.05);
+}
+
+#enviarWhatsapp:disabled { 
+  background-color:#A5D6A7; 
+  cursor:not-allowed; 
+  transform:none;
+}
+
+.opciones { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 50px; /* Aumentamos la separación entre botones */
+  max-width: 450px; 
+  margin: 0 auto;
+}
+
+.opciones button { 
+  padding: 35px; /* Más alto y ancho */
+  font-size: 28px; /* Texto más grande */
+  cursor: pointer; 
+  background: linear-gradient(90deg, #29ABE2, #0277bd); 
+  color: white; 
+  border: none; 
+  border-radius: 16px; 
+  font-weight: 600; 
+  transition: all 0.3s ease; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 20px; /* Separación entre icono y texto */
+}
+
+
+.opciones button:hover { 
+  background: linear-gradient(90deg, #0277bd, #01579b); 
+  transform: scale(1.05);
+}
+
+.file-input-wrapper { 
+  position:relative; 
+  overflow:hidden;
+}
+
+.file-input-wrapper input[type="file"] { 
+  font-size:100px; 
+  position:absolute; 
+  left:0; 
+  top:0; 
+  opacity:0; 
+  cursor:pointer;
+}
+
+
+
+#resultadoOCR { 
+  margin-bottom:20px; 
+  font-style:italic; 
+  color:#666;
+}
+
+.btn-icon { 
+  display:inline-flex; 
+  align-items:center; 
+  gap:10px;
+}
+
+@media (max-width:480px) { 
+  .opciones button { 
+    font-size: 24px; /* Ajuste para móviles */
+    padding: 28px; 
+    gap: 15px;
+  }
+}
+</style>
+  <style>
 body {
-    font-family: 'Roboto', sans-serif;
-    background: #f0f4fc;
-    margin: 0;
-    padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #f0f4fc; /* fondo muy suave */
+  margin: 0;
+  padding: 0;
+}
+
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+.header-title {
+  text-align: center;
+  flex: 1;
+  font-weight: 700;
+  font-size: 24px;
+color: white; /* <-- cambiar a blanco */
 }
 
 /* Sidebar */
 #sidebar {
-    position: fixed;
-    top: 0;
-    left: -220px;
-    width: 220px;
-    height: 100%;
-    background: #1f2937;
-    overflow-y: auto;
-    transition: left 0.3s;
-    z-index: 50;
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: #1f2937;
+  overflow: auto;
+  transition: left 0.3s;
+  z-index: 50;
 }
 
 #sidebar a {
-    display: block;
-    color: white;
-    padding: 14px 18px;
-    text-decoration: none;
-    font-size: 16px;
+  display: block;
+  color: white;
+  padding: 15px;
+  text-decoration: none;
 }
 
 #sidebar a:hover {
-    background: #374151;
+  background: #374151;
 }
 
 #overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: black;
-    opacity: 0.5;
-    z-index: 40;
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: black;
+  opacity: 0.5;
+  z-index: 40;
 }
 
-/* Header */
-.header-title {
-    flex: 1;
-    font-weight: 700;
-    font-size: 20px;
-    color: white;
-    text-align: center;
+.btn {
+  cursor: pointer;
 }
 
-/* Tabs */
-.tab {
-    display: none;
-}
-
-.tab.active {
-    display: block;
-}
-
-/* Contenedores */
-.container, #formularioCarga {
-    max-width: 95%;
-    margin: 20px auto;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-/* Logo */
-.logo img {
-    width: 140px;
-    max-width: 40vw;
-    display: block;
-    margin: 40px auto 25px;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: floatLogo 3s ease-in-out infinite;
-}
-
-.logo img:hover {
-    transform: scale(1.08) rotate(-2deg);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-}
-
-@keyframes floatLogo {
-    0%,100% {transform: translateY(0);}
-    50% {transform: translateY(-6px);}
-}
-
-/* Título */
-#titulo h2 {
-    text-align: center;
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    color: #0288d1;
-}
-
-/* Inputs */
-input[type="text"], .file-btn {
-    width: 100%;
-    padding: 14px;
-    font-size: 16px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-}
-
-input[type="text"]:focus {
-    border-color: #0288d1;
-    box-shadow: 0 0 8px rgba(2,136,209,0.3);
-    outline: none;
-}
-
-.file-btn {
-    background: linear-gradient(90deg,#29ABE2,#0277bd);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    border-radius: 12px;
-    transition: all 0.3s ease;
-}
-
-.file-input-wrapper:hover .file-btn {
-    background: linear-gradient(90deg,#0277bd,#01579b);
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-}
-
-/* Botón WhatsApp */
-#enviarWhatsapp {
-    width: 100%;
-    padding: 18px;
-    font-size: 20px;
-    border-radius: 12px;
-    color: white;
-    background: linear-gradient(90deg,#25D366,#128C7E);
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    transition: all 0.3s ease;
-}
-
-#enviarWhatsapp:hover:not(:disabled) {
-    background: linear-gradient(90deg,#128C7E,#075E54);
-    transform: scale(1.05);
-}
-
-#enviarWhatsapp:disabled {
-    background-color: #A5D6A7;
-    cursor: not-allowed;
-}
-
-/* Botones grandes Inicio */
+/* Botones / tarjetas estilo moderno */
 .inicio-btn {
-    background: linear-gradient(180deg,#ffffff 0%,#e6f0ff 100%);
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 100%;
-    color: #1e40af;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.inicio-btn i {
-    font-size: 28px;
-    color: #3b82f6;
+  background: linear-gradient(180deg, #ffffff 0%, #e6f0ff 100%);
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 320px;
+  color: #1e40af; /* texto azul */
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .inicio-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-    background: linear-gradient(180deg,#ffffff 0%,#d0e4ff 100%);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.08);
+  background: linear-gradient(180deg, #ffffff 0%, #d0e4ff 100%);
 }
 
-/* OCR Result */
-#resultadoOCR {
-    margin-bottom: 16px;
-    font-style: italic;
-    color: #666;
+.inicio-btn i {
+  font-size: 36px;
+  color: #3b82f6; /* icono azul claro */
 }
 
-/* Ajuste móvil */
-@media (max-width:480px){
-    .inicio-btn {
-        font-size: 16px;
-        padding: 18px;
-        gap: 10px;
-    }
-    .inicio-btn i { font-size: 24px; }
-    input[type="text"], .file-btn { font-size: 15px; padding: 12px; }
-    #enviarWhatsapp { font-size: 18px; padding: 16px; }
-    .header-title { font-size: 18px; }
+/* Ajustes para móviles */
+@media (max-width:480px) {
+  .inicio-btn {
+    font-size: 16px;
+    padding: 25px 20px;
+    gap: 8px;
+    min-width: 100%;
+  }
+
+  .inicio-btn i {
+    font-size: 28px;
+  }
 }
-</style>
+
+  </style>
 </head>
 <body>
 
-<!-- Barra superior -->
-<div class="flex items-center bg-blue-600 p-3 shadow-md">
-    <button class="btn text-white mr-3" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
-    <div id="appHeader" class="header-title">Inicio</div>
-</div>
+  <!-- Barra superior -->
+  <div class="flex items-center bg-blue-600 p-4 shadow-md">
+    <button class="btn text-white mr-4" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+    <div id="appHeader" class="header-title"></div>
+  </div>
 
-<!-- Sidebar -->
-<div id="sidebar">
-    <a href="#" onclick="mostrarTab('inicio', true, 'Inicio')"><i class="fa fa-home mr-2"></i> Inicio</a>
+  <!-- Sidebar -->
+  <div id="sidebar">
+   <a href="#" onclick="loadTab('inicio.html', 'Inicio')"><i class="fa-solid fa-house"></i> Inicio</a>
+    <a href="#" onclick="mostrarTab('inicio', true, 'Bienvenido')"><i class="fa fa-home"></i>Inicio</a>
     <a href="#" onclick="mostrarTab('carga', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
     <a href="#" onclick="mostrarTab('carga', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
     <a href="#" onclick="mostrarTab('carga', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
-</div>
-<div id="overlay" onclick="toggleSidebar()"></div>
+  </div>
 
-<!-- Contenido -->
-<div class="p-4">
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Contenido -->
+  <div class="p-6">
 
     <!-- Inicio -->
     <div id="inicio" class="tab active">
-        <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Energia')">
-            <i class="fa fa-bolt"></i><span>Carga Energia</span>
-        </div>
-        <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Agua')">
-            <i class="fa fa-tint"></i><span>Carga Agua</span>
-        </div>
-        <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Arriendo')">
-            <i class="fa fa-home"></i><span>Carga Arriendo</span>
-        </div>
+      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Energia')">
+        <i class="fa fa-bolt text-blue-600 text-2xl"></i>
+        <span>Carga Energia</span>
+      </div>
+      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Agua')">
+        <i class="fa fa-tint text-blue-600 text-2xl"></i>
+        <span>Carga Agua</span>
+      </div>
+      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Arriendo')">
+        <i class="fa fa-home text-blue-600 text-2xl"></i>
+        <span>Carga Arriendo</span>
+      </div>
     </div>
 
     <!-- Carga -->
     <div id="carga" class="tab">
-        <form id="formImagen">
-            <div class="file-input-wrapper">
-                <button type="button" class="file-btn">Selecciona Comprobante</button>
-                <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required/>
-            </div>
+      
+      <form id="formImagen">
+     
+      <div class="file-input-wrapper">
+        <button type="button" class="file-btn">Selecciona Comprobante</button>
+        <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required/>
+      </div>
+     
+      <div id="resultadoOCR" style="display:none;"></div>
 
-            <div id="resultadoOCR" style="display:none;"></div>
-
-            <input type="text" id="usuario" name="usuario" readonly style="display:none;"/>
-            <label for="contrato">Contrato:</label>
-            <input type="text" id="contrato" name="contrato" readonly/>
-            <div id="datosExtraidos" style="display:none;">
-                <label for="valor">Valor a cargar:</label>
-                <input type="text" id="valor" name="valor" readonly/>
-                <label for="fecha">Fecha:</label>
-                <input type="text" id="fecha" name="fecha" readonly/>
-                <label for="referencia">Referencia:</label>
-                <input type="text" id="referencia" name="referencia" readonly/>
-                <button type="button" id="enviarWhatsapp" disabled onclick="enviarDatosAWhatsApp()">Enviar</button>
-            </div>
-        </form>
+      <input type="text" id="usuario" name="usuario" readonly style="display:none;"/>
+      <label for="contrato">Contrato:</label>
+      <input type="text" id="contrato" name="contrato" readonly/>
+      <div id="datosExtraidos" style="display:none;">
+        <label for="valor">Valor a cargar:</label>
+        <input type="text" id="valor" name="valor" readonly/>
+        <label for="fecha">Fecha:</label>
+        <input type="text" id="fecha" name="fecha" readonly/>
+        <label for="referencia">Referencia:</label>
+        <input type="text" id="referencia" name="referencia" readonly/>
+        <button type="button" id="enviarWhatsapp" disabled onclick="enviarDatosAWhatsApp()">Enviar</button>
+      </div>
+    </form>
     </div>
 
-</div>
+  </div>
 
 <script>
-// Funciones Sidebar & Tabs
 function toggleSidebar(){
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('overlay');
-  if(sidebar.style.left==='0px'){sidebar.style.left='-220px'; overlay.style.display='none';} 
-  else {sidebar.style.left='0px'; overlay.style.display='block';}
+  if(sidebar.style.left === '0px'){
+    sidebar.style.left = '-250px';
+    overlay.style.display='none';
+  } else {
+    sidebar.style.left = '0px';
+    overlay.style.display='block';
+  }
 }
 
-function mostrarTab(tabId,cerrarSidebar=false,titulo=null){
+function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
+  // Ocultar todas las tabs
   document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  // Mostrar la tab seleccionada
   document.getElementById(tabId).classList.add('active');
-  if(titulo) document.getElementById('appHeader').innerText=titulo;
+  // Cambiar título
+  if(titulo) document.getElementById('appHeader').innerText = titulo;
+  // Cerrar sidebar si se indicó
   if(cerrarSidebar) toggleSidebar();
-  if(tabId==='carga') vaciarCamposCarga();
-}
-
-function vaciarCamposCarga(){
-  ['valor','fecha','referencia'].forEach(id=>{document.getElementById(id).value='';});
-  document.getElementById("datosExtraidos").style.display='none';
+   // 🚨 Limpiar inputs si es la tab de carga
+  if(tabId === 'carga'){
+    vaciarCamposCarga();
+  }
 }
 </script>
 <script>
