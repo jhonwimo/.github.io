@@ -312,7 +312,7 @@ color: white; /* <-- cambiar a blanco */
     <a href="#" onclick="mostrarTab('inicio', true, 'Bienvenido')"><i class="fa fa-home"></i>Inicio</a>
     <a href="#" onclick="mostrarTab('carga', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
     <a href="#" onclick="mostrarTab('carga', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
-    <a href="#" onclick="mostrarTab('carga', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
+    <a href="#" onclick="mostrarTab('carga', true, 'Pago Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
   </div>
 
   <!-- Overlay -->
@@ -476,7 +476,7 @@ async function enviarDatosAWhatsApp(){
   const boton=document.getElementById("enviarWhatsapp");
   boton.disabled=true; boton.textContent="Enviando...";
   const NGROK_URL="https://api.wshome.shop";
-  const accion=document.querySelector('h2').textContent+' wshome';
+  const accion=document.getElementById('appHeader').innerText+' wshome';
   const usuario=document.getElementById("usuario").value;
   const contrato=document.getElementById("contrato").value;
   const valor=document.getElementById("valor").value;
