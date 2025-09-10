@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Cargar Imagen</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <link rel="icon" href="logo.svg" type="image/svg+xml" />
- <style>
+  <meta charset="UTF-8">
+  <title>App con Tabs</title>
+   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="tabs/css/menu.css" rel="stylesheet">
+  <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 body { 
@@ -85,9 +87,10 @@ input[type="text"]:focus {
   transition: all 0.3s ease;
 }
 
-.file-btn:hover { 
-  background:linear-gradient(90deg,#0277bd,#01579b); 
-  transform:scale(1.03);
+.file-input-wrapper:hover .file-btn {
+  background: linear-gradient(90deg,#0277bd,#01579b); 
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
 #enviarWhatsapp { 
@@ -163,6 +166,8 @@ input[type="text"]:focus {
   cursor:pointer;
 }
 
+
+
 #resultadoOCR { 
   margin-bottom:20px; 
   font-style:italic; 
@@ -183,25 +188,160 @@ input[type="text"]:focus {
   }
 }
 </style>
+  <style>
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #f0f4fc; /* fondo muy suave */
+  margin: 0;
+  padding: 0;
+}
 
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+.header-title {
+  text-align: center;
+  flex: 1;
+  font-weight: 700;
+  font-size: 24px;
+color: white; /* <-- cambiar a blanco */
+}
+
+/* Sidebar */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: #1f2937;
+  overflow: auto;
+  transition: left 0.3s;
+  z-index: 50;
+}
+
+#sidebar a {
+  display: block;
+  color: white;
+  padding: 15px;
+  text-decoration: none;
+}
+
+#sidebar a:hover {
+  background: #374151;
+}
+
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: black;
+  opacity: 0.5;
+  z-index: 40;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+/* Botones / tarjetas estilo moderno */
+.inicio-btn {
+  background: linear-gradient(180deg, #ffffff 0%, #e6f0ff 100%);
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 320px;
+  color: #1e40af; /* texto azul */
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.inicio-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.08);
+  background: linear-gradient(180deg, #ffffff 0%, #d0e4ff 100%);
+}
+
+.inicio-btn i {
+  font-size: 36px;
+  color: #3b82f6; /* icono azul claro */
+}
+
+/* Ajustes para móviles */
+@media (max-width:480px) {
+  .inicio-btn {
+    font-size: 16px;
+    padding: 25px 20px;
+    gap: 8px;
+    min-width: 100%;
+  }
+
+  .inicio-btn i {
+    font-size: 28px;
+  }
+}
+
+  </style>
 </head>
 <body>
-  <div id="inicio">
-    <div class="logo"><img src="logo.svg" alt="Logo Empresa" /></div>
-    <div class="opciones">
-      <button onclick="mostrar('formularioCarga','Carga Energia')"><span class="btn-icon">💡 Cargar Energía</span></button>
-      <button onclick="mostrar('formularioCarga','Pago Arriendo')"><span class="btn-icon">🏠 Pago Arriendo</span></button>
-    </div>
+
+  <!-- Barra superior -->
+  <div class="flex items-center bg-blue-600 p-4 shadow-md">
+    <button class="btn text-white mr-4" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+    <div id="appHeader" class="header-title"></div>
   </div>
 
-  <div class="container" id="formularioCarga" style="display:none;">
-    <div id="titulo" style="text-align:center;"></div>
-    <form id="formImagen">
-      <label for="imagen">Selecciona Comprobante:</label>
+  <!-- Sidebar -->
+  <div id="sidebar">
+   <a href="#" onclick="loadTab('inicio.html', 'Inicio')"><i class="fa-solid fa-house"></i> Inicio</a>
+    <a href="#" onclick="mostrarTab('inicio', true, 'Bienvenido')"><i class="fa fa-home"></i>Inicio</a>
+    <a href="#" onclick="mostrarTab('carga', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
+    <a href="#" onclick="mostrarTab('carga', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
+    <a href="#" onclick="mostrarTab('carga', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Contenido -->
+  <div class="p-6">
+
+    <!-- Inicio -->
+    <div id="inicio" class="tab active">
+      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Energia')">
+        <i class="fa fa-bolt text-blue-600 text-2xl"></i>
+        <span>Carga Energia</span>
+      </div>
+      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Agua')">
+        <i class="fa fa-tint text-blue-600 text-2xl"></i>
+        <span>Carga Agua</span>
+      </div>
+      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Arriendo')">
+        <i class="fa fa-home text-blue-600 text-2xl"></i>
+        <span>Carga Arriendo</span>
+      </div>
+    </div>
+
+    <!-- Carga -->
+    <div id="carga" class="tab">
+      
+      <form id="formImagen">
+     
       <div class="file-input-wrapper">
-        <button type="button" class="file-btn">Elegir imagen</button>
+        <button type="button" class="file-btn">Selecciona Comprobante</button>
         <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required/>
       </div>
      
@@ -220,8 +360,38 @@ input[type="text"]:focus {
         <button type="button" id="enviarWhatsapp" disabled onclick="enviarDatosAWhatsApp()">Enviar</button>
       </div>
     </form>
+    </div>
+
   </div>
 
+<script>
+function toggleSidebar(){
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  if(sidebar.style.left === '0px'){
+    sidebar.style.left = '-250px';
+    overlay.style.display='none';
+  } else {
+    sidebar.style.left = '0px';
+    overlay.style.display='block';
+  }
+}
+
+function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
+  // Ocultar todas las tabs
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  // Mostrar la tab seleccionada
+  document.getElementById(tabId).classList.add('active');
+  // Cambiar título
+  if(titulo) document.getElementById('appHeader').innerText = titulo;
+  // Cerrar sidebar si se indicó
+  if(cerrarSidebar) toggleSidebar();
+   // 🚨 Limpiar inputs si es la tab de carga
+  if(tabId === 'carga'){
+    vaciarCamposCarga();
+  }
+}
+</script>
 <script>
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/service-worker.js')
@@ -382,6 +552,21 @@ function mesajeExito(titulo,mensaje){
     timer: 10000
   });
 }
+
+
+function vaciarCamposCarga(){
+  const campos = ['valor','fecha','referencia'];
+  campos.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.value = '';
+    }
+  });
+
+  // Ocultar la sección de datos extraídos
+  const datosDiv = document.getElementById("datosExtraidos");
+  if(datosDiv) datosDiv.style.display = 'none';
+  }
 </script>
 </body>
 </html>
