@@ -168,7 +168,7 @@ function init() {
 	 
     try{
       
-	   document.getElementById("usuario").value = 'venta';
+	   document.getElementById("usuario").value = 'jhonwimo';
       handleSearch(true);
       
     } catch(e){ console.error("Error al decodificar."); }
