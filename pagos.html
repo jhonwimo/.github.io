@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pagos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+ 
+  <link rel="stylesheet" href="css/menu.css">
+ <script src="js/pagoInquilino.js"></script>
+ 
+ <script src="js/factura.js"></script>
+
+ <link rel="stylesheet" href="css/bateria.css">
+ <link rel="stylesheet" href="css/factura.css">
+  <link rel="stylesheet" href="css/medidorAgua.css">
+</head>
+<body>
+
+  <!-- Barra superior -->
+  <div class="flex items-center bg-blue-600 p-4 shadow-md">
+    <button class="btn text-white mr-4" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+    <div id="appHeader" class="header-title"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+   
+    <a href="#" onclick="mostrarTab('inicio', true, 'Bienvenido')"><i class="fa fa-home"></i>Inicio</a>
+    <a href="#" onclick="mostrarTab('carga', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
+    <a href="#" onclick="mostrarTab('carga', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
+    <a href="#" onclick="mostrarTab('carga', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
+	<a href="#" onclick="mostrarTab('Factura', true, 'Factura')"><i class="fa fa-home mr-2"></i>Factura</a>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Contenido -->
+  <div class="p-6">
+
+    <!-- Inicio -->
+    <div id="inicio" class="tab active">
+      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Energia')">
+        <i class="fa fa-bolt text-blue-600 text-2xl"></i>
+        <span>Carga Energia</span>
+      </div>
+      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Agua')">
+        <i class="fa fa-tint text-blue-600 text-2xl"></i>
+        <span>Carga Agua</span>
+      </div>
+      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Arriendo')">
+        <i class="fa fa-home text-blue-600 text-2xl"></i>
+        <span>Carga Arriendo</span>
+      </div>
+    </div>
+
+    <!-- Carga -->
+    <div id="carga" class="tab">
+      
+      <form id="formImagen">
+     
+      <div class="file-input-wrapper">
+        <button type="button" class="file-btn">Selecciona Comprobante</button>
+        <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required/>
+      </div>
+     
+      <div id="resultadoOCR" style="display:none;"></div>
+
+      <input type="text" id="usuario" name="usuario" readonly style="display:none;"/>
+      <label for="contrato">Contrato:</label>
+      <input type="text" id="contrato" name="contrato" readonly/>
+      <div id="datosExtraidos" style="display:none;">
+        <label for="valor">Valor a cargar:</label>
+        <input type="text" id="valor" name="valor" readonly/>
+        <label for="fecha">Fecha:</label>
+        <input type="text" id="fecha" name="fecha" readonly/>
+        <label for="referencia">Referencia:</label>
+        <input type="text" id="referencia" name="referencia" readonly/>
+        <button type="button" id="enviarWhatsapp" disabled onclick="enviarDatosAWhatsApp()">Enviar</button>
+      </div>
+    </form>
+    </div>
+	
+	<!-- Factura -->
+    <div id="Factura" class="tab">
+	 <div class="card">
+  <div class="header">
+    <h2>Servicio de Energía Pre Pago</h2>
+    <p><b>Fecha:</b> 2025-09-02 17:52</p>
+  </div>
+
+  <!-- Contenedor contrato + batería -->
+  <div style="display: flex; align-items: center; margin-top: 15px;">
+    <p style="margin: 5;">
+      <b>Contrato:</b> C1003<br>
+      <b>Nombre:</b> JULIO<br>
+      <b>Dirección:</b> Calle 90 28 E 45 Vipasa<br>
+      <b>Apartamento:</b> 203
+    </p>
+
+    <!-- Batería animada -->
+    <div class="battery">
+      <div class="cell"><div class="fill" id="fill1"></div></div>
+      <div class="cell"><div class="fill" id="fill2"></div></div>
+      <div class="cell"><div class="fill" id="fill3"></div></div>
+      <div class="cell"><div class="fill" id="fill4"></div></div>
+      <div class="cell"><div class="fill" id="fill5"></div></div>
+      <div class="cell"><div class="fill" id="fill6"></div></div>
+    </div>
+  </div>
+
+  <!-- Datos -->
+  <div class="section">
+    <h3>Datos al momento de Carga</h3>
+    <table>
+      <tr><td>Consumo Total</td><td>KW</td><td id="consumo">0.03</td></tr>
+      <tr><td>Carga</td><td>KW</td><td id="carga">6.0</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h3>Saldo Actual</h3>
+    <table>
+      <tr><td>Consumo Total</td><td>KW</td><td id="saldoConsumo">0.03</td></tr>
+      <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
+    </table>
+  </div>
+
+  
+  
+  <div class="section">
+    <h3>Consumo de Agua</h3>
+    <div class="card" role="application" aria-label="Medidor de agua">
+  <div class="title">
+    <h1>Medidor de Agua</h1>
+    <p>Visualizador de nivel con ola animada — Wshome</p>
+  </div>
+
+  <div class="layout">
+    <!-- MEDIDOR (SVG) -->
+    <div class="tank-wrap">
+      <div class="tank" id="tankContainer" aria-hidden="false">
+        <div class="level-badge" id="pctBadge">0%</div>
+
+        <!-- SVG: tanque con clipPath para ola -->
+        <svg id="svgTank" viewBox="0 0 200 280" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;">
+          <!-- marco del tanque -->
+          <defs>
+            <clipPath id="tankClip">
+              <!-- forma del tanque: rectángulo con bordes redondeados -->
+              <rect x="20" y="30" width="160" height="220" rx="18" ry="18"></rect>
+            </clipPath>
+
+            <!-- Path de onda (se moverá con translateX desde JS) -->
+            <path id="wavePathTemplate" d=""></path>
+          </defs>
+
+          <!-- borde exterior -->
+          <rect x="18" y="28" width="164" height="224" rx="20" ry="20" fill="none" stroke="#dbeaf6" stroke-width="4"></rect>
+
+          <!-- contenedor de agua (clipeado) -->
+          <g clip-path="url(#tankClip)">
+            <!-- fondo agua (estático) -->
+            <rect id="waterBg" x="20" y="30" width="160" height="220" fill="#e6f7ff"></rect>
+
+            <!-- ola: se pondrá aquí (se duplica para efecto movimiento) -->
+            <g id="waveGroup" transform="translate(0,0)">
+              <path id="wave1" fill="#28a8e0" opacity="0.95"></path>
+              <path id="wave2" fill="#1f92c6" opacity="0.85"></path>
+            </g>
+
+            <!-- máscara superior suave para dar profundidad -->
+            <rect x="20" y="30" width="160" height="220" fill="url(#gradOverlay)" opacity="0.06"></rect>
+          </g>
+
+          <!-- escala lateral (marcas) -->
+          <g id="ticks" transform="translate(6,40)">
+            <!-- We'll draw ticks with JS if needed -->
+          </g>
+
+        </svg>
+      </div>
+    </div>
+
+    <!-- INFO Y CONTROLES -->
+    <div class="info" aria-hidden="false">
+      <div class="readout" role="status" aria-live="polite">
+        <div>
+          <div class="small">Nivel</div>
+          <div class="big" id="percentText">0%</div>
+        </div>
+        <div style="margin-left:auto; text-align:right;">
+          <div class="small">Volumen</div>
+          <div class="big" id="litersText">0 L</div>
+        </div>
+      </div>
+
+      <div class="controls" aria-label="Controles">
+        <label for="levelRange">Ajustar nivel (litros)</label>
+        <input id="levelRange" type="range" min="0" max="1000" value="0" step="1" />
+        <div style="display:flex; gap:10px; margin-top:8px;">
+          <button id="btnFill" style="flex:1; background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Llenar 100%</button>
+          <button id="btnEmpty" style="flex:1; background:#e6eef7; color:var(--accent-dark); border:none; padding:10px; border-radius:8px; cursor:pointer;">Vaciar</button>
+        </div>
+      </div>
+
+      <div class="kpis" aria-hidden="false">
+        <div class="kpi">
+          <small>Consumo diario</small>
+          <strong id="kpiDaily">120 L</strong>
+        </div>
+        <div class="kpi">
+          <small>Meta mensual</small>
+          <strong id="kpiMonthly">9,000 L</strong>
+        </div>
+        <div class="kpi">
+          <small>Reserva de emergencia</small>
+          <strong id="kpiReserve">200 L</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="js/medidorAgua.js"></script>
+  </div>
+</div>
+
+
+</body>
+</html>
