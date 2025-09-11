@@ -1,85 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>App con Tabs</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
- <link rel="stylesheet" href="css/menu.css">
- 
-</head>
-<body>
-
-  <!-- Barra superior -->
-  <div class="flex items-center bg-blue-600 p-4 shadow-md">
-    <button class="btn text-white mr-4" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
-    <div id="appHeader" class="header-title"></div>
-  </div>
-
-  <!-- Sidebar -->
-  <div id="sidebar">
-   
-    <a href="#" onclick="mostrarTab('inicio', true, 'Bienvenido')"><i class="fa fa-home"></i>Inicio</a>
-    <a href="#" onclick="mostrarTab('carga', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
-    <a href="#" onclick="mostrarTab('carga', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
-    <a href="#" onclick="mostrarTab('carga', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
-  </div>
-
-  <!-- Overlay -->
-  <div id="overlay" onclick="toggleSidebar()"></div>
-
-  <!-- Contenido -->
-  <div class="p-6">
-
-    <!-- Inicio -->
-    <div id="inicio" class="tab active">
-      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Energia')">
-        <i class="fa fa-bolt text-blue-600 text-2xl"></i>
-        <span>Carga Energia</span>
-      </div>
-      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Agua')">
-        <i class="fa fa-tint text-blue-600 text-2xl"></i>
-        <span>Carga Agua</span>
-      </div>
-      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Arriendo')">
-        <i class="fa fa-home text-blue-600 text-2xl"></i>
-        <span>Carga Arriendo</span>
-      </div>
-    </div>
-
-    <!-- Carga -->
-    <div id="carga" class="tab">
-      
-      <form id="formImagen">
-     
-      <div class="file-input-wrapper">
-        <button type="button" class="file-btn">Selecciona Comprobante</button>
-        <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required/>
-      </div>
-     
-      <div id="resultadoOCR" style="display:none;"></div>
-
-      <input type="text" id="usuario" name="usuario" readonly style="display:none;"/>
-      <label for="contrato">Contrato:</label>
-      <input type="text" id="contrato" name="contrato" readonly/>
-      <div id="datosExtraidos" style="display:none;">
-        <label for="valor">Valor a cargar:</label>
-        <input type="text" id="valor" name="valor" readonly/>
-        <label for="fecha">Fecha:</label>
-        <input type="text" id="fecha" name="fecha" readonly/>
-        <label for="referencia">Referencia:</label>
-        <input type="text" id="referencia" name="referencia" readonly/>
-        <button type="button" id="enviarWhatsapp" disabled onclick="enviarDatosAWhatsApp()">Enviar</button>
-      </div>
-    </form>
-    </div>
-
-  </div>
-
-<script>
 function toggleSidebar(){
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('overlay');
@@ -106,8 +25,7 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
     vaciarCamposCarga();
   }
 }
-</script>
-<script>
+
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/service-worker.js')
     .then(()=>console.log('SW registrado'))
@@ -282,6 +200,3 @@ function vaciarCamposCarga(){
   const datosDiv = document.getElementById("datosExtraidos");
   if(datosDiv) datosDiv.style.display = 'none';
   }
-</script>
-</body>
-</html>

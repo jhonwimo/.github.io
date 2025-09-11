@@ -89,7 +89,7 @@ const API_URL = "http://192.168.1.45:31383/api/WsHome";
       //handleEnableFields();
       editar = true;
       nuevo = false;
-      handleSearch(true);
+     // handleSearch(true);
     }
 
    function buscarBarrio(idBarrio) {
@@ -146,30 +146,6 @@ const API_URL = "http://192.168.1.45:31383/api/WsHome";
 	  handleEnableFields();
     }
 	
-	window.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const dataBase64 = params.get("data");
-  if(dataBase64){
-    try{
-      const decoded = atob(dataBase64);
-      const datos = new URLSearchParams(decoded);
-	   document.getElementById("usuario").value = datos.get("usuario");
-	   document.getElementById("usuario").value = 'venta';
-      handleSearch(true);
-      
-    } catch(e){ console.error("Error al decodificar."); }
-  }
-  
 
-  
-});
 
-function init() {
-	 
-    try{
-      
-	   document.getElementById("usuario").value = 'jhonwimo';
-      handleSearch(true);
-      
-    } catch(e){ console.error("Error al decodificar."); }
-  }
+
