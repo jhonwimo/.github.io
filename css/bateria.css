@@ -1,10 +1,4 @@
- body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: #f8f9fa;
-  }
+
 
   .battery {
     width: 300px;

@@ -2,14 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>App con Tabs</title>
+  <title>Pagos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
- <link rel="stylesheet" href="css/menu.css">
  
+  <link rel="stylesheet" href="css/menu.css">
+ <script src="js/pagoInquilino.js"></script>
+ 
+ <script src="js/factura.js"></script>
+
+ <link rel="stylesheet" href="css/bateria.css">
+ <link rel="stylesheet" href="css/factura.css">
+  <link rel="stylesheet" href="css/medidorAgua.css">
 </head>
 <body>
 
@@ -26,6 +33,7 @@
     <a href="#" onclick="mostrarTab('carga', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
     <a href="#" onclick="mostrarTab('carga', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
     <a href="#" onclick="mostrarTab('carga', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
+	<a href="#" onclick="mostrarTab('Factura', true, 'Factura')"><i class="fa fa-home mr-2"></i>Factura</a>
   </div>
 
   <!-- Overlay -->
@@ -76,212 +84,152 @@
       </div>
     </form>
     </div>
-
+	
+	<!-- Factura -->
+    <div id="Factura" class="tab">
+	 <div class="card">
+  <div class="header">
+    <h2>Servicio de Energía Pre Pago</h2>
+    <p><b>Fecha:</b> 2025-09-02 17:52</p>
   </div>
 
-<script>
-function toggleSidebar(){
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('overlay');
-  if(sidebar.style.left === '0px'){
-    sidebar.style.left = '-250px';
-    overlay.style.display='none';
-  } else {
-    sidebar.style.left = '0px';
-    overlay.style.display='block';
-  }
-}
+  <!-- Contenedor contrato + batería -->
+  <div style="display: flex; align-items: center; margin-top: 15px;">
+    <p style="margin: 5;">
+      <b>Contrato:</b> C1003<br>
+      <b>Nombre:</b> JULIO<br>
+      <b>Dirección:</b> Calle 90 28 E 45 Vipasa<br>
+      <b>Apartamento:</b> 203
+    </p>
 
-function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
-  // Ocultar todas las tabs
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  // Mostrar la tab seleccionada
-  document.getElementById(tabId).classList.add('active');
-  // Cambiar título
-  if(titulo) document.getElementById('appHeader').innerText = titulo;
-  // Cerrar sidebar si se indicó
-  if(cerrarSidebar) toggleSidebar();
-   // 🚨 Limpiar inputs si es la tab de carga
-  if(tabId === 'carga'){
-    vaciarCamposCarga();
-  }
-}
-</script>
-<script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(()=>console.log('SW registrado'))
-    .catch(console.error);
-}
+    <!-- Batería animada -->
+    <div class="battery">
+      <div class="cell"><div class="fill" id="fill1"></div></div>
+      <div class="cell"><div class="fill" id="fill2"></div></div>
+      <div class="cell"><div class="fill" id="fill3"></div></div>
+      <div class="cell"><div class="fill" id="fill4"></div></div>
+      <div class="cell"><div class="fill" id="fill5"></div></div>
+      <div class="cell"><div class="fill" id="fill6"></div></div>
+    </div>
+  </div>
 
-function mostrar(id,titulo){
-  document.getElementById('inicio').style.display='none';
-  document.getElementById(id).style.display='block';
-  const h2 = document.createElement("h2"); h2.textContent = titulo;
-  document.getElementById("titulo").appendChild(h2);
-}
+  <!-- Datos -->
+  <div class="section">
+    <h3>Datos al momento de Carga</h3>
+    <table>
+      <tr><td>Consumo Total</td><td>KW</td><td id="consumo">0.03</td></tr>
+      <tr><td>Carga</td><td>KW</td><td id="carga">6.0</td></tr>
+    </table>
+  </div>
 
-function previsualizarImagen(event){
-  const archivo = event.target.files[0];
-  const img = document.getElementById("previewImg");
-  if(archivo){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      img.src = e.target.result;
-      img.style.display="block";
-    };
-    reader.readAsDataURL(archivo);
-    procesarImagenOCR();
-  } else {
-    img.src=""; img.style.display="none";
-  }
-}
-
-async function procesarImagenOCR(){
-  const archivo = document.getElementById("imagen").files[0];
-  const resultadoOCRDiv = document.getElementById("resultadoOCR");
-  if(!archivo){ alert("Selecciona una imagen."); return; }
-  resultadoOCRDiv.style.display="block"; resultadoOCRDiv.textContent="Verificar datos despues de carga Procesando ...";
-  const reader = new FileReader();
-  reader.onload = async function(event){
-    try{
-      const { data: { text } } = await Tesseract.recognize(event.target.result,"spa",{logger:m=>console.log(m)});
-      resultadoOCRDiv.style.display="none";
-      document.getElementById("datosExtraidos").style.display="block";
-      const datos = extraerDatos(text);
-      document.getElementById("valor").value = datos.valor || "";
-      document.getElementById("fecha").value = datos.fecha ? datos.fecha.join("; ") : "";
-      document.getElementById("referencia").value = datos.referencia || "";
-      validarCampos();
-    } catch(err){
-      resultadoOCRDiv.textContent="Error OCR: "+err.message;
-    }
-  };
-  reader.readAsDataURL(archivo);
-}
-
-function extraerDatos(texto){
-  const fechas = extraerFechas(texto);
-  const valores = extraerValores(texto);
-  const referencia = extraerReferenciaComprobante(texto);
-  return { fecha: fechas.length>0?fechas:null, valor: valores.length>0?valores[0]:null, referencia };
-}
-
-function extraerFechas(texto){
- // const regexFechaHora = /\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+DE)?\s+(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+DE)?\s+\d{4}|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01]))(?:\s*[-–]?\s*(?:[01]?\d|2[0-3]):[0-5]\d(?:\:[0-5]\d)?(?:\s?(?:AM|PM|am|pm))?)?\b/gi;
- const regexFechaHora=/\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+de)?\s+(?:ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|sept|septiembre|oct|octubre|nov|noviembre|dic|diciembre|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|september|oct|october|nov|november|dec|december)(?:\s+de)?\s+\d{2,4}(?:\s+a\s+las\s+(?:[01]?\d|2[0-3]):[0-5]\d(?:\s*(?:a\.?\s*m\.?|p\.?\s*m\.?))?)?|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01])|(?:jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december|ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|septiembre|oct|octubre|nov|noviembre|dic|diciembre)[\s\-/.](?:0?[1-9]|[12][0-9]|3[01])[\s\-/.]\d{2,4}|\d{4}[\s\-/.](?:jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december|ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|septiembre|oct|octubre|nov|noviembre|dic|diciembre)[\s\-/.](?:0?[1-9]|[12][0-9]|3[01]))\b/gi;
-  return texto.split(/\r?\n/).filter(linea=>regexFechaHora.test(linea)).map(l=>l.trim());
-}
-
-function extraerValores(texto){
-  const regex = /(?:\$|COP)?\s*\d{1,3}(?:([.,])\d{3})+(?:[.,]\d{2})?|\d+[.,]\d{2}/g;
-  const valores = []; let match;
-  while((match=regex.exec(texto))!==null) valores.push(match[0].trim());
-  return valores;
-}
-
-function extraerReferenciaComprobante(texto){
-  const regex = /\b(?:comprobante|referencia|ref(?:\.|:)?|n[úu]mero|nro(?:\.|:)?)(?:\s*No\.?\s*|\s+No\.?\s*|\s*:\s*|\s+)?([A-Z0-9\-]{6,})\b/gi;
-  const match = regex.exec(texto); return match?match[1]:"";
-}
-
-async function enviarDatosAWhatsApp(){
-  const boton=document.getElementById("enviarWhatsapp");
-  boton.disabled=true; boton.textContent="Enviando...";
-  const NGROK_URL="https://api.wshome.shop";
-  const accion=document.querySelector('h2').textContent+' wshome';
-  const usuario=document.getElementById("usuario").value;
-  const contrato=document.getElementById("contrato").value;
-  const valor=document.getElementById("valor").value;
-  const fecha=document.getElementById("fecha").value;
-  const referencia=document.getElementById("referencia").value;
-  if(!valor||!fecha||!referencia||!contrato||!usuario){ alert("Todos los datos deben estar presentes."); return; }
-  const payload={accion,usuario,contrato,valor,fecha,referencia};
-  try{
-    const response=await fetch(`${NGROK_URL}/comprobantes`,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(payload)
-    });
-   const data = await response.json();
-    if (data.status=="ko" ) {
-    // ❌ Error desde el backend (validación fallida o fallo en RabbitMQ)
-     mesajeError("Error en la solicitud",data.mensaje || 'Ocurrió un error inesperado');
-}else {
-    mesajeExito("Se envió tu Solicitud",'Pronto llegara la respuesta de su solicitud al celular');
-    }
-    boton.disabled=false; boton.textContent="Enviar";
-  } catch(err){
-    boton.disabled=false;
-	boton.textContent="Enviar"; 
-	 Swal.fire({icon:'error', title:'Servicio presenta problemas', text:'Error al enviar', confirmButtonText:'Cerrar', timer:5000});
-	console.error(err);
-  }
-}
-
-function validarCampos(){
-  const valor=document.getElementById("valor").value.trim();
-  const fecha=document.getElementById("fecha").value.trim();
-  const referencia=document.getElementById("referencia").value.trim();
-  document.getElementById("enviarWhatsapp").disabled=!(valor || fecha || referencia);
-}
-window.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const dataBase64 = params.get("data");
-  if(dataBase64){
-    try{
-      const decoded = atob(dataBase64);
-      const datos = new URLSearchParams(decoded);
-	  const usuario = datos.get("usuario");
-      document.getElementById("contrato").value = datos.get("contrato");
-      document.getElementById("usuario").value = datos.get("usuario");
-    } catch(e){ console.error("Error al decodificar."); }
-  }
-  
-  
-   if (!document.getElementById("usuario").value || document.getElementById("usuario").value === "") {
-        // 🚨 Redirigir si usuario no existe o está vacío
-        window.location.href = "index.html"; // <-- aquí cambias por tu página
-        return;
-      }
+  <div class="section">
+    <h3>Saldo Actual</h3>
+    <table>
+      <tr><td>Consumo Total</td><td>KW</td><td id="saldoConsumo">0.03</td></tr>
+      <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
+    </table>
+  </div>
 
   
-});
+  
+  <div class="section">
+    <h3>Consumo de Agua</h3>
+    <div class="card" role="application" aria-label="Medidor de agua">
+  <div class="title">
+    <h1>Medidor de Agua</h1>
+    <p>Visualizador de nivel con ola animada — Wshome</p>
+  </div>
 
-function mesajeError(titulo,mensaje){
-  Swal.fire({
-    icon: 'error',
-    title: titulo,
-    text: mensaje ,
-    confirmButtonText: 'Cerrar',
-    timer: 10000
-  });
-}
+  <div class="layout">
+    <!-- MEDIDOR (SVG) -->
+    <div class="tank-wrap">
+      <div class="tank" id="tankContainer" aria-hidden="false">
+        <div class="level-badge" id="pctBadge">0%</div>
 
-function mesajeExito(titulo,mensaje){
-  Swal.fire({
-    icon: 'success',
-    title: titulo,
-    text: mensaje,
-    confirmButtonText: 'Aceptar',
-    timer: 10000
-  });
-}
+        <!-- SVG: tanque con clipPath para ola -->
+        <svg id="svgTank" viewBox="0 0 200 280" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;">
+          <!-- marco del tanque -->
+          <defs>
+            <clipPath id="tankClip">
+              <!-- forma del tanque: rectángulo con bordes redondeados -->
+              <rect x="20" y="30" width="160" height="220" rx="18" ry="18"></rect>
+            </clipPath>
+
+            <!-- Path de onda (se moverá con translateX desde JS) -->
+            <path id="wavePathTemplate" d=""></path>
+          </defs>
+
+          <!-- borde exterior -->
+          <rect x="18" y="28" width="164" height="224" rx="20" ry="20" fill="none" stroke="#dbeaf6" stroke-width="4"></rect>
+
+          <!-- contenedor de agua (clipeado) -->
+          <g clip-path="url(#tankClip)">
+            <!-- fondo agua (estático) -->
+            <rect id="waterBg" x="20" y="30" width="160" height="220" fill="#e6f7ff"></rect>
+
+            <!-- ola: se pondrá aquí (se duplica para efecto movimiento) -->
+            <g id="waveGroup" transform="translate(0,0)">
+              <path id="wave1" fill="#28a8e0" opacity="0.95"></path>
+              <path id="wave2" fill="#1f92c6" opacity="0.85"></path>
+            </g>
+
+            <!-- máscara superior suave para dar profundidad -->
+            <rect x="20" y="30" width="160" height="220" fill="url(#gradOverlay)" opacity="0.06"></rect>
+          </g>
+
+          <!-- escala lateral (marcas) -->
+          <g id="ticks" transform="translate(6,40)">
+            <!-- We'll draw ticks with JS if needed -->
+          </g>
+
+        </svg>
+      </div>
+    </div>
+
+    <!-- INFO Y CONTROLES -->
+    <div class="info" aria-hidden="false">
+      <div class="readout" role="status" aria-live="polite">
+        <div>
+          <div class="small">Nivel</div>
+          <div class="big" id="percentText">0%</div>
+        </div>
+        <div style="margin-left:auto; text-align:right;">
+          <div class="small">Volumen</div>
+          <div class="big" id="litersText">0 L</div>
+        </div>
+      </div>
+
+      <div class="controls" aria-label="Controles">
+        <label for="levelRange">Ajustar nivel (litros)</label>
+        <input id="levelRange" type="range" min="0" max="1000" value="0" step="1" />
+        <div style="display:flex; gap:10px; margin-top:8px;">
+          <button id="btnFill" style="flex:1; background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Llenar 100%</button>
+          <button id="btnEmpty" style="flex:1; background:#e6eef7; color:var(--accent-dark); border:none; padding:10px; border-radius:8px; cursor:pointer;">Vaciar</button>
+        </div>
+      </div>
+
+      <div class="kpis" aria-hidden="false">
+        <div class="kpi">
+          <small>Consumo diario</small>
+          <strong id="kpiDaily">120 L</strong>
+        </div>
+        <div class="kpi">
+          <small>Meta mensual</small>
+          <strong id="kpiMonthly">9,000 L</strong>
+        </div>
+        <div class="kpi">
+          <small>Reserva de emergencia</small>
+          <strong id="kpiReserve">200 L</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="js/medidorAgua.js"></script>
+  </div>
+</div>
 
 
-function vaciarCamposCarga(){
-  const campos = ['valor','fecha','referencia'];
-  campos.forEach(id=>{
-    const el = document.getElementById(id);
-    if(el){
-      el.value = '';
-    }
-  });
-
-  // Ocultar la sección de datos extraídos
-  const datosDiv = document.getElementById("datosExtraidos");
-  if(datosDiv) datosDiv.style.display = 'none';
-  }
-</script>
 </body>
 </html>

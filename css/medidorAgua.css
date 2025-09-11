@@ -6,17 +6,7 @@
     --water:#28a8e0;
     --muted:#6b7280;
   }
-  body{
-    margin:0;
-    font-family: Inter, Roboto, "Segoe UI", system-ui, -apple-system;
-    background:var(--bg);
-    color:#0f172a;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    padding:20px;
-  }
+
 
   .card{
     width:100%;
