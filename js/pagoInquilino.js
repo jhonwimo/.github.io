@@ -85,7 +85,11 @@ async function procesarImagenOCR(){
       document.getElementById("valor").value = datos.valor || "";
       document.getElementById("fecha").value = datos.fecha ? datos.fecha.join("; ") : "";
       document.getElementById("referencia").value = datos.referencia || "";
-      validarCampos();
+	
+	  if(validarData(text)){
+		  validarCampos();
+	  }
+      
     } catch(err){
       resultadoOCRDiv.textContent="Error OCR: "+err.message;
     }
@@ -142,7 +146,7 @@ async function enviarDatosAWhatsApp(){
     // ❌ Error desde el backend (validación fallida o fallo en RabbitMQ)
      mesajeError("Error en la solicitud",data.mensaje || 'Ocurrió un error inesperado');
 }else {
-	validarCampos();
+	vaciarCamposCarga();
     mesajeExito("Se envió tu Solicitud",'Pronto llegara la respuesta de su solicitud al celular');
     }
     boton.disabled=false; boton.textContent="Enviar";
@@ -160,6 +164,24 @@ function validarCampos(){
   const referencia=document.getElementById("referencia").value.trim();
   document.getElementById("enviarWhatsapp").disabled=!(valor || fecha || referencia);
 }
+
+function validarData(texto) {
+  
+
+  const valor = document.getElementById("valida").value.trim();
+  if (!valor) true; // Si texto es null, undefined o vacío, no valida nada
+  if(texto.includes(valor)){
+	  console.log("hp si");
+  }else{
+	   console.log("hp no");
+  }
+  // Habilitar el botón solo si 'texto' contiene 'valor'
+  Swal.fire({icon:'error', title:'Valide su Comprobante', text:'Cuenta de canon Arriendo esta no es Valida', confirmButtonText:'Cerrar', timer:5000});
+  return texto.includes(valor)
+}
+
+
+
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const dataBase64 = params.get("data");
@@ -170,6 +192,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	  const usuario = datos.get("usuario");
       document.getElementById("contrato").value = datos.get("contrato");
       document.getElementById("usuario").value = datos.get("usuario");
+	  document.getElementById("valida").value = datos.get("validatran");
     } catch(e){ console.error("Error al decodificar."); }
   }
   
