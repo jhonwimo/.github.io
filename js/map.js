@@ -41,8 +41,16 @@ function initMap() {
 // Función para cargar sensores
 async function cargarSensores() {
   markers.clearLayers();
-
-  const mapSensores = [
+  
+  axios.post("https://api.wshome.shop/api/WsHome/sensores/listaSensoresMap", { usuario })
+  .then(res => {
+    console.log("Respuesta:", res.data);
+  })
+  .catch(err => {
+    console.error("Error:", err);
+  });
+   mapSensores =res.data;
+ /* const mapSensores = [
     { "contrato": "C101", "apartamento": "Apto 101", "kwcarga": "134", "latitud": "3.4752819", "logitud": "-76.489579", "online": true },
     { "contrato": "C102", "apartamento": "Apto 102", "kwcarga": "87", "latitud": "3.4752819", "logitud": "-76.489579", "online": false },
     { "contrato": "C201", "apartamento": "Apto 201", "kwcarga": "155", "latitud": "3.4768000", "logitud": "-76.490200", "online": true },
@@ -52,7 +60,7 @@ async function cargarSensores() {
     { "contrato": "C401", "apartamento": "Apto 401", "kwcarga": "162", "latitud": "3.4745000", "logitud": "-76.490800", "online": true },
     { "contrato": "C402", "apartamento": "Apto 402", "kwcarga": "91", "latitud": "3.4745000", "logitud": "-76.490800", "online": false }
   ];
-
+*/
   mapSensores.forEach(item => {
     if (item.latitud && item.latitud !== "N/A" && item.logitud !== "N/A") {
       const latitud = parseFloat(item.latitud);
