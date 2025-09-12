@@ -24,6 +24,21 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
   if(tabId === 'carga'){
     vaciarCamposCarga();
   }
+   // 👇 aplicar cambio de viewport
+  setViewport(tabId);
+}
+
+function setViewport(tabId){
+  const normal = document.getElementById("viewportNormal");
+  const factura = document.getElementById("viewportFactura");
+
+  if(tabId === "Factura"){
+    normal.setAttribute("disabled", true);
+    factura.removeAttribute("disabled");
+  } else {
+    factura.setAttribute("disabled", true);
+    normal.removeAttribute("disabled");
+  }
 }
 
 if('serviceWorker' in navigator){

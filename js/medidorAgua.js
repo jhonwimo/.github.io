@@ -6,7 +6,7 @@
 */
 
 // CONFIGURACIÓN
-const CAPACITY_LITERS = 1000;        // capacidad total del tanque (L)
+const CAPACITY_LITERS = 2000;        // capacidad total del tanque (L)
 const svgWidth = 200;
 const svgHeight = 280;
 const waterArea = { x:20, y:30, w:160, h:220 }; // caja del tanque (coordenadas en SVG)
@@ -27,7 +27,7 @@ const waveGroup = document.getElementById('waveGroup');
 let waveOffset = 0;
 let animId = null;
 let currentLiters = Number(range.value);
-
+currentLiters=500;
 // parámetros ola
 const wave = {
   amplitude: 8,     // altura de la onda en px

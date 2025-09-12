@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Pagos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta id="viewportNormal" name="viewport" content="width=device-width, initial-scale=1.0">
+<meta id="viewportFactura" name="viewport" content="width=1024" disabled>
+
 
    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -212,8 +215,8 @@
         <label for="levelRange">Ajustar nivel (litros)</label>
         <input id="levelRange" type="range" min="0" max="1000" value="0" step="1" />
         <div style="display:flex; gap:10px; margin-top:8px;">
-          <button id="btnFill" style="flex:1; background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Llenar 100%</button>
-          <button id="btnEmpty" style="flex:1; background:#e6eef7; color:var(--accent-dark); border:none; padding:10px; border-radius:8px; cursor:pointer;">Vaciar</button>
+          <button disabled  id="btnFill" style="flex:1; background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Llenar 100%</button>
+          <button disabled  id="btnEmpty" style="flex:1; background:#e6eef7; color:var(--accent-dark); border:none; padding:10px; border-radius:8px; cursor:pointer;">Vaciar</button>
         </div>
       </div>
 
