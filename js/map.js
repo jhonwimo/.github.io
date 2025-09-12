@@ -40,42 +40,49 @@ function initMap() {
 
 // Función para cargar sensores
 async function cargarSensores() {
-	
-	  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
   const dataBase64 = params.get("data");
-  let usuario ;
-  if(dataBase64){
-    try{
+  let usuario;
+
+  if (dataBase64) {
+    try {
       const decoded = atob(dataBase64);
       const datos = new URLSearchParams(decoded);
-	   usuario = datos.get("usuario");
-      
-    } catch(e){ console.error("Error al decodificar."); }
+      usuario = datos.get("usuario");
+    } catch (e) {
+      console.error("Error al decodificar.");
+    }
   }
-	
-	
+
   markers.clearLayers();
-  
-  axios.post("https://api.wshome.shop/api/WsHome/sensores/listaSensoresMap", { usuario })
-  .then(res => {
+
+  try {
+    const res = await axios.post("https://api.wshome.shop/api/WsHome/sensores/listaSensoresMap", { usuario });
     console.log("Respuesta:", res.data);
-  })
-  .catch(err => {
-    console.log("Error:", err);
-  });
-  console.log("Respuesta:", res.data);
-   mapSensores =res.data;
- /* const mapSensores = [
-    { "contrato": "C101", "apartamento": "Apto 101", "kwcarga": "134", "latitud": "3.4752819", "logitud": "-76.489579", "online": true },
-    { "contrato": "C102", "apartamento": "Apto 102", "kwcarga": "87", "latitud": "3.4752819", "logitud": "-76.489579", "online": false },
-    { "contrato": "C201", "apartamento": "Apto 201", "kwcarga": "155", "latitud": "3.4768000", "logitud": "-76.490200", "online": true },
-    { "contrato": "C202", "apartamento": "Apto 202", "kwcarga": "69", "latitud": "3.4768000", "logitud": "-76.490200", "online": false },
-    { "contrato": "C301", "apartamento": "Apto 301", "kwcarga": "121", "latitud": "3.4775000", "logitud": "-76.488700", "online": true },
-    { "contrato": "C302", "apartamento": "Apto 302", "kwcarga": "77", "latitud": "3.4775000", "logitud": "-76.488700", "online": false },
-    { "contrato": "C401", "apartamento": "Apto 401", "kwcarga": "162", "latitud": "3.4745000", "logitud": "-76.490800", "online": true },
-    { "contrato": "C402", "apartamento": "Apto 402", "kwcarga": "91", "latitud": "3.4745000", "logitud": "-76.490800", "online": false }
-  ];
-*/
+    const mapSensores = res.data;
+
+    // Si no vienen sensores, podrías meter un fallback
+    if (!mapSensores || mapSensores.length === 0) {
+      console.warn("No llegaron sensores, usando fallback...");
+      return pintarSensores([
+        { "contrato": "C101", "apartamento": "Apto 101", "kwcarga": "134", "latitud": "3.4752819", "logitud": "-76.489579", "online": true },
+        { "contrato": "C102", "apartamento": "Apto 102", "kwcarga": "87", "latitud": "3.4752819", "logitud": "-76.489579", "online": false }
+      ]);
+    }
+
+    pintarSensores(mapSensores);
+  } catch (err) {
+    console.error("Error:", err);
+    alert("Error cargando sensores desde API. Se mostrarán datos de prueba.");
+    pintarSensores([
+      { "contrato": "C101", "apartamento": "Apto 101", "kwcarga": "134", "latitud": "3.4752819", "logitud": "-76.489579", "online": true },
+      { "contrato": "C102", "apartamento": "Apto 102", "kwcarga": "87", "latitud": "3.4752819", "logitud": "-76.489579", "online": false }
+    ]);
+  }
+}
+
+// Función para pintar sensores en el mapa
+function pintarSensores(mapSensores) {
   mapSensores.forEach(item => {
     if (item.latitud && item.latitud !== "N/A" && item.logitud !== "N/A") {
       const latitud = parseFloat(item.latitud);
