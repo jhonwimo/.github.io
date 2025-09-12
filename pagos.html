@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <title>Pagos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <meta id="viewportNormal" name="viewport" content="width=device-width, initial-scale=1.0">
-<meta id="viewportFactura" name="viewport" content="width=1024" disabled> -->
 
 
    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
@@ -24,7 +22,39 @@
   <link rel="stylesheet" href="css/medidorAgua.css">
   
   
+<style>
+  .section table {
+    display: none; /* oculto por defecto */
+    margin-top: 5px;
+  }
+  .section.active table {
+    display: table; /* visible cuando se activa */
+  }
 
+  h3 {
+    cursor: pointer;
+    user-select: none;
+    padding: 8px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  h3:hover {
+    background: #ddd;
+  }
+
+  /* Agregar el icono ➕/➖ */
+  h3::after {
+    content: " ➕";
+    float: right;
+    font-weight: normal;
+  }
+
+  .section.active h3::after {
+    content: " ➖";
+  }
+</style>
 </head>
 <body>
 
@@ -38,11 +68,11 @@
   <div id="sidebar">
    
     <a href="#" onclick="mostrarTab('inicio', true, 'Bienvenido')"><i class="fa fa-home"></i>Inicio</a>
-    <a href="#" onclick="mostrarTab('carga', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
-    <a href="#" onclick="mostrarTab('carga', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
-    <a href="#" onclick="mostrarTab('carga', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
-	<a href="#" onclick="mostrarTab('Factura', true, 'Factura')"><i class="fa fa-home mr-2"></i>Factura</a>
-  </div>
+    <a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
+    <a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
+    <a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
+	<a href="#" onclick="mostrarTab('FacturaEnergia', true, 'Factura Energia')"><i class="fa fa-home mr-2"></i>Factura Energia</a>
+ </div>
 
   <!-- Overlay -->
   <div id="overlay" onclick="toggleSidebar()"></div>
@@ -52,22 +82,26 @@
 
     <!-- Inicio -->
     <div id="inicio" class="tab active">
-      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Energia')">
+      <div class="inicio-btn" onclick="mostrarTab('cargaComprobantes', false, 'Carga Energia')">
         <i class="fa fa-bolt text-blue-600 text-2xl"></i>
         <span>Carga Energia</span>
       </div>
-      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Agua')">
+      <div class="inicio-btn" onclick="mostrarTab('cargaComprobantes', false, 'Carga Agua')">
         <i class="fa fa-tint text-blue-600 text-2xl"></i>
         <span>Carga Agua</span>
       </div>
-      <div class="inicio-btn" onclick="mostrarTab('carga', false, 'Carga Arriendo')">
+      <div class="inicio-btn" onclick="mostrarTab('cargaComprobantes', false, 'Carga Arriendo')">
         <i class="fa fa-home text-blue-600 text-2xl"></i>
         <span>Carga Arriendo</span>
       </div>
-    </div>
+	  <div class="inicio-btn" onclick="mostrarTab('FacturaEnergia', false, 'Factura Energia')">
+        <i class="fa fa-home text-blue-600 text-2xl"></i>
+        <span>Factura Energia</span>
+      </div>
+	 </div>
 
     <!-- Carga -->
-    <div id="carga" class="tab">
+    <div id="cargaComprobantes" class="tab">
       
       <form id="formImagen">
      
@@ -97,8 +131,8 @@
     </form>
     </div>
 	
-	<!-- Factura -->
-    <div id="Factura" class="tab">
+	<!-- FacturaEnergia -->
+    <div id="FacturaEnergia" class="tab">
 	 <div class="card">
   <div class="header">
     <h2>Servicio de Energía Pre Pago</h2>
@@ -126,26 +160,28 @@
   </div>
 
   <!-- Datos -->
-  <div class="section">
-    <h3>Datos al momento de Carga</h3>
-    <table>
-      <tr><td>Consumo Total</td><td>KW</td><td id="consumo">0.03</td></tr>
-      <tr><td>Carga</td><td>KW</td><td id="carga">6.0</td></tr>
-    </table>
-  </div>
+ <div class="section">
+  <h3 onclick="toggleSection(this)">Datos Energia al momento de Carga</h3>
+  <table>
+    <tr><td>Consumo Total</td><td>KW</td><td id="consumo">0.03</td></tr>
+    <tr><td>Carga</td><td>KW</td><td id="carga">6.0</td></tr>
+  </table>
+</div>
 
-  <div class="section">
-    <h3>Saldo Actual</h3>
-    <table>
-      <tr><td>Consumo Total</td><td>KW</td><td id="saldoConsumo">0.03</td></tr>
-      <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
-    </table>
-  </div>
+<div class="section">
+  <h3 onclick="toggleSection(this)">Saldo Energia Actual</h3>
+  <table>
+    <tr><td>Consumo Total</td><td>KW</td><td id="saldoConsumo">0.03</td></tr>
+    <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
+  </table>
+</div>
 
   
   
   <div class="section">
-    <h3>Consumo de Agua</h3>
+   
+
+	
     <div class="card" role="application" aria-label="Medidor de agua">
   <div class="title">
     <h1>Medidor de Agua</h1>
@@ -228,19 +264,27 @@
         <div class="kpi">
           <small>Carga Agua</small>
           <strong id="CargaAgua">0</strong>
-        </div>
-        
-      </div>
-
+       </div>
+                </div>
     </div>
-  </div>
-</div>
-<script src="js/medidorAgua.js"></script>
-<script src="js/bateria.js"></script>
- <script src="js/factura.js"></script>
-  </div>
-</div>
+            </div> <!-- .layout -->
+          </div> <!-- .card medidor -->
+        </div> <!-- .section Consumo de Agua -->
+      </div> <!-- .card Factura Energia -->
+	  <script src="js/bateria.js"></script>
+     <script src="js/factura.js"></script>
+	 <script src="js/medidorAgua.js"></script>
+    </div> <!-- #FacturaEnergia -->
+
+    
 
 
+  </div> <!-- .p-6 -->
+<script>
+  function toggleSection(el) {
+    const section = el.parentElement;
+    section.classList.toggle("active");
+  }
+</script>
 </body>
 </html>
