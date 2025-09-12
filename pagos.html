@@ -46,10 +46,12 @@
 
   /* Agregar el icono ➕/➖ */
   h3::after {
-    content: " ➕";
+    content: " ▼";
     float: right;
     font-weight: normal;
   }
+  
+
 
   .section.active h3::after {
     content: " ➖";
@@ -71,7 +73,7 @@
     <a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
     <a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
     <a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
-	<a href="#" onclick="mostrarTab('FacturaEnergia', true, 'Factura Energia')"><i class="fa fa-home mr-2"></i>Factura Energia</a>
+	<a href="#" onclick="mostrarTab('FacturaEnergia', true, 'Factura Energia')"><i class="fa fa-home mr-2"></i>Factura</a>
  </div>
 
   <!-- Overlay -->
@@ -94,9 +96,9 @@
         <i class="fa fa-home text-blue-600 text-2xl"></i>
         <span>Carga Arriendo</span>
       </div>
-	  <div class="inicio-btn" onclick="mostrarTab('FacturaEnergia', false, 'Factura Energia')">
+	  <div class="inicio-btn" onclick="mostrarTab('FacturaEnergia', false, 'Factura')">
         <i class="fa fa-home text-blue-600 text-2xl"></i>
-        <span>Factura Energia</span>
+        <span>Factura</span>
       </div>
 	 </div>
 
@@ -177,7 +179,14 @@
 </div>
 
   
-  
+  <div class="section">
+ <h3 >Datos Servicio Agua <span class="arrow"></span></h3>
+
+  <table>
+    <tr><td>Consumo Total</td><td>KW</td><td id="saldoConsumo">0.03</td></tr>
+    <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
+  </table>
+</div>
   <div class="section">
    
 
