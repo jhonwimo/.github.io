@@ -24,6 +24,10 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
   if(tabId === 'carga'){
     vaciarCamposCarga();
   }
+  if(tabId === 'FacturaEnergia'){
+    cargaDataFactura();
+  }
+ 
    // 👇 aplicar cambio de viewport
   setViewport(tabId);
 }
@@ -41,11 +45,7 @@ function setViewport(tabId){
   }
 }
 
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(()=>console.log('SW registrado'))
-    .catch(console.error);
-}
+
 
 function mostrar(id,titulo){
   document.getElementById('inicio').style.display='none';
@@ -121,8 +121,9 @@ function extraerReferenciaComprobante(texto){
 async function enviarDatosAWhatsApp(){
   const boton=document.getElementById("enviarWhatsapp");
   boton.disabled=true; boton.textContent="Enviando...";
+  
   const NGROK_URL="https://api.wshome.shop";
-  const accion=document.querySelector('h2').textContent+' wshome';
+  const accion=document.getElementById('appHeader').innerText+' wshome';
   const usuario=document.getElementById("usuario").value;
   const contrato=document.getElementById("contrato").value;
   const valor=document.getElementById("valor").value;
@@ -141,6 +142,7 @@ async function enviarDatosAWhatsApp(){
     // ❌ Error desde el backend (validación fallida o fallo en RabbitMQ)
      mesajeError("Error en la solicitud",data.mensaje || 'Ocurrió un error inesperado');
 }else {
+	validarCampos();
     mesajeExito("Se envió tu Solicitud",'Pronto llegara la respuesta de su solicitud al celular');
     }
     boton.disabled=false; boton.textContent="Enviar";

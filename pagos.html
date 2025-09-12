@@ -142,16 +142,31 @@
 	<!-- FacturaEnergia -->
     <div id="FacturaEnergia" class="tab">
 	 <div class="card">
-   <div class="header">
-    <h2>Servicios Pre Pago</h2>
-   <!-- <p><b>Fecha:</b> <span id="fecha"></span></p>-->
+    <!-- Datos -->
+<div class="section">
+  <h3 onclick="toggleSection(this)">Datos Energía</h3>
+
+  <div class="section-content">
+    <table>
+      <tr><td>Consumo Total</td><td>KW</td><td id="consumoTotalOld">0.03</td></tr>
+      <tr><td>Carga</td><td>KW</td><td id="carga">6.0</td></tr>
+    </table>
+
+    <div class="header">
+    </div>
+
+    <table>
+      <tr><td>Consumo Total</td><td>KW</td><td id="consumoTotalNew">0.03</td></tr>
+      <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
+    </table>
   </div>
+</div>
 
   <!-- Contenedor contrato + batería -->
   <div style="display: flex; align-items: center; margin-top: 15px;">
     <p style="margin: 5;">
-       <b>Contrato</b> <span id="contratoTexto"></span><br>
-  <!--<b>Nombre:</b> <span id="nombreTexto"></span><br>
+    <!--   <b>Contrato</b> <span id="contratoTexto"></span><br>
+  <b>Nombre:</b> <span id="nombreTexto"></span><br>
   <b>Dirección:</b> <span id="direccionTexto"></span><br>
   <b>Apartamento:</b> <span id="apartamentoTexto"></span>-->
     </p>
@@ -167,25 +182,7 @@
     </div>
   </div>
 
-  <!-- Datos -->
-<div class="section">
-  <h3 onclick="toggleSection(this)">Datos Energía</h3>
 
-  <div class="section-content">
-    <table>
-      <tr><td>Consumo Total</td><td>KW</td><td id="consumo">0.03</td></tr>
-      <tr><td>Carga</td><td>KW</td><td id="carga">6.0</td></tr>
-    </table>
-
-    <div class="header">
-    </div>
-
-    <table>
-      <tr><td>Consumo Total</td><td>KW</td><td id="saldoConsumo">0.03</td></tr>
-      <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
-    </table>
-  </div>
-</div>
 
 
 
@@ -216,17 +213,9 @@
         </div>
       </div>
 
-      <div class="kpis" aria-hidden="false">
-        <div class="kpi">
-          <small>Saldo a la fecha</small>
-          <strong id="saldoAgua">0</strong>
-        </div>
-        <div class="kpi">
-          <small>Carga Agua</small>
-          <strong id="CargaAgua">0</strong>
-       </div>
-                </div>
+    
     </div>
+	 <script src="js/factura.js"></script>
   </div>
 </div>
   <div class="section">
@@ -284,14 +273,23 @@
         </svg>
       </div>
     </div>
-
+<div class="kpis" aria-hidden="false">
+        <div class="kpi">
+          <small>Saldo a la fecha</small>
+          <strong id="saldoAgua">0</strong>
+        </div>
+        <div class="kpi">
+          <small>Carga Agua</small>
+          <strong id="CargaAgua">0</strong>
+       </div>
+                </div>
 
             </div> <!-- .layout -->
           </div> <!-- .card medidor -->
         </div> <!-- .section Consumo de Agua -->
       </div> <!-- .card Factura Energia -->
 	  <script src="js/bateria.js"></script>
-     <script src="js/factura.js"></script>
+    
 	 <script src="js/medidorAgua.js"></script>
     </div> <!-- #FacturaEnergia -->
 

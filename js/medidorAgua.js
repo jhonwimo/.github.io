@@ -11,14 +11,38 @@ const svgWidth = 200;
 const svgHeight = 280;
 const waterArea = { x:20, y:30, w:160, h:220 }; // caja del tanque (coordenadas en SVG)
 
+  const params = new URLSearchParams(window.location.search);
+  const dataBase64 = params.get("data");
+
+  if (dataBase64) {
+    try {
+      const decoded = atob(dataBase64);
+      const datos = new URLSearchParams(decoded);
+    // JSON que viene dentro de los parámetros
+      const dataFacturaStr = datos.get("DataFactura");
+      let jsonData = null;
+      if (dataFacturaStr) {
+        try {
+          jsonData = JSON.parse(dataFacturaStr);
+        } catch (err) {
+          console.error("JSON mal formado:", err);
+        }
+      }
+
+      document.getElementById("saldoAgua").textContent      = jsonData.saldoAgua;
+      document.getElementById("CargaAgua").textContent      = jsonData.cargaAgua;
+
+    } catch(e) { 
+      console.log("Error al decodificar:", e); 
+    }
+  }
+
 // lo que queda
-let CAPACITY_LITERS = Number(4000);       // capacidad total del tanque (L)
-let currentLiters   = Number(2000);// lo que queda
-document.getElementById("saldoAgua").textContent      = '2000 L';
-document.getElementById("CargaAgua").textContent      = '4000 L';
+let CAPACITY_LITERS = Number(document.getElementById("CargaAgua").innerText);   // capacidad total del tanque (L)
+let currentLiters   = Number(document.getElementById("saldoAgua").textContent);// lo que queda
 const levelRange = document.getElementById("levelRange");
-levelRange.max = 4000; // rango maximo = capacidad total del tanque
-levelRange.value = 2000;  // ejemplo: dejarlo en // lo que queda
+levelRange.max = document.getElementById("CargaAgua").innerText; // rango maximo = capacidad total del tanque
+levelRange.value = document.getElementById("saldoAgua").textContent;  // ejemplo: dejarlo en // lo que queda
 
 // referencias DOM
 const range = document.getElementById('levelRange');
@@ -174,3 +198,42 @@ document.addEventListener('visibilitychange', function () {
     if (!animId) animId = requestAnimationFrame(animate);
   }
 });
+
+
+function cargaDataAgua() {
+  const params = new URLSearchParams(window.location.search);
+  const dataBase64 = params.get("data");
+
+  if (dataBase64) {
+    try {
+      const decoded = atob(dataBase64);
+      const datos = new URLSearchParams(decoded);
+    // JSON que viene dentro de los parámetros
+      const dataFacturaStr = datos.get("DataFactura");
+      let jsonData = null;
+      if (dataFacturaStr) {
+        try {
+          jsonData = JSON.parse(dataFacturaStr);
+        } catch (err) {
+          console.error("JSON mal formado:", err);
+        }
+      }
+jsonData=
+{
+    "consumoTotalOld": "0.03",
+    "carga": "1.3",
+    "consumoTotalNew": "0.03",
+    "cargaAgua": 3000,
+    "saldo": "4.9",
+    "saldoAgua": 1500
+};
+      document.getElementById("saldoAgua").textContent      = jsonData.saldoAgua;
+      document.getElementById("CargaAgua").textContent      = jsonData.cargaAgua;
+
+    } catch(e) { 
+      console.log("Error al decodificar:", e); 
+    }
+  }
+}
+
+

@@ -18,9 +18,15 @@
     .green { background: #4caf50; }
 	
 	
-	#Factura.no-viewport-scale {
-  transform: scale(1.2);   /* Ajusta el zoom */
-  transform-origin: top left;
-  width: calc(100% / 1.2);
-  height: calc(100% / 1.2);
-}
+
+
+/* Poner negrita en todas las celdas de valores */
+  /* Todo solo afecta a lo que está dentro de .section-content */
+    .section-content td[id] {
+      font-weight: bold;
+    }
+
+  /* Clase que pinta en rojo cuando el saldo ≤ 2 */
+  .alerta {
+    color: red;
+  }
