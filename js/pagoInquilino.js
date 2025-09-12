@@ -170,13 +170,9 @@ function validarData(texto) {
 
   const valor = document.getElementById("valida").value.trim();
   if (!valor) true; // Si texto es null, undefined o vacío, no valida nada
-  if(texto.includes(valor)){
-	  console.log("hp si");
-  }else{
-	   console.log("hp no");
-  }
-  // Habilitar el botón solo si 'texto' contiene 'valor'
-  Swal.fire({icon:'error', title:'Valide su Comprobante', text:'Cuenta de canon Arriendo esta no es Valida', confirmButtonText:'Cerrar', timer:5000});
+  if(!texto.includes(valor)){
+	  mesajeError("Valide su Comprobante",'Cuenta de canon Arriendo esta no es Valida');
+	}
   return texto.includes(valor)
 }
 
