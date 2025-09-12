@@ -23,36 +23,39 @@
   
   
 <style>
-  .section table {
-    display: none; /* oculto por defecto */
-    margin-top: 5px;
+  /* Todo oculto por defecto excepto el título */
+  .section-content {
+    display: none;
+    margin-top: 10px;
   }
-  .section.active table {
-    display: table; /* visible cuando se activa */
+
+  /* Cuando la sección está activa, se muestra */
+  .section.active .section-content {
+    display: block;
   }
 
   h3 {
     cursor: pointer;
     user-select: none;
     padding: 8px;
-   
+    background: #f0f0f0;
     border-radius: 6px;
     transition: background 0.2s;
   }
 
-  
+  h3:hover {
+    background: #ddd;
+  }
 
-  /* Agregar el icono ➕/➖ */
+  /* Icono desplegable ▼ / ▲ */
   h3::after {
     content: " ▼";
     float: right;
     font-weight: normal;
   }
-  
-
 
   .section.active h3::after {
-    content: " ➖";
+    content: " ▲";
   }
 </style>
 </head>
@@ -95,7 +98,7 @@
         <span>Carga Arriendo</span>
       </div>
 	  <div class="inicio-btn" onclick="mostrarTab('FacturaEnergia', false, 'Factura')">
-        <i class="fa fa-home text-blue-600 text-2xl"></i>
+        <i class="fa fa-file-invoice text-blue-600 text-2xl"></i>
         <span>Factura</span>
       </div>
 	 </div>
@@ -134,7 +137,7 @@
 	<!-- FacturaEnergia -->
     <div id="FacturaEnergia" class="tab">
 	 <div class="card">
-  <div class="header">
+   <div class="header">
     <h2>Servicio de Energía Pre Pago</h2>
     <p><b>Fecha:</b> <span id="fecha"></span></p>
   </div>
@@ -160,30 +163,30 @@
   </div>
 
   <!-- Datos -->
- <div class="section">
-  <h3 onclick="toggleSection(this)">Datos Energia al momento de Carga</h3>
-  <table>
-    <tr><td>Consumo Total</td><td>KW</td><td id="consumo">0.03</td></tr>
-    <tr><td>Carga</td><td>KW</td><td id="carga">6.0</td></tr>
-  </table>
+<div class="section">
+  <h3 onclick="toggleSection(this)">Datos Energía</h3>
+
+  <div class="section-content">
+    <table>
+      <tr><td>Consumo Total</td><td>KW</td><td id="consumo">0.03</td></tr>
+      <tr><td>Carga</td><td>KW</td><td id="carga">6.0</td></tr>
+    </table>
+
+    <div class="header">
+    </div>
+
+    <table>
+      <tr><td>Consumo Total</td><td>KW</td><td id="saldoConsumo">0.03</td></tr>
+      <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
+    </table>
+  </div>
 </div>
 
-<div class="section">
-  <h3 onclick="toggleSection(this)">Saldo Energia Actual</h3>
-  <table>
-    <tr><td>Consumo Total</td><td>KW</td><td id="saldoConsumo">0.03</td></tr>
-    <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
-  </table>
-</div>
+
 
   
   <div class="section">
  <h3 >Datos Servicio Agua <span class="arrow"></span></h3>
-
-  <table>
-    <tr><td>Consumo Total</td><td>KW</td><td id="saldoConsumo">0.03</td></tr>
-    <tr><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">6.0</td></tr>
-  </table>
 </div>
   <div class="section">
    
