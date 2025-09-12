@@ -43,3 +43,29 @@ function startBattery(maxLevel) {
   }, 1000);
 }
 
+
+ window.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const dataBase64 = params.get("data");
+  if (dataBase64) {
+    try {
+      const decoded = atob(dataBase64);
+      const datos = new URLSearchParams(decoded);
+      const usuario = datos.get("usuario");
+      document.getElementById("contrato").value = datos.get("contrato");
+      document.getElementById("usuario").value  = datos.get("usuario");
+
+      // const consumoTotalOld= datos.get("consumoTotalOld");
+      // const carga= datos.get("carga");
+      // const consumoTotalNew= datos.get("consumoTotalNew");
+      // const saldo= datos.get("saldo");
+      startBattery(6);
+
+    } catch (e) {
+      console.error("Error al decodificar:", e);
+    }
+  }
+});
+
+  
+

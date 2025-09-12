@@ -3,20 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>Pagos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta id="viewportNormal" name="viewport" content="width=device-width, initial-scale=1.0">
+<meta id="viewportFactura" name="viewport" content="width=1024" disabled>
+
 
    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
  
   <link rel="stylesheet" href="css/menu.css">
  <script src="js/pagoInquilino.js"></script>
- 
- <script src="js/factura.js"></script>
+   <link rel="stylesheet" href="css/pagoInquilino.css">
+
 
  <link rel="stylesheet" href="css/bateria.css">
  <link rel="stylesheet" href="css/factura.css">
   <link rel="stylesheet" href="css/medidorAgua.css">
+  
+  
+
 </head>
 <body>
 
@@ -63,25 +71,29 @@
       
       <form id="formImagen">
      
-      <div class="file-input-wrapper">
-        <button type="button" class="file-btn">Selecciona Comprobante</button>
-        <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required/>
-      </div>
+     
+	  
+	  <div class="file-input-wrapper">
+  <label for="imagen" class="file-btn">Selecciona Comprobante</label>
+  <input type="file" id="imagen" name="imagen" accept="image/*" onchange="previsualizarImagen(event)" required style="display:none;"/>
+</div>
+
      
       <div id="resultadoOCR" style="display:none;"></div>
-
+      <div id="labelFormulario">
       <input type="text" id="usuario" name="usuario" readonly style="display:none;"/>
-      <label for="contrato">Contrato:</label>
+      <label for="contrato"  >Contrato:</label>
       <input type="text" id="contrato" name="contrato" readonly/>
       <div id="datosExtraidos" style="display:none;">
-        <label for="valor">Valor a cargar:</label>
+        <label for="valor" >Valor a cargar:</label>
         <input type="text" id="valor" name="valor" readonly/>
-        <label for="fecha">Fecha:</label>
+        <label for="fecha" >Fecha:</label>
         <input type="text" id="fecha" name="fecha" readonly/>
-        <label for="referencia">Referencia:</label>
+        <label for="referencia" >Referencia:</label>
         <input type="text" id="referencia" name="referencia" readonly/>
         <button type="button" id="enviarWhatsapp" disabled onclick="enviarDatosAWhatsApp()">Enviar</button>
       </div>
+	  </div>
     </form>
     </div>
 	
@@ -90,16 +102,16 @@
 	 <div class="card">
   <div class="header">
     <h2>Servicio de Energía Pre Pago</h2>
-    <p><b>Fecha:</b> 2025-09-02 17:52</p>
+    <p><b>Fecha:</b> <span id="fecha"></span></p>
   </div>
 
   <!-- Contenedor contrato + batería -->
   <div style="display: flex; align-items: center; margin-top: 15px;">
     <p style="margin: 5;">
-      <b>Contrato:</b> C1003<br>
-      <b>Nombre:</b> JULIO<br>
-      <b>Dirección:</b> Calle 90 28 E 45 Vipasa<br>
-      <b>Apartamento:</b> 203
+       <b>Contrato:</b> <span id="contratoTexto"></span><br>
+  <b>Nombre:</b> <span id="nombreTexto"></span><br>
+  <b>Dirección:</b> <span id="direccionTexto"></span><br>
+  <b>Apartamento:</b> <span id="apartamentoTexto"></span>
     </p>
 
     <!-- Batería animada -->
@@ -201,32 +213,31 @@
 
       <div class="controls" aria-label="Controles">
         <label for="levelRange">Ajustar nivel (litros)</label>
-        <input id="levelRange" type="range" min="0" max="1000" value="0" step="1" />
+        <input id="levelRange" type="range" min="0" max="0" value="0" step="1" />
         <div style="display:flex; gap:10px; margin-top:8px;">
-          <button id="btnFill" style="flex:1; background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Llenar 100%</button>
-          <button id="btnEmpty" style="flex:1; background:#e6eef7; color:var(--accent-dark); border:none; padding:10px; border-radius:8px; cursor:pointer;">Vaciar</button>
+          <button disabled  id="btnFill" style="flex:1; background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Llenar 100%</button>
+          <button disabled  id="btnEmpty" style="flex:1; background:#e6eef7; color:var(--accent-dark); border:none; padding:10px; border-radius:8px; cursor:pointer;">Vaciar</button>
         </div>
       </div>
 
       <div class="kpis" aria-hidden="false">
         <div class="kpi">
-          <small>Consumo diario</small>
-          <strong id="kpiDaily">120 L</strong>
+          <small>Saldo a la fecha</small>
+          <strong id="saldoAgua">0</strong>
         </div>
         <div class="kpi">
-          <small>Meta mensual</small>
-          <strong id="kpiMonthly">9,000 L</strong>
+          <small>Carga Agua</small>
+          <strong id="CargaAgua">0</strong>
         </div>
-        <div class="kpi">
-          <small>Reserva de emergencia</small>
-          <strong id="kpiReserve">200 L</strong>
-        </div>
+        
       </div>
 
     </div>
   </div>
 </div>
 <script src="js/medidorAgua.js"></script>
+<script src="js/bateria.js"></script>
+ <script src="js/factura.js"></script>
   </div>
 </div>
 

@@ -1,0 +1,27 @@
+#labelFormulario label {
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+
+/* Estilo general para inputs */
+#labelFormulario input[type="text"] {
+  
+  font-size: 1.7rem;
+  font-weight: bold;  
+}
+
+.file-btn {
+  display: block;          /* que ocupe el ancho disponible */
+  text-align: center;      /* texto centrado */
+  padding: 10px 15px;
+  background: #1e90ff;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+ursor: pointer;
+}

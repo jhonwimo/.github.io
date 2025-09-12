@@ -16,3 +16,11 @@
     .red { background: #f44336; }
     .yellow { background: #ffc107; }
     .green { background: #4caf50; }
+	
+	
+	#Factura.no-viewport-scale {
+  transform: scale(1.2);   /* Ajusta el zoom */
+  transform-origin: top left;
+  width: calc(100% / 1.2);
+  height: calc(100% / 1.2);
+}

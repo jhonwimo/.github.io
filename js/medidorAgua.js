@@ -6,10 +6,19 @@
 */
 
 // CONFIGURACIÓN
-const CAPACITY_LITERS = 1000;        // capacidad total del tanque (L)
+
 const svgWidth = 200;
 const svgHeight = 280;
 const waterArea = { x:20, y:30, w:160, h:220 }; // caja del tanque (coordenadas en SVG)
+
+// lo que queda
+let CAPACITY_LITERS = Number(4000);       // capacidad total del tanque (L)
+let currentLiters   = Number(2000);// lo que queda
+document.getElementById("saldoAgua").textContent      = '2000 L';
+document.getElementById("CargaAgua").textContent      = '4000 L';
+const levelRange = document.getElementById("levelRange");
+levelRange.max = 4000; // rango maximo = capacidad total del tanque
+levelRange.value = 2000;  // ejemplo: dejarlo en // lo que queda
 
 // referencias DOM
 const range = document.getElementById('levelRange');
@@ -26,7 +35,7 @@ const waveGroup = document.getElementById('waveGroup');
 // animación de ola
 let waveOffset = 0;
 let animId = null;
-let currentLiters = Number(range.value);
+//let currentLiters = Number(range.value);
 
 // parámetros ola
 const wave = {
@@ -133,8 +142,32 @@ btnEmpty.addEventListener('click', ()=> {
 })();
 
 // accessibility: pause animation when tab not visible
-document.addEventListener('visibilitychange', function(){
-  if (document.hidden){
+document.addEventListener('visibilitychange', function () {
+  const params = new URLSearchParams(window.location.search);
+  const dataBase64 = params.get("data");
+
+  if (dataBase64) {
+    try {
+      const decoded = atob(dataBase64);
+      const datos = new URLSearchParams(decoded);
+
+      document.getElementById("contrato").value = datos.get("contrato") || "";
+      document.getElementById("usuario").value  = datos.get("usuario")  || "";
+
+      // 🔹 si quieres permitir cambiar capacidad y litros, declara CAPACITY_LITERS como let
+      CAPACITY_LITERS = Number(2000);
+      currentLiters   = Number(500);
+
+      // actualizar pantalla con los nuevos datos
+      setLevelLiters(currentLiters, false);
+
+    } catch (e) {
+      console.error("Error al decodificar.");
+    }
+  }
+
+  // 🔹 animación ON/OFF cuando cambias de pestaña
+  if (document.hidden) {
     if (animId) cancelAnimationFrame(animId);
     animId = null;
   } else {
