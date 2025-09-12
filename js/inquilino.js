@@ -80,7 +80,7 @@ const API_URL = "https://api.wshome.shop/api/WsHome";
     });
 
   } catch (error) {
-    console.error("Error en búsqueda:", error);
+    console.log("Error en búsqueda:", error);
   }
 }
 

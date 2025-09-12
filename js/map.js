@@ -47,8 +47,9 @@ async function cargarSensores() {
     console.log("Respuesta:", res.data);
   })
   .catch(err => {
-    console.error("Error:", err);
+    console.log("Error:", err);
   });
+  console.log("Respuesta:", res.data);
    mapSensores =res.data;
  /* const mapSensores = [
     { "contrato": "C101", "apartamento": "Apto 101", "kwcarga": "134", "latitud": "3.4752819", "logitud": "-76.489579", "online": true },
