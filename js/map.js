@@ -40,6 +40,19 @@ function initMap() {
 
 // Función para cargar sensores
 async function cargarSensores() {
+	
+	  const params = new URLSearchParams(window.location.search);
+  const dataBase64 = params.get("data");
+  if(dataBase64){
+    try{
+      const decoded = atob(dataBase64);
+      const datos = new URLSearchParams(decoded);
+	  const usuario = datos.get("usuario");
+      
+    } catch(e){ console.error("Error al decodificar."); }
+  }
+	
+	
   markers.clearLayers();
   
   axios.post("https://api.wshome.shop/api/WsHome/sensores/listaSensoresMap", { usuario })
