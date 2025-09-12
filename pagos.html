@@ -28,6 +28,11 @@
     display: none;
     margin-top: 10px;
   }
+  
+  .section-agua {
+    display: none;
+    margin-top: 10px;
+  }
 
   /* Cuando la sección está activa, se muestra */
   .section.active .section-content {
@@ -44,7 +49,7 @@
   }
 
   h3:hover {
-    background: #ddd;
+    background:  #77CDFC;
   }
 
   /* Icono desplegable ▼ / ▲ */
@@ -138,17 +143,17 @@
     <div id="FacturaEnergia" class="tab">
 	 <div class="card">
    <div class="header">
-    <h2>Servicio de Energía Pre Pago</h2>
-    <p><b>Fecha:</b> <span id="fecha"></span></p>
+    <h2>Servicios Pre Pago</h2>
+   <!-- <p><b>Fecha:</b> <span id="fecha"></span></p>-->
   </div>
 
   <!-- Contenedor contrato + batería -->
   <div style="display: flex; align-items: center; margin-top: 15px;">
     <p style="margin: 5;">
-       <b>Contrato:</b> <span id="contratoTexto"></span><br>
-  <b>Nombre:</b> <span id="nombreTexto"></span><br>
+       <b>Contrato</b> <span id="contratoTexto"></span><br>
+  <!--<b>Nombre:</b> <span id="nombreTexto"></span><br>
   <b>Dirección:</b> <span id="direccionTexto"></span><br>
-  <b>Apartamento:</b> <span id="apartamentoTexto"></span>
+  <b>Apartamento:</b> <span id="apartamentoTexto"></span>-->
     </p>
 
     <!-- Batería animada -->
@@ -185,8 +190,44 @@
 
 
   
-  <div class="section">
- <h3 >Datos Servicio Agua <span class="arrow"></span></h3>
+<div class="section">
+  <h3 onclick="toggleSection(this)">Datos Agua</h3>
+
+  <div class="section-content">
+      <!-- INFO Y CONTROLES -->
+    <div class="info" aria-hidden="false">
+      <div class="readout" role="status" aria-live="polite">
+        <div>
+          <div class="small">Nivel</div>
+          <div class="big" id="percentText">0%</div>
+        </div>
+        <div style="margin-left:auto; text-align:right;">
+          <div class="small">Volumen</div>
+          <div class="big" id="litersText">0 L</div>
+        </div>
+      </div>
+
+      <div class="controls" aria-label="Controles">
+        <label for="levelRange"> nivel (litros)</label>
+        <input disabled id="levelRange" type="range" min="0" max="0" value="0" step="1" />
+        <div style="display:flex; gap:10px; margin-top:8px;">
+          <button disabled  id="btnFill" style="flex:1; background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Llenar 100%</button>
+          <button disabled  id="btnEmpty" style="flex:1; background:#e6eef7; color:var(--accent-dark); border:none; padding:10px; border-radius:8px; cursor:pointer;">Vaciar</button>
+        </div>
+      </div>
+
+      <div class="kpis" aria-hidden="false">
+        <div class="kpi">
+          <small>Saldo a la fecha</small>
+          <strong id="saldoAgua">0</strong>
+        </div>
+        <div class="kpi">
+          <small>Carga Agua</small>
+          <strong id="CargaAgua">0</strong>
+       </div>
+                </div>
+    </div>
+  </div>
 </div>
   <div class="section">
    
@@ -194,8 +235,8 @@
 	
     <div class="card" role="application" aria-label="Medidor de agua">
   <div class="title">
-    <h1>Medidor de Agua</h1>
-    <p>Visualizador de nivel con ola animada — Wshome</p>
+    <h1>Nivel de Agua</h1>
+    <p>Visualizador — Wshome</p>
   </div>
 
   <div class="layout">
@@ -244,39 +285,7 @@
       </div>
     </div>
 
-    <!-- INFO Y CONTROLES -->
-    <div class="info" aria-hidden="false">
-      <div class="readout" role="status" aria-live="polite">
-        <div>
-          <div class="small">Nivel</div>
-          <div class="big" id="percentText">0%</div>
-        </div>
-        <div style="margin-left:auto; text-align:right;">
-          <div class="small">Volumen</div>
-          <div class="big" id="litersText">0 L</div>
-        </div>
-      </div>
 
-      <div class="controls" aria-label="Controles">
-        <label for="levelRange">Ajustar nivel (litros)</label>
-        <input id="levelRange" type="range" min="0" max="0" value="0" step="1" />
-        <div style="display:flex; gap:10px; margin-top:8px;">
-          <button disabled  id="btnFill" style="flex:1; background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Llenar 100%</button>
-          <button disabled  id="btnEmpty" style="flex:1; background:#e6eef7; color:var(--accent-dark); border:none; padding:10px; border-radius:8px; cursor:pointer;">Vaciar</button>
-        </div>
-      </div>
-
-      <div class="kpis" aria-hidden="false">
-        <div class="kpi">
-          <small>Saldo a la fecha</small>
-          <strong id="saldoAgua">0</strong>
-        </div>
-        <div class="kpi">
-          <small>Carga Agua</small>
-          <strong id="CargaAgua">0</strong>
-       </div>
-                </div>
-    </div>
             </div> <!-- .layout -->
           </div> <!-- .card medidor -->
         </div> <!-- .section Consumo de Agua -->
