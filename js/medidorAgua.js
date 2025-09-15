@@ -29,8 +29,8 @@ const waterArea = { x:20, y:30, w:160, h:220 }; // caja del tanque (coordenadas 
         }
       }
 
-      document.getElementById("saldoAgua").textContent      = jsonData.saldoAgua;
-      document.getElementById("CargaAgua").textContent      = jsonData.cargaAgua;
+      document.getElementById("saldoAgua").textContent      = jsonData.saldoAgua+' Litros';
+      document.getElementById("CargaAgua").textContent      = jsonData.cargaAgua+' Litros';
 
     } catch(e) { 
       console.log("Error al decodificar:", e); 
