@@ -1,6 +1,6 @@
 const CACHE_NAME = "wshome-v1";
 const urlsToCache = [
-  "/appCliente.html",
+  "/appCliente",
   "/css/inquilino.css",
   "/css/appCliente.css",
   "/css/map.css",
