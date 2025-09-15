@@ -55,6 +55,20 @@ function actualizar() {
       document.getElementById("carga").textContent           = jsonData.carga         || "0";
       //document.getElementById("consumoTotalNew").textContent = jsonData.consumoTotalNew || "0";
       document.getElementById("saldoEnergia").textContent    = jsonData.saldo           || "0";
+	  
+
+
+   const saldoTd = document.getElementById('saldoEnergia');
+  const fila = document.getElementById('filaEnergia');
+
+  const saldo = parseFloat(saldoTd.textContent);
+
+  if (saldo <= 2) {
+    fila.style.backgroundColor = '#f28b82'; // rojo suave tipo pastel
+    fila.style.color = 'white';             // texto blanco
+    fila.style.fontWeight = 'bold';         // opcional
+  }
+
 
     } catch(e) { 
       console.log("Error al decodificar:", e); 

@@ -153,7 +153,7 @@
     <table>
       <!--<tr><td>Consumo Total</td><td>KW</td><td id="consumoTotalNew">0.00</td></tr>-->
 	   <tr><td>Ultima Carga</td><td>KW</td><td id="carga">0.0</td></tr>
-      <tr id="filaEnergia"><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">0.0</td></tr>
+      <tr id="filaEnergia"><td>Saldo de Energía</td><td>KW</td><td id="saldoEnergia">3.54</td></tr>
     </table>
 </div>
 
@@ -296,19 +296,6 @@
   }
 </script>
 
-
-<script>
-   const saldoTd = document.getElementById('saldoEnergia');
-  const fila = document.getElementById('filaEnergia');
-
-  const saldo = parseFloat(saldoTd.textContent);
-
-  if (saldo <= 2) {
-    fila.style.backgroundColor = '#f28b82'; // rojo suave tipo pastel
-    fila.style.color = 'white';             // texto blanco
-    fila.style.fontWeight = 'bold';         // opcional
-  }
-</script>
 
 </body>
 </html>
