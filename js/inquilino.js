@@ -1,6 +1,5 @@
 
-const API_URL = "http://192.168.1.45:5000"; 
-//const API_URL = "https://api.wshome.shop/api/WsHome"; 
+const API_URL = "https://api.wshome.shop/api/WsHome"; 
     let results = {};
     let editar = false;
     let nuevo = true;
