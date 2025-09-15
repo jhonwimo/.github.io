@@ -51,7 +51,7 @@ function actualizar() {
 
       // Tablas de valores
       //document.getElementById("contratoTexto").textContent   = datos.get("contrato")        || "N/A";
-      document.getElementById("consumoTotalOld").textContent = jsonData.consumoTotalOld || "0";
+      //document.getElementById("consumoTotalOld").textContent = jsonData.consumoTotalOld || "0";
       document.getElementById("carga").textContent           = jsonData.carga         || "0";
       document.getElementById("consumoTotalNew").textContent = jsonData.consumoTotalNew || "0";
       document.getElementById("saldoEnergia").textContent    = jsonData.saldo           || "0";
