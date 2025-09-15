@@ -12,8 +12,8 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   
-   <link rel="stylesheet" href="./css/inquilino.css">
-   <link rel="stylesheet" href="./css/appCliente.css">
+   <link rel="stylesheet" href="css/inquilino.css">
+   <link rel="stylesheet" href="css/appCliente.css">
     <script src="js/inquilino.js"></script>
 	 <script src="js/appCliente.js"></script>
 	
@@ -36,7 +36,7 @@
 <meta name="apple-mobile-web-app-title" content="WsHome">
 
 
-<link rel="manifest" href="./manifest.json">
+
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 <meta name="theme-color" content="#0000ff">
@@ -171,16 +171,6 @@
 
   </div>
 
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./sw.js")
-        .then(reg => console.log("Service Worker registrado:", reg.scope))
-        .catch(err => console.log("Error al registrar el Service Worker:", err));
-    });
-  }
-</script>
 
 </body>
 </html>
