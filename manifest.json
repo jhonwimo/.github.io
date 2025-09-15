@@ -1,7 +1,7 @@
 {
   "name": "WsHome",
   "short_name": "WsHome",
-  "start_url": "/appCliente.html",
+  "start_url": "/appCliente",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0000ff",
