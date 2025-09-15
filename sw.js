@@ -1,14 +1,14 @@
 const CACHE_NAME = "wshome-v1";
 const urlsToCache = [
-  "./appCliente.html",
-  "./css/inquilino.css",
-  "./css/appCliente.css",
-  "./css/map.css",
-  "./js/inquilino.js",
-  "./js/appCliente.js",
-  "./js/map.js",
-  "./icons/logo-192.png",
-  "./icons/logo-512.png"
+  "/appCliente.html",
+  "/css/inquilino.css",
+  "/css/appCliente.css",
+  "/css/map.css",
+  "/js/inquilino.js",
+  "/js/appCliente.js",
+  "/js/map.js",
+  "/icons/logo-192.png",
+  "/icons/logo-512.png"
 ];
 
 self.addEventListener("install", (event) => {
