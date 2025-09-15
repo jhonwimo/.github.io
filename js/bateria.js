@@ -54,12 +54,22 @@ function startBattery(maxLevel) {
       const usuario = datos.get("usuario");
       document.getElementById("contrato").value = datos.get("contrato");
       document.getElementById("usuario").value  = datos.get("usuario");
+	  
+	  const dataFacturaStr = datos.get("DataFactura");
+      let jsonData = null;
+      if (dataFacturaStr) {
+        try {
+          jsonData = JSON.parse(dataFacturaStr);
+        } catch (err) {
+          console.error("JSON mal formado:", err);
+        }
+      }
 
       // const consumoTotalOld= datos.get("consumoTotalOld");
       // const carga= datos.get("carga");
       // const consumoTotalNew= datos.get("consumoTotalNew");
       // const saldo= datos.get("saldo");
-      startBattery(6);
+      startBattery(Number(jsonData.celdaPila));
 
     } catch (e) {
       console.error("Error al decodificar:", e);
