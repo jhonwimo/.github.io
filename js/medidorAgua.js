@@ -179,8 +179,8 @@ document.addEventListener('visibilitychange', function () {
       document.getElementById("usuario").value  = datos.get("usuario")  || "";
 
       // 🔹 si quieres permitir cambiar capacidad y litros, declara CAPACITY_LITERS como let
-      CAPACITY_LITERS = Number(2000);
-      currentLiters   = Number(500);
+       CAPACITY_LITERS = Number(document.getElementById("CargaAgua").innerText);   // capacidad total del tanque (L)
+       currentLiters   = Number(document.getElementById("saldoAgua").textContent);// lo que queda
 
       // actualizar pantalla con los nuevos datos
       setLevelLiters(currentLiters, false);
