@@ -24,6 +24,10 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
   if(tabId === 'carga'){
     vaciarCamposCarga();
   }
+  if(tabId === 'FacturaEnergia'){
+    cargaDataFactura();
+  }
+ 
    // 👇 aplicar cambio de viewport
   setViewport(tabId);
 }
@@ -41,11 +45,7 @@ function setViewport(tabId){
   }
 }
 
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(()=>console.log('SW registrado'))
-    .catch(console.error);
-}
+
 
 function mostrar(id,titulo){
   document.getElementById('inicio').style.display='none';
@@ -85,7 +85,11 @@ async function procesarImagenOCR(){
       document.getElementById("valor").value = datos.valor || "";
       document.getElementById("fecha").value = datos.fecha ? datos.fecha.join("; ") : "";
       document.getElementById("referencia").value = datos.referencia || "";
-      validarCampos();
+	
+	  if(validarData(text)){
+		  validarCampos();
+	  }
+      
     } catch(err){
       resultadoOCRDiv.textContent="Error OCR: "+err.message;
     }
@@ -121,8 +125,9 @@ function extraerReferenciaComprobante(texto){
 async function enviarDatosAWhatsApp(){
   const boton=document.getElementById("enviarWhatsapp");
   boton.disabled=true; boton.textContent="Enviando...";
+  
   const NGROK_URL="https://api.wshome.shop";
-  const accion=document.querySelector('h2').textContent+' wshome';
+  const accion=document.getElementById('appHeader').innerText+' wshome';
   const usuario=document.getElementById("usuario").value;
   const contrato=document.getElementById("contrato").value;
   const valor=document.getElementById("valor").value;
@@ -141,6 +146,7 @@ async function enviarDatosAWhatsApp(){
     // ❌ Error desde el backend (validación fallida o fallo en RabbitMQ)
      mesajeError("Error en la solicitud",data.mensaje || 'Ocurrió un error inesperado');
 }else {
+	vaciarCamposCarga();
     mesajeExito("Se envió tu Solicitud",'Pronto llegara la respuesta de su solicitud al celular');
     }
     boton.disabled=false; boton.textContent="Enviar";
@@ -158,6 +164,20 @@ function validarCampos(){
   const referencia=document.getElementById("referencia").value.trim();
   document.getElementById("enviarWhatsapp").disabled=!(valor || fecha || referencia);
 }
+
+function validarData(texto) {
+  
+
+  const valor = document.getElementById("valida").value.trim();
+  if (!valor) true; // Si texto es null, undefined o vacío, no valida nada
+  if(!texto.includes(valor)){
+	  mesajeError("Valide su Comprobante",'Cuenta de canon Arriendo esta no es Valida');
+	}
+  return texto.includes(valor)
+}
+
+
+
 window.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const dataBase64 = params.get("data");
@@ -168,6 +188,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	  const usuario = datos.get("usuario");
       document.getElementById("contrato").value = datos.get("contrato");
       document.getElementById("usuario").value = datos.get("usuario");
+	  document.getElementById("valida").value = datos.get("validatran");
     } catch(e){ console.error("Error al decodificar."); }
   }
   

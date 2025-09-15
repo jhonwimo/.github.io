@@ -30,8 +30,7 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
       const decoded = atob(dataBase64);
       const datos = new URLSearchParams(decoded);
 	   document.getElementById("usuario").value = datos.get("usuario");
-	   document.getElementById("usuario").value = 'jhonwimo';
-      handleSearch(true);
+	   handleSearch(true);
 	 } catch(e){ console.error("Error al decodificar."); }
   }
  

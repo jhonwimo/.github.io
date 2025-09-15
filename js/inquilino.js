@@ -1,6 +1,6 @@
 
 
-const API_URL = "http://192.168.1.45:31383/api/WsHome"; 
+const API_URL = "https://api.wshome.shop/api/WsHome"; 
     let results = {};
     let editar = false;
     let nuevo = true;
@@ -29,8 +29,8 @@ const API_URL = "http://192.168.1.45:31383/api/WsHome";
       };
 
       const request = editar
-        ? axios.put(`${API_URL}/inquilinos`, data)
-        : axios.post(`${API_URL}/inquilinos`, data);
+        ? axios.put(`${API_URL}/inquilino`, data)
+        : axios.post(`${API_URL}/inquilino`, data);
 
       request.then(() => alert("✅ Datos guardados con éxito"))
              .catch(err => alert("❌ Error al guardar: " + err));
@@ -80,7 +80,7 @@ const API_URL = "http://192.168.1.45:31383/api/WsHome";
     });
 
   } catch (error) {
-    console.error("Error en búsqueda:", error);
+    console.log("Error en búsqueda:", error);
   }
 }
 
