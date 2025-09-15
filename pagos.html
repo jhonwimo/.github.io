@@ -224,10 +224,16 @@
 
 	
     <div class="card" role="application" aria-label="Medidor de agua">
-  <div class="title">
-    <h1>Nivel de Agua</h1>
-    <p>Visualizador — Wshome</p>
-  </div>
+ <div class="kpis" aria-hidden="false">
+        <div class="kpi">
+          <small>Saldo a la fecha</small>
+          <strong id="saldoAgua">0</strong>
+        </div>
+        <div class="kpi">
+          <small>Carga Agua</small>
+          <strong id="CargaAgua">0</strong>
+       </div>
+                </div>
 
   <div class="layout">
     <!-- MEDIDOR (SVG) -->
@@ -274,16 +280,7 @@
         </svg>
       </div>
     </div>
-<div class="kpis" aria-hidden="false">
-        <div class="kpi">
-          <small>Saldo a la fecha</small>
-          <strong id="saldoAgua">0</strong>
-        </div>
-        <div class="kpi">
-          <small>Carga Agua</small>
-          <strong id="CargaAgua">0</strong>
-       </div>
-                </div>
+
 
             </div> <!-- .layout -->
           </div> <!-- .card medidor -->
