@@ -67,7 +67,7 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
   };
 
   try {
-    if (editar) {
+    if (idInquilino) {
       await axios.put(`${API_URL}/inquilino`, data);
     } else {
       await axios.post(`${API_URL}/inquilino`, data);
