@@ -47,7 +47,7 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
       return fecha;
     }
 
-async function enviarServer() {
+ async function enviarServer() {
   const boton = document.getElementById("enviarCliente");
   boton.disabled = true;
   boton.textContent = "Enviando...";
@@ -66,22 +66,22 @@ async function enviarServer() {
     diaPago: document.getElementById("diaPago").value
   };
 
-  const request = editar
-    ? axios.put(`${API_URL}/inquilino`, data)
-    : axios.post(`${API_URL}/inquilino`, data);
+  try {
+    if (editar) {
+      await axios.put(`${API_URL}/inquilino`, data);
+    } else {
+      await axios.post(`${API_URL}/inquilino`, data);
+    }
 
-  request
-    .then(() => {
-      mensajeExito("Se envió tu Solicitud", "Datos Guardados");
-      boton.disabled = false;
-      boton.textContent = "Guardar";
-    })
-    .catch(err => {
-      mensajeError("Error en Solicitud", "Error al procesar petición");
-      boton.disabled = false;
-      boton.textContent = "Guardar";
-    });
+    mensajeExito("Se envió tu Solicitud", "Datos Guardados");
+  } catch (err) {
+    mensajeError("Error en Solicitud", "Error al procesar petición");
+  } finally {
+    boton.disabled = false;
+    boton.textContent = "Guardar";
+  }
 }
+
 
 
     function handleEnableFields() {
