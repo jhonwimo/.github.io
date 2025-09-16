@@ -205,7 +205,7 @@ function mensajeError(titulo,mensaje){
   });
 }
 
-function mesajeExito(titulo,mensaje){
+function mensajeExito(titulo,mensaje){
   Swal.fire({
     icon: 'success',
     title: titulo,
