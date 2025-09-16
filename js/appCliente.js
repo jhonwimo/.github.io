@@ -47,10 +47,10 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
       return fecha;
     }
 
-    function onSubmit(event) {
+ async   function enviarServer() {
 	  const boton=document.getElementById("enviarCliente");
 	  boton.disabled=true; boton.textContent="Enviando...";
-      event.preventDefault();
+   
       const data = {
         idInquilino: document.getElementById("idInquilino").value,
         idCasa: document.getElementById("idCasa").value,
