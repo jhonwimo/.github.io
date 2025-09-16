@@ -47,32 +47,42 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
       return fecha;
     }
 
- async   function enviarServer() {
-	  const boton=document.getElementById("enviarCliente");
-	  boton.disabled=true; boton.textContent="Enviando...";
-   
-      const data = {
-        idInquilino: document.getElementById("idInquilino").value,
-        idCasa: document.getElementById("idCasa").value,
-        idSensor: document.getElementById("apartamento").value,
-        nombres: document.getElementById("nombres").value,
-        fechaNotificacion: document.getElementById("fecNotificacion").value + "T00:00:00",
-        telefono: document.getElementById("telefonoInquilino").value,
-        fechaCarga: formatFecha(document.getElementById("fecCarga").value) + "T00:00:00",
-        fecPagoArriendo: formatFecha(document.getElementById("fecPagoArriendo").value),
-        fechaCorteArrendo: document.getElementById("fechaCorteArrendo").value + "T00:00:00",
-        diasMora: document.getElementById("diasMora").value,
-        diaPago: document.getElementById("diaPago").value
-      };
-      
-      const request = editar
-        ? axios.put(`${API_URL}/inquilino`, data)
-        : axios.post(`${API_URL}/inquilino`, data);
-        
-      request.then(() => mesajeExito("Se envió tu Solicitud",'Datos Guardados'))
-             .catch(err => mesajeError("Error en Solicitud",'Error al procesar peticion'));
-			  boton.disabled=false; boton.textContent="Guardar";
-    }
+async function enviarServer() {
+  const boton = document.getElementById("enviarCliente");
+  boton.disabled = true;
+  boton.textContent = "Enviando...";
+
+  const data = {
+    idInquilino: document.getElementById("idInquilino").value,
+    idCasa: document.getElementById("idCasa").value,
+    idSensor: document.getElementById("apartamento").value,
+    nombres: document.getElementById("nombres").value,
+    fechaNotificacion: document.getElementById("fecNotificacion").value + "T00:00:00",
+    telefono: document.getElementById("telefonoInquilino").value,
+    fechaCarga: formatFecha(document.getElementById("fecCarga").value) + "T00:00:00",
+    fecPagoArriendo: formatFecha(document.getElementById("fecPagoArriendo").value),
+    fechaCorteArrendo: document.getElementById("fechaCorteArrendo").value + "T00:00:00",
+    diasMora: document.getElementById("diasMora").value,
+    diaPago: document.getElementById("diaPago").value
+  };
+
+  const request = editar
+    ? axios.put(`${API_URL}/inquilino`, data)
+    : axios.post(`${API_URL}/inquilino`, data);
+
+  request
+    .then(() => {
+      mensajeExito("Se envió tu Solicitud", "Datos Guardados");
+      boton.disabled = false;
+      boton.textContent = "Guardar";
+    })
+    .catch(err => {
+      mensajeError("Error en Solicitud", "Error al procesar petición");
+      boton.disabled = false;
+      boton.textContent = "Guardar";
+    });
+}
+
 
     function handleEnableFields() {
      document.querySelectorAll("#inquilinoForm input").forEach(el => {
