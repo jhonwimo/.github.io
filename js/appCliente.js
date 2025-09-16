@@ -69,8 +69,14 @@ const API_URL = "https://api.wshome.shop/api/WsHome";
         ? axios.put(`${API_URL}/inquilino`, data)
         : axios.post(`${API_URL}/inquilino`, data);
 
-      request.then(() => alert("✅ Datos guardados con éxito"))
-             .catch(err => alert("❌ Error al guardar: " + err));
+      request.then(() =>
+	  mesajeExito("Se envió tu Solicitud",'Datos guardados con éxito');
+	 )
+             .catch(err => 
+			 mesajeError("Error ",'No se guardaron los datos');
+			 alert("❌ Error al guardar: " + err)
+			 
+			 );
     }
 
     function handleEnableFields() {
@@ -185,5 +191,23 @@ const API_URL = "https://api.wshome.shop/api/WsHome";
 	
 
 
+function mesajeError(titulo,mensaje){
+  Swal.fire({
+    icon: 'error',
+    title: titulo,
+    text: mensaje ,
+    confirmButtonText: 'Cerrar',
+    timer: 10000
+  });
+}
 
+function mesajeExito(titulo,mensaje){
+  Swal.fire({
+    icon: 'success',
+    title: titulo,
+    text: mensaje,
+    confirmButtonText: 'Aceptar',
+    timer: 10000
+  });
+}
 

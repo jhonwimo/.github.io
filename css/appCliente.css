@@ -192,6 +192,14 @@ color: white; /* <-- cambiar a blanco */
 
 
 
+#labelFormulario label {
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
+
 /* Estilo general para inputs */
 #labelFormulario input[type="text"] {
   
