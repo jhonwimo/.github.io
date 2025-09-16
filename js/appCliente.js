@@ -48,6 +48,7 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
     }
 
     function onSubmit(event) {
+	  const boton=document.getElementById("enviarCliente");
 	  boton.disabled=true; boton.textContent="Enviando...";
       event.preventDefault();
       const data = {
