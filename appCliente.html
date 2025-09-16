@@ -142,25 +142,38 @@
               <input id="diasMora" type="text" class="form-control" placeholder="Día de mora" disabled value="15">
             </div>
 			
-			  <div class="col-12 col-md-6">
-              <label for="fechaCorteArrendo" class="form-label">Fecha Corte Arriendo</label>
-              <input id="fechaCorteArrendo" type="date" class="form-control" disabled>
-            </div>
-			
-			<div class="col-12 col-md-6">
-              <label for="fecPagoArriendo" class="form-label">Fecha Pago Arriendo</label>
-              <input id="fecPagoArriendo" type="date" class="form-control" disabled>
-            </div>
+			<div class="col-12">
+  <div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" id="toggleFechas">
+    <label class="form-check-label" for="toggleFechas">
+      Ver más campos
+    </label>
+  </div>
+</div>
 
-            <div class="col-12 col-md-6">
-              <label for="fecNotificacion" class="form-label">Fecha Notificacion Energia</label>
-              <input id="fecNotificacion" type="date" class="form-control" disabled>
-            </div>
+<div id="extraFechas" style="display:none;">
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="fechaCorteArrendo" class="form-label">Fecha Corte Arriendo</label>
+      <input id="fechaCorteArrendo" type="date" class="form-control" disabled>
+    </div>
+    
+    <div class="col-12 col-md-6">
+      <label for="fecPagoArriendo" class="form-label">Fecha Pago Arriendo</label>
+      <input id="fecPagoArriendo" type="date" class="form-control" disabled>
+    </div>
 
-            <div class="col-12 col-md-6">
-              <label for="fecCarga" class="form-label">Fecha Carga Energia </label>
-              <input id="fecCarga" type="date" class="form-control" disabled>
-            </div>
+    <div class="col-12 col-md-6">
+      <label for="fecNotificacion" class="form-label">Fecha Notificación Energía</label>
+      <input id="fecNotificacion" type="date" class="form-control" disabled>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <label for="fecCarga" class="form-label">Fecha Carga Energía</label>
+      <input id="fecCarga" type="date" class="form-control" disabled>
+    </div>
+  </div>
+</div>
 
             <!-- Botones -->
             <div class="col-12 d-flex flex-column flex-md-row justify-content-center mt-3">
@@ -174,5 +187,11 @@
   </div>
 
 
+<script>
+  document.getElementById("toggleFechas").addEventListener("change", function() {
+    const extraFechas = document.getElementById("extraFechas");
+    extraFechas.style.display = this.checked ? "block" : "none";
+  });
+</script>
 </body>
 </html>
