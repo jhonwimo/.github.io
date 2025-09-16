@@ -48,6 +48,7 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
     }
 
     function onSubmit(event) {
+	  boton.disabled=true; boton.textContent="Enviando...";
       event.preventDefault();
       const data = {
         idInquilino: document.getElementById("idInquilino").value,
@@ -62,13 +63,14 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
         diasMora: document.getElementById("diasMora").value,
         diaPago: document.getElementById("diaPago").value
       };
-
+      
       const request = editar
         ? axios.put(`${API_URL}/inquilino`, data)
         : axios.post(`${API_URL}/inquilino`, data);
-
-      request.then(() => alert("✅ Datos guardados con éxito"))
-             .catch(err => alert("❌ Error al guardar: " + err));
+        
+      request.then(() => mesajeExito("Se envió tu Solicitud",'Datos Guardados'))
+             .catch(err => mesajeError("Error en Solicitud",'Error al procesar peticion'));
+			  boton.disabled=false; boton.textContent="Guardar";
     }
 
     function handleEnableFields() {
@@ -182,3 +184,22 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
     }
 	
 
+function mesajeError(titulo,mensaje){
+  Swal.fire({
+    icon: 'error',
+    title: titulo,
+    text: mensaje ,
+    confirmButtonText: 'Cerrar',
+    timer: 10000
+  });
+}
+
+function mesajeExito(titulo,mensaje){
+  Swal.fire({
+    icon: 'success',
+    title: titulo,
+    text: mensaje,
+    confirmButtonText: 'Aceptar',
+    timer: 10000
+  });
+}
