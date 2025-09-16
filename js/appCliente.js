@@ -56,7 +56,7 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
 	  editarInquilino = null;
 	}
   const data = {
-    idInquilino: document.getElementById("idInquilino").value,
+    idInquilino: document.getElementById("idInquilino").value?.trim() || 0,
     idCasa: document.getElementById("idCasa").value,
     idSensor: document.getElementById("apartamento").value,
     nombres: document.getElementById("nombres").value,
