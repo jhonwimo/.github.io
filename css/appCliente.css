@@ -31,7 +31,7 @@ color: white; /* <-- cambiar a blanco */
   background: #1f2937;
   overflow: auto;
   transition: left 0.3s;
-  z-index: 50;
+ z-index: 1000;  /* encima del mapa */
 }
 
 #sidebar a {

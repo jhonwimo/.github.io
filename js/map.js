@@ -29,7 +29,7 @@ function initMap() {
     markers = L.markerClusterGroup({ maxClusterRadius: 20 });
     map.addLayer(markers);
   }
-
+map.zoomControl.setPosition('topright');
   cargarSensores();
 
   // 🔑 Recalcular tamaño del mapa cuando se muestra
