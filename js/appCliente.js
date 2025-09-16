@@ -1,4 +1,9 @@
-
+const API_URL = "https://api.wshome.shop/api/WsHome"; 
+    let results = {};
+    let editar = false;
+    let nuevo = true;
+	
+	
 function toggleSidebar(){
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('overlay');
@@ -31,20 +36,13 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
       const datos = new URLSearchParams(decoded);
 	   document.getElementById("usuario").value = datos.get("usuario");
 	   handleSearch(true);
-	 } catch(e){ console.log("Error al decodificar."); }
+	 } catch(e){ console.error("Error al decodificar."); }
   }
  
  }
  
  
-const API_URL = "https://api.wshome.shop/api/WsHome"; 
-    let results = {};
-    let editar = false;
-    let nuevo = true;
-
-   
-
-    function formatFecha(fecha) {
+  function formatFecha(fecha) {
       if (!fecha || fecha.trim() === "") return "1900-01-01";
       return fecha;
     }
@@ -69,14 +67,8 @@ const API_URL = "https://api.wshome.shop/api/WsHome";
         ? axios.put(`${API_URL}/inquilino`, data)
         : axios.post(`${API_URL}/inquilino`, data);
 
-      request.then(() =>
-	  mesajeExito("Se envió tu Solicitud",'Datos guardados con éxito');
-	 )
-             .catch(err => 
-			 mesajeError("Error ",'No se guardaron los datos');
-			 alert("❌ Error al guardar: " + err)
-			 
-			 );
+      request.then(() => alert("✅ Datos guardados con éxito"))
+             .catch(err => alert("❌ Error al guardar: " + err));
     }
 
     function handleEnableFields() {
@@ -189,25 +181,4 @@ const API_URL = "https://api.wshome.shop/api/WsHome";
 	  handleEnableFields();
     }
 	
-
-
-function mesajeError(titulo,mensaje){
-  Swal.fire({
-    icon: 'error',
-    title: titulo,
-    text: mensaje ,
-    confirmButtonText: 'Cerrar',
-    timer: 10000
-  });
-}
-
-function mesajeExito(titulo,mensaje){
-  Swal.fire({
-    icon: 'success',
-    title: titulo,
-    text: mensaje,
-    confirmButtonText: 'Aceptar',
-    timer: 10000
-  });
-}
 
