@@ -195,7 +195,7 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
     }
 	
 
-function mesajeError(titulo,mensaje){
+function mensajeError(titulo,mensaje){
   Swal.fire({
     icon: 'error',
     title: titulo,
