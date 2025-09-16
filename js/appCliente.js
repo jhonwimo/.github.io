@@ -51,7 +51,10 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
   const boton = document.getElementById("enviarCliente");
   boton.disabled = true;
   boton.textContent = "Enviando...";
-
+	let editarInquilino = document.getElementById("idInquilino").value?.trim();
+	if (!editarInquilino) {
+	  editarInquilino = null;
+	}
   const data = {
     idInquilino: document.getElementById("idInquilino").value,
     idCasa: document.getElementById("idCasa").value,
@@ -67,7 +70,7 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
   };
 
   try {
-    if (idInquilino) {
+    if (editarInquilino) {
       await axios.put(`${API_URL}/inquilino`, data);
     } else {
       await axios.post(`${API_URL}/inquilino`, data);
