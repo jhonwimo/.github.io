@@ -4,7 +4,6 @@ const urlsToCache = [
   "/css/inquilino.css",
   "/css/appCliente.css",
   "/css/map.css",
-  "/js/inquilino.js",
   "/js/appCliente.js",
   "/js/map.js",
   "./icons/logo-192.png",
