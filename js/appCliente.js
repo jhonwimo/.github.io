@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8089/api/WsHome"; 
+const API_URL = "https://api.wshome.shop/api/WsHome"; 
     let results = {};
     let editar = false;
     let nuevo = true;
