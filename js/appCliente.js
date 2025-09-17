@@ -1,4 +1,4 @@
-const API_URL = "https://api.wshome.shop/api/WsHome"; 
+const API_URL = "http://localhost:8089/api/WsHome"; 
     let results = {};
     let editar = false;
     let nuevo = true;
@@ -47,43 +47,55 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
       return fecha;
     }
 
- async function enviarServer() {
+async function enviarServer() {
   const boton = document.getElementById("enviarCliente");
   boton.disabled = true;
   boton.textContent = "Enviando...";
-	let editarInquilino = document.getElementById("idInquilino").value?.trim();
-	if (!editarInquilino) {
-	  editarInquilino = null;
-	}
+
+  // Capturar idInquilino y convertirlo a número o null
+  let idInquilinoVal = document.getElementById("idInquilino").value?.trim();
+  idInquilinoVal = idInquilinoVal ? parseInt(idInquilinoVal) : null;
+
+  // Construir payload
   const data = {
-  idInquilino: idInquilino ? parseInt(idInquilino) : null,
-    idCasa: document.getElementById("idCasa").value,
-    idSensor: document.getElementById("apartamento").value,
-    nombres: document.getElementById("nombres").value,
-    fechaNotificacion: document.getElementById("fecNotificacion").value + "T00:00:00",
-    telefono: document.getElementById("telefonoInquilino").value,
-    fechaCarga: formatFecha(document.getElementById("fecCarga").value) + "T00:00:00",
-    fecPagoArriendo: formatFecha(document.getElementById("fecPagoArriendo").value),
-    fechaCorteArrendo: document.getElementById("fechaCorteArrendo").value + "T00:00:00",
-    diasMora: document.getElementById("diasMora").value,
-    diaPago: document.getElementById("diaPago").value
+    idInquilino: idInquilinoVal,
+    idCasa: document.getElementById("idCasa").value || null,
+    idSensor: document.getElementById("apartamento").value || null,
+    nombres: document.getElementById("nombres").value || null,
+    telefono: document.getElementById("telefonoInquilino").value || null,
+    fechaNotificacion: document.getElementById("fecNotificacion").value
+      ? document.getElementById("fecNotificacion").value + "T00:00:00"
+      : null,
+    fechaCarga: document.getElementById("fecCarga").value
+      ? document.getElementById("fecCarga").value + "T00:00:00"
+      : null,
+    fecPagoArriendo: document.getElementById("fecPagoArriendo").value || null,
+    fechaCorteArrendo: document.getElementById("fechaCorteArrendo").value
+      ? document.getElementById("fechaCorteArrendo").value + "T00:00:00"
+      : null,
+    diasMora: parseInt(document.getElementById("diasMora").value) || 0,
+    diaPago: parseInt(document.getElementById("diaPago").value) || 0
   };
 
   try {
-    if (editarInquilino) {
-      await axios.put(`${API_URL}/inquilino`, data);
+    if (idInquilinoVal) {
+      // Update existente
+      await axios.put(`${API_URL}/inquilinos`, data);
     } else {
-      await axios.post(`${API_URL}/inquilino`, data);
+      // Crear nuevo
+      await axios.post(`${API_URL}/inquilinos`, data);
     }
 
     mensajeExito("Se envió tu Solicitud", "Datos Guardados");
   } catch (err) {
+    console.log("Error al enviar datos:", err);
     mensajeError("Error en Solicitud", "Error al procesar petición");
   } finally {
     boton.disabled = false;
     boton.textContent = "Guardar";
   }
 }
+
 
 
 
