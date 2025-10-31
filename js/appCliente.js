@@ -1,5 +1,6 @@
-const API_URL = "https://api.wshome.shop/api/WsHome"; 
-//API_URL = "http://localhost:8089/api/WsHome"; 
+let API_URL = "https://api.wshome.shop/api/WsHome"; 
+//API_URL = "http://192.168.1.45:8585/api/WsHome"; 
+API_URL = "http://localhost:8189/api/WsHome"; 
     let results = {};
     let editar = false;
     let nuevo = true;
@@ -64,7 +65,7 @@ async function enviarServer() {
     idInquilino: idInquilinoVal,
     idCasa: document.getElementById("idCasa").value || null,
     idSensor: document.getElementById("apartamento").value || null,
-    nombres: document.getElementById("nombres").value || null,
+    nombre: document.getElementById("nombres").value || null,
     telefono: document.getElementById("telefonoInquilino").value || null,
     fechaNotificacion: document.getElementById("fecNotificacion").value
       ? document.getElementById("fecNotificacion").value + "T00:00:00"
@@ -201,7 +202,7 @@ async function enviarServer() {
         const sensorData = results.listaInquilinos.find(s => s.idSensor == idSensor);
         if (sensorData) {
           const i = sensorData;
-          document.getElementById("nombres").value = i.nombres || "";
+          document.getElementById("nombres").value = i.nombre || "";
           document.getElementById("telefonoInquilino").value = i.telefono || "";
           document.getElementById("fecNotificacion").value = i.fechaNotificacion?.substring(0, 10) || "";
           document.getElementById("fecCarga").value = i.fechaCarga?.substring(0, 10) || "";
