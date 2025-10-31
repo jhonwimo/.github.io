@@ -129,7 +129,7 @@ async function enviarDatosAWhatsApp(){
   boton.disabled=true; boton.textContent="Enviando...";
   
   let NGROK_URL="https://api.wshome.shop";
-  NGROK_URL="http://192.168.1.45:8585";
+  //NGROK_URL="http://192.168.1.45:8585";
   const accion=document.getElementById('appHeader').innerText+' wshome';
   const usuario=document.getElementById("usuario").value;
   const contrato=document.getElementById("contrato").value;

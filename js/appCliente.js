@@ -63,6 +63,7 @@ async function enviarServer() {
   // Construir payload
   const data = {
     idInquilino: idInquilinoVal,
+	contratoSensor: document.getElementById("contratoSensor").value || null,
     idCasa: document.getElementById("idCasa").value || null,
     idSensor: document.getElementById("apartamento").value || null,
     nombre: document.getElementById("nombres").value || null,
@@ -202,13 +203,14 @@ async function enviarServer() {
         const sensorData = results.listaInquilinos.find(s => s.idSensor == idSensor);
         if (sensorData) {
           const i = sensorData;
+		  document.getElementById("contratoSensor").value = i.contratoSensor || "";
           document.getElementById("nombres").value = i.nombre || "";
           document.getElementById("telefonoInquilino").value = i.telefono || "";
           document.getElementById("fecNotificacion").value = i.fechaNotificacion?.substring(0, 10) || "";
           document.getElementById("fecCarga").value = i.fechaCarga?.substring(0, 10) || "";
           document.getElementById("fecPagoArriendo").value = i.fecPagoArriendo?.substring(0, 10) || "";
           document.getElementById("fechaCorteArrendo").value = i.fechaCorteArrendo?.substring(0, 10) || "";
-          document.getElementById("idInquilino").value = i.idInquilino || "";
+          document.getElementById("idInquilino").value = i.id || "";
           document.getElementById("diasMora").value = i.diasMoraPermitido || "";
           document.getElementById("diaPago").value = i.diasPago || "";
         
