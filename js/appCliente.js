@@ -1,4 +1,5 @@
 const API_URL = "https://api.wshome.shop/api/WsHome"; 
+//API_URL = "http://localhost:8089/api/WsHome"; 
     let results = {};
     let editar = false;
     let nuevo = true;
@@ -46,6 +47,8 @@ function mostrarTab(tabId, cerrarSidebar=false, titulo=null){
       if (!fecha || fecha.trim() === "") return "1900-01-01";
       return fecha;
     }
+	
+
 
 async function enviarServer() {
   const boton = document.getElementById("enviarCliente");
@@ -71,10 +74,10 @@ async function enviarServer() {
       : null,
     fecPagoArriendo: document.getElementById("fecPagoArriendo").value || null,
     fechaCorteArrendo: document.getElementById("fechaCorteArrendo").value
-      ? document.getElementById("fechaCorteArrendo").value + "T00:00:00"
+      ? document.getElementById("fechaCorteArrendo").value 
       : null,
-    diasMora: parseInt(document.getElementById("diasMora").value) || 0,
-    diaPago: parseInt(document.getElementById("diaPago").value) || 0
+    diasMoraPermitido: parseInt(document.getElementById("diasMora").value) || 0,
+    diasPago: parseInt(document.getElementById("diaPago").value) || 0
   };
 
   try {
@@ -190,20 +193,23 @@ async function enviarServer() {
       
     }
 
-    function buscarPorApartamento(idSensor) {
     
-        const sensorData = results.listaSensores.find(s => s.idSensor == idSensor);
-        if (sensorData?.inquilino) {
-          const i = sensorData.inquilino;
+	
+	
+	  function buscarPorApartamento(idSensor) {
+    
+        const sensorData = results.listaInquilinos.find(s => s.idSensor == idSensor);
+        if (sensorData) {
+          const i = sensorData;
           document.getElementById("nombres").value = i.nombres || "";
           document.getElementById("telefonoInquilino").value = i.telefono || "";
           document.getElementById("fecNotificacion").value = i.fechaNotificacion?.substring(0, 10) || "";
           document.getElementById("fecCarga").value = i.fechaCarga?.substring(0, 10) || "";
-          document.getElementById("fecPagoArriendo").value = i.fechaPagoArrendo?.substring(0, 10) || "";
+          document.getElementById("fecPagoArriendo").value = i.fecPagoArriendo?.substring(0, 10) || "";
           document.getElementById("fechaCorteArrendo").value = i.fechaCorteArrendo?.substring(0, 10) || "";
           document.getElementById("idInquilino").value = i.idInquilino || "";
-          document.getElementById("diasMora").value = i.rangoDiasMora || "";
-          document.getElementById("diaPago").value = i.diaPagoCadaMes || "";
+          document.getElementById("diasMora").value = i.diasMoraPermitido || "";
+          document.getElementById("diaPago").value = i.diasPago || "";
         
       }
 	  handleEnableFields();

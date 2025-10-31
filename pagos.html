@@ -77,7 +77,7 @@
    
     <a href="#" onclick="mostrarTab('inicio', true, 'Bienvenido')"><i class="fa fa-home"></i>Inicio</a>
     <a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Energia')"><i class="fa fa-bolt mr-2"></i>Carga Energia</a>
-    <a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>
+    <!--<a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Agua')"><i class="fa fa-tint mr-2"></i>Carga Agua</a>-->
     <a href="#" onclick="mostrarTab('cargaComprobantes', true, 'Carga Arriendo')"><i class="fa fa-home mr-2"></i>Carga Arriendo</a>
 	<a href="#" onclick="mostrarTab('FacturaEnergia', true, 'Factura Energia')"><i class="fa fa-home mr-2"></i>Factura</a>
  </div>
@@ -89,15 +89,15 @@
   <div class="p-6">
 
     <!-- Inicio -->
-    <div id="inicio" class="tab active">
+    <div id="inicio" class="tab">
       <div class="inicio-btn" onclick="mostrarTab('cargaComprobantes', false, 'Carga Energia')">
         <i class="fa fa-bolt text-blue-600 text-2xl"></i>
         <span>Carga Energia</span>
       </div>
-      <div class="inicio-btn" onclick="mostrarTab('cargaComprobantes', false, 'Carga Agua')">
+     <!-- <div class="inicio-btn" onclick="mostrarTab('cargaComprobantes', false, 'Carga Agua')">
         <i class="fa fa-tint text-blue-600 text-2xl"></i>
         <span>Carga Agua</span>
-      </div>
+      </div>-->
       <div class="inicio-btn" onclick="mostrarTab('cargaComprobantes', false, 'Carga Arriendo')">
         <i class="fa fa-home text-blue-600 text-2xl"></i>
         <span>Carga Arriendo</span>
@@ -141,7 +141,7 @@
     </div>
 	
 	<!-- FacturaEnergia -->
-    <div id="FacturaEnergia" class="tab">
+    <div id="FacturaEnergia" class="tab active">
 	 <div class="card">
     <!-- Datos -->
 <div >

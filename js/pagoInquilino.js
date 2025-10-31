@@ -106,7 +106,9 @@ function extraerDatos(texto){
 
 function extraerFechas(texto){
  // const regexFechaHora = /\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+DE)?\s+(?:Ene|Enero|Feb|Febrero|Mar|Marzo|Abr|Abril|May|Mayo|Jun|Junio|Jul|Julio|Ago|Agosto|Sep|Septiembre|Oct|Octubre|Nov|Noviembre|Dic|Diciembre)(?:\s+DE)?\s+\d{4}|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01]))(?:\s*[-–]?\s*(?:[01]?\d|2[0-3]):[0-5]\d(?:\:[0-5]\d)?(?:\s?(?:AM|PM|am|pm))?)?\b/gi;
- const regexFechaHora=/\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+de)?\s+(?:ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|sept|septiembre|oct|octubre|nov|noviembre|dic|diciembre|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|september|oct|october|nov|november|dec|december)(?:\s+de)?\s+\d{2,4}(?:\s+a\s+las\s+(?:[01]?\d|2[0-3]):[0-5]\d(?:\s*(?:a\.?\s*m\.?|p\.?\s*m\.?))?)?|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01])|(?:jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december|ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|septiembre|oct|octubre|nov|noviembre|dic|diciembre)[\s\-/.](?:0?[1-9]|[12][0-9]|3[01])[\s\-/.]\d{2,4}|\d{4}[\s\-/.](?:jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december|ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|septiembre|oct|octubre|nov|noviembre|dic|diciembre)[\s\-/.](?:0?[1-9]|[12][0-9]|3[01]))\b/gi;
+ //const regexFechaHora=/\b((?:0?[1-9]|[12][0-9]|3[01])(?:\s+de)?\s+(?:ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|sept|septiembre|oct|octubre|nov|noviembre|dic|diciembre|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|september|oct|october|nov|november|dec|december)(?:\s+de)?\s+\d{2,4}(?:\s+a\s+las\s+(?:[01]?\d|2[0-3]):[0-5]\d(?:\s*(?:a\.?\s*m\.?|p\.?\s*m\.?))?)?|(?:0?[1-9]|[12][0-9]|3[01])[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:\d{2}|\d{4})|(?:\d{4})[\/\-.](?:0?[1-9]|1[0-2])[\/\-.](?:0?[1-9]|[12][0-9]|3[01])|(?:jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december|ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|septiembre|oct|octubre|nov|noviembre|dic|diciembre)[\s\-/.](?:0?[1-9]|[12][0-9]|3[01])[\s\-/.]\d{2,4}|\d{4}[\s\-/.](?:jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december|ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|septiembre|oct|octubre|nov|noviembre|dic|diciembre)[\s\-/.](?:0?[1-9]|[12][0-9]|3[01]))\b/gi;
+  const regexFechaHora = /\b(?:ene|enero|feb|febrero|mar|marzo|abr|abril|may|mayo|jun|junio|jul|julio|ago|agosto|sep|sept|septiembre|oct|octubre|nov|noviembre|dic|diciembre|jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december)\b/gi;
+
   return texto.split(/\r?\n/).filter(linea=>regexFechaHora.test(linea)).map(l=>l.trim());
 }
 
@@ -126,7 +128,8 @@ async function enviarDatosAWhatsApp(){
   const boton=document.getElementById("enviarWhatsapp");
   boton.disabled=true; boton.textContent="Enviando...";
   
-  const NGROK_URL="https://api.wshome.shop";
+  let NGROK_URL="https://api.wshome.shop";
+  //NGROK_URL="http://localhost:8189";
   const accion=document.getElementById('appHeader').innerText+' wshome';
   const usuario=document.getElementById("usuario").value;
   const contrato=document.getElementById("contrato").value;
