@@ -1,6 +1,6 @@
 let API_URL = "https://api.wshome.shop/api/WsHome"; 
 //API_URL = "http://192.168.1.45:8585/api/WsHome"; 
-API_URL = "http://localhost:8189/api/WsHome"; 
+//API_URL = "http://localhost:8189/api/WsHome"; 
     let results = {};
     let editar = false;
     let nuevo = true;
