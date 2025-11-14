@@ -162,7 +162,7 @@ async function enviarServer() {
     }
 
    function buscarBarrio(idBarrio) {
-	   buscarPorApartamento();
+	   //buscarPorApartamento();
   const casasFiltradas = results.listaCasas?.filter(s => s.barrio.idBarrio == idBarrio) || [];
   const casaSelect = document.getElementById("idCasa");
   casaSelect.innerHTML = "<option value=''>Dirección</option>";
