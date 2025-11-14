@@ -201,7 +201,7 @@ async function enviarServer() {
 	
 	  function buscarPorApartamento(idSensor) {
         const sensor = results.listaSensores?.filter(s => s.idSensor == idSensor) || [];
-		document.getElementById("idContrato").value = sensor.contrato.id || "";
+		document.getElementById("idContrato").value = sensor?.contrato?.id || "";
         const sensorData = results.listaInquilinos.find(s => s.idSensor == idSensor);
         if (sensorData) {
           const i = sensorData;
