@@ -201,8 +201,8 @@ async function enviarServer() {
 	
 	  function buscarPorApartamento(idSensor) {
         const sensor = results.listaSensores?.filter(s => s.idSensor == idSensor) || [];
-		document.getElementById("idContrato").value = sensor.idContrato || "";
-        const sensorData = results.listaInquilinos.find(s => s.contrato.id == idSensor);
+		document.getElementById("idContrato").value = sensor.contrato.id || "";
+        const sensorData = results.listaInquilinos.find(s => s.idSensor == idSensor);
         if (sensorData) {
           const i = sensorData;
 		  
