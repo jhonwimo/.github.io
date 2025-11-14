@@ -201,10 +201,11 @@ async function enviarServer() {
 	
 	  function buscarPorApartamento(idSensor) {
         const sensor = results.listaSensores?.filter(s => s.idSensor == idSensor) || [];
+		document.getElementById("idContrato").value = sensor.idContrato || "";
         const sensorData = results.listaInquilinos.find(s => s.idSensor == idSensor);
         if (sensorData) {
           const i = sensorData;
-		  document.getElementById("idContrato").value = sensor.idContrato || "";
+		  
 		  document.getElementById("contratoSensor").value = i.contratoSensor || "";
           document.getElementById("nombres").value = i.nombre || "";
           document.getElementById("telefonoInquilino").value = i.telefono || "";
