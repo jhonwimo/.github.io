@@ -63,6 +63,7 @@ async function enviarServer() {
   // Construir payload
   const data = {
     idInquilino: idInquilinoVal,
+	idContrato: document.getElementById("idContrato").value || null,
 	contratoSensor: document.getElementById("contratoSensor").value || null,
     idCasa: document.getElementById("idCasa").value || null,
     idSensor: document.getElementById("apartamento").value || null,
@@ -199,10 +200,11 @@ async function enviarServer() {
 	
 	
 	  function buscarPorApartamento(idSensor) {
-    
+        const sensor = results.listaSensores?.filter(s => s.idSensor == idSensor) || [];
         const sensorData = results.listaInquilinos.find(s => s.idSensor == idSensor);
         if (sensorData) {
           const i = sensorData;
+		  document.getElementById("idContrato").value = sensor.idContrato || "";
 		  document.getElementById("contratoSensor").value = i.contratoSensor || "";
           document.getElementById("nombres").value = i.nombre || "";
           document.getElementById("telefonoInquilino").value = i.telefono || "";
